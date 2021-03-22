@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "777771634490",
+    "project_id": "stc-app-fb9a9",
+    "storage_bucket": "stc-app-fb9a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777771634490:android:2dc3629bb1a3dca2518a03",
+        "android_client_info": {
+          "package_name": "com.stcwallpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777771634490-ltvetar3sij9im3sv3a29sp0sudmq93e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZZkKkqgPP1dAogGA_l1IqE4XCSIwwD04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777771634490-ltvetar3sij9im3sv3a29sp0sudmq93e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
