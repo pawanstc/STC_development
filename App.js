@@ -89,7 +89,8 @@ import PreviewJobView from './screens/postViewJob.js';
 export default class App extends Component {
 
  constructor(props) {
-    super(props)
+    super(props);
+    
   }
  
 
