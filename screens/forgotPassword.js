@@ -98,7 +98,7 @@ export default class ChangePassword extends Component {
                     .then(result => {
                         if (result.error == false) {
                             this.setState({
-                                opt_field2: result.otp
+                                opt_field: result.otp
                             })
                         } else {
                             this.setState({
