@@ -63,7 +63,7 @@ export default class ChangePassword extends Component {
                         } else {
                             Alert.alert(
                                 "Mobile Number",
-                                result.msg
+                                "Mobile number does not exist"
                             );
 
                             this.setState({
@@ -119,7 +119,7 @@ export default class ChangePassword extends Component {
   
 
         if (this.state.opt_field == "") {
-            alert("Enter your otp number");
+            alert("Enter your OTP");
             return;
         } else{
             console.log(this.state.mobile_number);
