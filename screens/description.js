@@ -68,7 +68,7 @@ export default class Recorder extends Component {
 		this.getSheet();
 
 	
-
+console.log(this.props.route.params.image_id);
 		
 		
 
@@ -194,12 +194,13 @@ export default class Recorder extends Component {
 
 	
 	playSound =  () => {
+		console.log(this.sound);
 		this.setState({
 			playButtonStat: true
 		});
 	
-		if (this.sound == null) {
-			alert("Please Recorde Your message first");
+		if (this.sound == null ) {
+			alert("Please record first");
 			this.setState({
 				playButtonStat:false
 			})
@@ -261,6 +262,7 @@ export default class Recorder extends Component {
 
 	submit = () =>{
 	
+	
 
 
 	if(this.state.desc =="" || this.state.selectPaper == "" || this.state.mediaType ==""){
@@ -316,7 +318,7 @@ export default class Recorder extends Component {
 			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, '')+"&img_flag="+ this.props.route.params.imge_flag
 		}).then(response => response.json())
 		.then(result =>{
-			console.log(result);
+			
 			if(result.error == false){
 			
 				Alert.alert(
@@ -542,18 +544,18 @@ export default class Recorder extends Component {
 						}} >
 							<Icon name="x" onPress={() => {
 								if(this.sound == null){
-									alert("Please Recorde First")
+									alert("Please record first")
 								}else{
 
 								Alert.alert(
 									"Confirmation Alert",
-									"Are you sure to delete audio record? ?",
+									"Do you really want to delete your recorded audio?",
 									[
 										{
 											text:"Ok",
-											onPress: async () => {
-												await this.sound.release()
-												alert("Recorde Successfully")
+											onPress:  () => {
+												 this.sound = null;
+												alert("Deleted successfully")
 											},
 											style:"default"
 										},

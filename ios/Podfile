@@ -12,12 +12,6 @@ target 'STC' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
-
-  pod 'RNSoundRecorder', :path => '../node_modules/react-native-sound-recorder'
-
-  pod 'RNSweetAlert', :path => '../node_modules/react-native-sweet-alert'
-
   target 'STCTests' do
     inherit! :complete
     # Pods for testing

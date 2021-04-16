@@ -6,6 +6,7 @@ import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
 import StepIndicator from 'react-native-step-indicator';
 import moment from 'moment';
+import { getBatteryLevel } from 'react-native-device-info';
 
 const labels = ["Cart","cart","cart","cart","cart"];
 const labels1 = ["cart"];
@@ -756,7 +757,11 @@ export default class TrackJob extends Component{
                       justifyContent:"center",
                       alignItems:"center"
                   }} >
-                       <ActivityIndicator  size="large" color="#62463e" />
+                      <Text style={{
+                          textAlign:"center",
+                          color:'grey',
+                          fontSize:16
+                      }} >No Status Found</Text>
 
 
                   </View>

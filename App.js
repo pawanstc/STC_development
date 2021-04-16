@@ -14,10 +14,9 @@ import {
   View,
   Text,
   StatusBar,
-  Animated,
-  AsyncStorage
+  Animated
 } from 'react-native';
-
+import { ModalPortal } from 'react-native-modals';
 import {
   Header,
   LearnMoreLinks,
@@ -27,7 +26,6 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 // app navigation
-import PushNotification from "react-native-push-notification";
 
 import { NavigationContainer } from '@react-navigation/native';
 // stack navigation
@@ -35,7 +33,7 @@ import { createStackNavigator,CardStyleInterpolators} from '@react-navigation/st
 
 // tab navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import message from '@react-native-firebase/messaging';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -87,18 +85,11 @@ import SearchComponent from './screens/searchBarComponent.js';
 import PreviewJobView from './screens/postViewJob.js';
 
 export default class App extends Component {
-
- constructor(props) {
-    super(props)
-  }
- 
-
-  
-
   render(){
 
 function TabNavigation(){
   return(
+    
     <Tab.Navigator 
     tabBarOptions={{
       activeTintColor:"#ffb74d",
@@ -159,6 +150,7 @@ const config = {
 
 
     return(
+      
       <NavigationContainer>
           <Stack.Navigator 
           initialRouteName="splashScreen"

@@ -109,7 +109,7 @@ export default class EditImage extends Component{
         if(this.state.height == "" && this.state.width == ""){
           Alert.alert(
             "Validation Error",
-            "Please Check your Input field"
+            "Please enter height and width"
           );
         }else if(this.state.height ==""){
           Alert.alert(
@@ -127,10 +127,14 @@ export default class EditImage extends Component{
           return;
         }
         else{
-          
+          console.log(this.state.fileObj.path);
           var form = new FormData();
           var filename = this.state.fileObj.path.replace(/^.*[\\\/]/, '')
-          console.log(this.state.fileObj.path);
+          console.log({
+            uri:this.state.fileObj.path,
+            type:this.state.fileObj.mime,
+            name:filename
+          });
          
           form.append("image",{
             uri:this.state.fileObj.path,
@@ -142,6 +146,7 @@ export default class EditImage extends Component{
           xhr.open("POST","https://stcapp.stcwallpaper.com/backend/edit_pattern.php");
           xhr.setRequestHeader("Content-Type","multipart/form-data");
           xhr.send(form);
+          console.log(xhr);
 
           if(xhr.upload){
             xhr.upload.onprogress = async ({total, loaded}) =>{

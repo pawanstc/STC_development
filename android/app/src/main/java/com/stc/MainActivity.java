@@ -1,6 +1,5 @@
 package com.stc;
 
-
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -23,6 +22,4 @@ public class MainActivity extends ReactActivity {
        intent.putExtra("newConfig", newConfig);
        this.sendBroadcast(intent);
   }
-
-  
 }

@@ -282,7 +282,7 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:100
+                           paddingLeft:88
                        }} >1</Text>
 
                    </View>
@@ -303,7 +303,7 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:50
+                           paddingLeft:53
                        }} >{ this.state.stockDetails.catalog_name}</Text>
 
                    </View>
@@ -319,11 +319,11 @@ export default class StockEnqueryDetails extends Component{
                            fontSize:16
                        }} >Paper Type</Text>
 
-                       <Text style={{
+                       <Text numberOfLines={2} style={{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:54
+                           paddingLeft:62
                            
                        }} >{ this.state.stockDetails.paper_type_name}</Text>
 
@@ -344,7 +344,7 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:62
+                           paddingLeft:80
                        }} >{ this.state.stockDetails.roll_size}</Text>
 
                    </View>
@@ -366,7 +366,7 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                       paddingLeft:50
+                       paddingLeft:48
                        }} >{ this.state.stockDetails.total_sq_ft}</Text>
 
                    </View>
@@ -387,9 +387,9 @@ export default class StockEnqueryDetails extends Component{
                            fontSize:16,
                            color:"grey",
                        
-                           width:212,
+                           
                            textAlign:"center",
-                           paddingLeft:45
+                           paddingLeft:100
                        }} >{ this.state.stockDetails.color}</Text>
 
                    </View>
@@ -416,7 +416,7 @@ export default class StockEnqueryDetails extends Component{
                                 color:"grey",
                           
                                 width:200,
-                                paddingLeft:80
+                                paddingLeft:85
                              }} >
 
 
@@ -444,8 +444,14 @@ export default class StockEnqueryDetails extends Component{
                          ):(
                             <View style={{
                                 flexDirection:"row",
-                                marginLeft:120,
-                                marginTop:6
+                                fontSize:14,
+                                fontWeight:"normal",
+                         
+                               textAlign:"center",
+                                color:"grey",
+                          
+                                width:200,
+                                paddingLeft:80
                              }} >
 
 

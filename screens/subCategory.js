@@ -499,18 +499,18 @@ searchBarAppear = () =>{
                             flexDirection:"row",
                             justifyContent:'space-between',
                             height:"100%",
-                            flexGrow:1
+                        
                         }} >
                             <View style={{
                                 flexDirection:"column",
                                 justifyContent:"center",
                                 alignItems:'center',
-                                marginBottom:20
+                              
                             }} >
                            <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id)} >
                            <ImageLoad
                                      isShowActivity={true}
-        style={{  height:110,
+        style={{  height:120,
             width:120, marginTop:20 }}
         loadingStyle={{ size: 'large', color: '#62463e' }}
         borderRadius={6}
@@ -522,16 +522,17 @@ searchBarAppear = () =>{
                                     textAlign:'center',
                                     fontSize:14,
                                     width:120,
-                                    height:45
+                                    height:30,
                                 }} >
                                     {items.item.catlog_name} 
                                 </Text>
                            </TouchableOpacity>
     
            <View style={{
-               marginTop:10,
+              
                width:120,
-               marginLeft:10
+               marginLeft:10,
+              marginTop:12
            }} >
                          <Button
                         onPress={() => this.subCatelogById(items.item.id)}

@@ -232,7 +232,18 @@ console.log(this.state.params)
 
                   </View>
 
-                  <TouchableOpacity activeOpacity={2} onPress={() => {
+                  <View style={{
+                      flex:1
+                  }} >
+                  <TouchableOpacity  style={{
+                          height:45,
+                          width:280,
+                          backgroundColor:"#62463e",
+                          borderRadius:6,
+                          justifyContent:'center',
+                          alignItems:"center",
+                          marginTop:60
+                      }} activeOpacity={2} onPress={() => {
                       if(this.state.city == ""){
                           Alert.alert(
                               "Validation Error",
@@ -246,15 +257,7 @@ console.log(this.state.params)
                       
                       })
                   } } >
-                      <View style={{
-                          height:45,
-                          width:280,
-                          backgroundColor:"#62463e",
-                          borderRadius:6,
-                          justifyContent:'center',
-                          alignItems:"center",
-                          marginTop:60
-                      }} >
+                      <View >
                           <Text style={{
                               textAlign:'center',
                               color:"#FFF",
@@ -263,6 +266,7 @@ console.log(this.state.params)
 
                       </View>
                   </TouchableOpacity>
+                  </View>
 
                  </View>
 

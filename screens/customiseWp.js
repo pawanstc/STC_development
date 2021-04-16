@@ -39,6 +39,7 @@ export default class customiseComponent extends Component{
     }
 
     componentDidMount(){
+console.log("catlog pattenr_id"+ this.props.route.params.image_id,);
 
     console.log("flag"+this.props.route.params.flag);
         if(this.props.route.params.image){
@@ -46,7 +47,8 @@ export default class customiseComponent extends Component{
                 photo:this.props.route.params.image,
                 imageObj2:this.props.route.params.imageObj,
                 height:this.props.route.params.height,
-                width:this.props.route.params.width
+                width:this.props.route.params.width,
+                image_flag:this.props.route.params.imge_flag
             });
         }
     }
@@ -212,7 +214,7 @@ launchCamera2 = async () =>{
 
     orderSubmit =  ()=>{
   
-    console.log(this.state.fileObj);
+    console.log(this.props.route.params.flag);
       if(this.state.height == "" && this.state.width == "" && this.state.photo == ""){
         Alert.alert(
           "Validation Error",
@@ -288,6 +290,20 @@ launchCamera2 = async () =>{
     
           });
         }
+      }else if(this.props.route.params.flag == undefined){
+        this.props.navigation.navigate("description",{
+          supportImages: this.state.photo2Arr,
+          imageObj:this.props.route.params.imageObj,
+          fileObj:this.state.fileObj,
+          image_id:this.props.route.params.image_id,
+          height:this.state.height,
+          width:this.state.width,
+          fileupload:this.state.uploadFile,
+          quantity:this.state.Quantity,
+          patternUrl:this.props.route.params.image,
+          imge_flag:this.props.route.params.flag
+  
+        });
       }else{
         this.props.navigation.navigate("description",{
           supportImages: this.state.photo2Arr,
@@ -473,10 +489,10 @@ launchCamera2 = async () =>{
           });
        }
      }},
-     {text:"No", onPress:() => Alert.alert("Continue Process"), style:"cancel"}
+     {text:"No", onPress:() => null }
         ],
         {
-          cancelable:true
+          cancelable:false
         }
         )
      
@@ -486,8 +502,9 @@ launchCamera2 = async () =>{
         console.log(this.state.photo2Arr);
   }
   uploadFile = async () => {
+    console.log("yes");
     this.setState({
-      image_flag:"2"
+      image_flag:""
     })
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -508,40 +525,49 @@ launchCamera2 = async () =>{
   this.setState({
     photo: image.path,
     uploadFile:image,
-    fileObj:image
+    fileObj:image,
+    image_flag:"2"
   });
 
-      if(image){
-        var form = new FormData();
+  var form = new FormData();
 
-        var filename = image.path.replace(/^.*[\\\/]/, '');
+  var filename = image.path.replace(/^.*[\\\/]/, '');
+
+
+    form.append('image',{
+      uri:image.path,
+      type:image.mime,
+      name:filename
+    });
+    console.log({
+      uri:image.path,
+      type:image.mime,
+      name:filename
+    });
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST","https://stcapp.stcwallpaper.com/backend/edit_pattern.php");
+    xhr.setRequestHeader("Content-Type","multipart/form-data");
+    xhr.send(form);
+    console.log(xhr);
+
+    if(xhr.upload){
       
-
-          form.append({
-            uri:image.path,
-            type:image.mime,
-            name:filename
-          });
-
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST","https://stcapp.stcwallpaper.com/backend/edit_pattern.php");
-          xhr.send(form);
-
-          if(xhr.upload){
-            xhr.upload.onprogress = ({total, loaded}) =>{
-              this.setState({
-                progress:loaded/total,
-                progressStat:true
-              })
-            }
-          }
-
-          setTimeout(() =>{
-            this.setState({
-              progressStat:false
-            })
-          }, 1100);
+      xhr.upload.onprogress = ({total, loaded}) =>{
+        this.setState({
+          progress:loaded/total,
+          progressStat:true
+        })
       }
+    }else{
+      alert("Image not uplaoded")
+    }
+
+    setTimeout(() =>{
+      this.setState({
+        progressStat:false
+      })
+    }, 1100);
 });
     }else{
       alert("Please try again latter");

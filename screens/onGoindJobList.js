@@ -34,19 +34,21 @@ export default class onGoingJobList extends Component{
 			is_model_view:false,
 			order_id:"",
 			user_id:"",
+		selected_id:"",
 			confirm_data:[
+				{
+					label:"Details missing",
+					value:"Details missing"
+				},
 				{
 					label:"Non payment",
 					value:"Non payment"
 					
 				},
-				{
-					label:"Details missing",
-					value:"Details payment"
-				}
+				
 			],
 			user_role:"",
-			desc:"", 
+			desc:"Details missing", 
 			job_status:"All Jobs",
 			status:[
 				{
@@ -65,7 +67,8 @@ export default class onGoingJobList extends Component{
 					"id":"3",
 					"value":"Cancel"
 				}
-			]
+			],
+			deletedJob:[]
 		}
 	}
 
@@ -94,9 +97,18 @@ getJobList = () =>{
 				}).then(response => response.json())
 				.then(result =>{
 					console.log(result);
+					let jobId = [];
 					if(result.error ==false){
+						result.order_details.forEach(element => {
+							var tempObj ={
+								id:element.id
+							};
+							jobId.push(tempObj);
+						});
+						
 						this.setState({
-							jobList:result.order_details
+							jobList:result.order_details,
+							deletedJob:[...this.state.deletedJob, ...jobId]
 						});
 					}
 				}).catch(error =>{
@@ -114,7 +126,8 @@ getJobList = () =>{
 cancelJob = (id) => {
 	// check user role
 	this.setState({
-		order_id:id
+		order_id:id,
+		selected_id:""
 	})
 	AsyncStorage.getItem("user_id")
 	.then(result =>{
@@ -132,11 +145,22 @@ cancelJob = (id) => {
 						body:"user_id=" +result
 					}).then(response => response.json())
 					.then(result =>{
+						
+					this.setState({
+						selected_id:id
+					})
 						if(result.user_role_name === "Distributer"){
+						
+							
+						
+						
+						
 							this.setState({
 								user_role:result.user_role_name,
-								is_model_view:true
-							})
+								is_model_view:true,
+						
+							});
+							
 						}else{
 							Alert.alert(
 								"Confirmation Eror",
@@ -173,6 +197,8 @@ cancelJob = (id) => {
 		console.log(error);
 	})
 }
+
+
 
 doneCancle = () => {
 	if(this.state.desc === ""){
@@ -398,6 +424,8 @@ setStatus = (value) =>{
 	
 }
     render(){
+		console.log(this.state.deletedJob);
+		
         return(
 			<View style={{
 				flex:1
@@ -559,7 +587,7 @@ setStatus = (value) =>{
 									   fontSize:12,
 									   
 									   padding:4,
-									    paddingLeft:30,
+									    paddingLeft:33,
 								   }} >N/A</Text>
 								   	)
 								   }
@@ -580,7 +608,7 @@ setStatus = (value) =>{
 									   fontSize:12,
 									   
 									   padding:4,
-									   paddingLeft:30
+									   paddingLeft:33
 								   }} >{ items.item.quantity }</Text>
    
 									   </View>
@@ -597,7 +625,7 @@ setStatus = (value) =>{
 								   <Text style={{
 									   fontSize:12,
 									   
-									   padding:4
+									   padding:12
 								   }} >Sales Coordinator</Text>
    
 									   </View>
@@ -615,7 +643,7 @@ setStatus = (value) =>{
 									   fontSize:12,
 									   
 									   padding:4,
-									   paddingLeft:20
+									   paddingLeft:27
 								   }} >{ items.item.wall_size }</Text>
    
 									   </View>
@@ -633,8 +661,9 @@ setStatus = (value) =>{
 									   fontSize:12,
 									   
 									   padding:4,
-									   paddingLeft:32,
-									   width:150
+									   paddingLeft:40,
+									   width:200,
+									   lineHeight:20
 								   }} >{ items.item.media }</Text>
    
 									   </View>
@@ -746,20 +775,20 @@ setStatus = (value) =>{
 													  </TouchableOpacity>
    
 													  <TouchableOpacity onPress={() => this.cancelJob(items.item.id)} >
-													  <View style={{
-													   justifyContent:'center',
-													   alignItems:'center'
-												   }} >
-													   <IconName name="ban" style={{
-														   margin:10
-													   }} size={20} />
-													   <Text style={{
-														   fontSize:15
-													   }}> Cancel Job</Text>
-   
-													   </View>
-   
-													  </TouchableOpacity>
+															<View style={{
+															 justifyContent:'center',
+															 alignItems:'center'
+														 }} >
+															 <IconName name="ban" style={{
+																 margin:10
+															 }} size={20} />
+															 <Text style={{
+																 fontSize:15
+															 }}> Cancel Job</Text>
+		 
+															 </View>
+		 
+															</TouchableOpacity>
 													   </View>
 												   </View>
 										   ) :null
@@ -823,7 +852,7 @@ setStatus = (value) =>{
  					<TouchableOpacity activeOpacity={2} onPress={() => this.setStatus(value.value)} >  
 			<Text style={{
 				 textAlign:"center",
-				 padding:20,
+				 padding:15,
 				 color:"#FFF",
 				 backgroundColor:"#62463e"
 			 }} >{ value.value }</Text>
@@ -839,7 +868,7 @@ setStatus = (value) =>{
  					<TouchableOpacity activeOpacity={2} onPress={() => this.setStatus(value.value)} >  
 			<Text style={{
 				 textAlign:"center",
-				 padding:20
+				 padding:15
 			 }} >{ value.value }</Text>
 			</TouchableOpacity>
  					</View>
@@ -908,7 +937,7 @@ marginTop:30
 <RadioForm
 radio_props={this.state.confirm_data}
 initial={0}
-
+value={this.state.confirm_data[0].value}
 formHorizontal={false}
 labelHorizontal={false}
 buttonColor={'#2196f3'}

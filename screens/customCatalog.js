@@ -143,7 +143,7 @@ handleRefreshing = () =>{
           showsVerticalScrollIndicator={false}
            numColumns={2}
           contentContainerStyle={{
-              paddingBottom:100
+              paddingBottom:140
           }}
            
            data={this.state.catelog_list}
@@ -161,7 +161,7 @@ handleRefreshing = () =>{
                             flexDirection:"column",
                             justifyContent:"center",
                             alignItems:'center',
-                            marginBottom:20
+                            marginBottom:10
                         }} >
                        <TouchableOpacity activeOpacity={2} onPress={() => this.subCustomCatelog(value.item.id)} >
                        <ImageLoad
@@ -185,7 +185,7 @@ handleRefreshing = () =>{
                        </TouchableOpacity>
 
        <View style={{
-           marginTop:10,
+           
            width:120,
            marginLeft:10
        }} >

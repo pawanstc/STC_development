@@ -54,7 +54,7 @@ export default class HomeComponent extends Component{
                     onPress:() => BackHandler.exitApp()
                 },
                 {
-                    text:"Cancle",
+                    text:"Cancel",
                     onPress:() => null
                 }
             ]
@@ -257,7 +257,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
              }}  >
                 {
                     this.state.user_name !="" || this.state.user_name != null ? (
-                     <Text style={{
+                     <Text numberOfLines={1} style={{
                          color:"#FFF",
                          margin:11,
                          fontSize:18,
@@ -307,7 +307,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
 
                           ) :(
                             <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                            <Image source={{uri:imageUrl+"/"+this.state.profile_image}}
+                            {/* <Image source={{uri:imageUrl+"/"+this.state.profile_image}}
                             style={{
                             height:50,
                             width:50,
@@ -315,7 +315,20 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             margin:10,
                             
                             }}
-                            />
+                            /> */}
+                             <ImageLoad
+                                 isShowActivity={false}
+                                    style={{
+                                        height:50,
+                                        width:50,
+                                        borderRadius:40,
+                                        margin:10,
+                                        
+                                        }}
+                                    loadingStyle={{ size: 'large', color: '#62463e' }}
+                                    borderRadius={6}
+                                    source={{uri:imageUrl+"/"+this.state.profile_image}}
+                                />
                             </TouchableOpacity>
                           )
                       }
@@ -323,7 +336,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                 ) :(
                     <View>
                     <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                    <Image source={{uri:imageUrl+"/"+this.state.company_logo}}
+                    {/* <Image source={{uri:imageUrl+"/"+this.state.company_logo}}
              style={{
                  height:50,
                  width:50,
@@ -331,7 +344,20 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                  margin:10,
                 
              }}
-             />
+             /> */}
+             <ImageLoad
+                                    isShowActivity={false}
+                                    style={{
+                                        height:50,
+                                        width:50,
+                                        borderRadius:25,
+                                        margin:10,
+                                       
+                                    }}
+                                    loadingStyle={{ size: 'large', color: '#62463e' }}
+                                    borderRadius={6}
+                                    source={{uri:imageUrl+"/"+this.state.company_logo}}
+                                />
             </TouchableOpacity>
                     </View>
                 )

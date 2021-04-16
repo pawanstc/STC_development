@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 
+
 import {
   StyleSheet,
   View,
@@ -82,10 +83,11 @@ export default class Messaging extends Component {
   };
 
   onSend = (messages) => {
+    console.log(URL+'/insert_message_order_wise');
     NetInfo.fetch().then((state) => {
       if (state.isConnected) {
         fetch(
-          'https://phpstack-525410-1692898.cloudwaysapps.com/backend/v1/insert_message_order_wise',
+          URL+'/insert_message_order_wise',
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -102,9 +104,9 @@ export default class Messaging extends Component {
               this.state.ip_address,
           },
         )
-          .then((response) => response.json())
+          .then((response) => response.text())
           .then((result) => {
-            if (result.error === false) {
+            if (result.error == false) {
               this.getMessage();
             }
           })
@@ -230,7 +232,7 @@ export default class Messaging extends Component {
      <ScrollView 
 
      contentContainerStyle={{
-        paddingBottom:10,
+        paddingBottom:20,
         flex:1
      }}
       >

@@ -135,7 +135,7 @@ export default class postViewJob extends Component{
                         <Text style={{
                         fontSize:16,
                         fontWeight:"normar",
-                        margin:10
+                        margin:8
                     }} >Pattern Number</Text>
 
 <Text style={{
@@ -163,7 +163,7 @@ export default class postViewJob extends Component{
                         fontSize:14,
                         margin:20,
                         marginTop:20
-                    }} >Suppert Images:</Text>
+                    }} >Support Images:</Text>
 
                     <FlatList
                   numColumns={2}
@@ -293,7 +293,7 @@ export default class postViewJob extends Component{
                                   <Button title="Approvrd" disabled={true} color="green" />
                             </View> */}
 
-                            <TouchableOpacity onPress={() => this.approveJob() } >
+                            <TouchableOpacity   >
 
                             <View style={{
                                     height:40,

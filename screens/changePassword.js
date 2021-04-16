@@ -59,14 +59,14 @@ export default class UpdatePassword extends Component{
                         }).then(response => response.json())
                         .then(result =>{
                        
-                           
+                           console.log(result);
                             if(result.error == false){
                             AsyncStorage.removeItem("user_id");
                                 this.props.navigation.replace("login");
                             }else{
                                 Alert.alert(
                                     "Error",
-                                    "Password update not successfully"
+                                    result.msg
                                 )
                             }
                         }).catch(error =>{

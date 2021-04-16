@@ -322,10 +322,11 @@ export default class Profile extends Component{
                            <View style={{
                                flexDirection:"column"
                            }} >
-                                <Text style={{
+                                <Text numberOfLines={1} style={{
                                 fontSize:24,
                                 fontWeight:"bold",
-                                paddingLeft:10
+                                paddingLeft:10,
+                                width:200
                             }} >{ this.state.first_name }</Text>
                               <Text style={{
                                     fontSize:15,
@@ -416,6 +417,16 @@ export default class Profile extends Component{
                         }} >
                           {/* first name section */}
                               <View  >
+                              <Text style={{
+                               color:"black",
+                               fontSize:14,
+                              width:100,
+                              color:"#62463e",
+                              fontWeight:"bold",
+                              marginBottom:10
+                           }} >
+                               First Name
+                           </Text>
                                   
                            <View style={{
                                height:45,
@@ -424,29 +435,14 @@ export default class Profile extends Component{
                                borderRadius:6,
                                borderColor:"#62463e"
                            }} >
-                               <Text style={{
+                               <Text numberOfLines={1} style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.first_name }</Text>
-                              <View style={{
-                                  backgroundColor:"#FFF",
-                                  position:"absolute",
-                                  top:-8,
-                                  left:0,
-                                  right:0,
-                                  width:60
-                              }} >
+                              <View  >
                                 
-                                 <Text style={{
-                               color:"black",
-                               fontSize:14,
-                              width:100,
-                              color:"#62463e",
-                              fontWeight:"bold"
-                           }} >
-                               First Name
-                           </Text>
+                               
           
                               </View>
                            </View>
@@ -457,6 +453,17 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <Text style={{
+                                      color:"black",
+                                      fontSize:14,
+                                     width:100,
+                                     color:"#62463e",
+                                     fontWeight:"bold",
+                                     marginTop:3,
+                                     marginBottom:10
+                                  }} >
+                                      Last Name
+                                  </Text>
                                   
                                   <View style={{
                                       height:45,
@@ -473,25 +480,9 @@ export default class Profile extends Component{
                                           fontWeight:"bold",
                                        
                                       }} >{ this.state.last_name }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-14,
-                                         left:0,
-                                         right:0,
-                                         width:60
-                                     }} >
+                                     <View  >
                                        
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold",
-                                     marginTop:3
-                                  }} >
-                                      Last Name
-                                  </Text>
+                                       
                  
                                      </View>
                                   </View>
@@ -502,6 +493,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Email Id
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -517,26 +522,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.email }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:45
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Email Id
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of Email id section */}
@@ -545,6 +531,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:185,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Mobile Number
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -560,26 +560,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.mobile_number }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:84
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:185,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Mobile Number
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of Mobile Number id section */}
@@ -588,6 +569,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:180,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Company Name
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -603,26 +598,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.company_name }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:88
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:180,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Company Name
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of company name id section */}
@@ -631,6 +607,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:200,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Company Address
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -646,26 +636,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.office_address }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:100
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:200,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Company Address
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of company address id section */}
@@ -674,6 +645,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                  <View >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    State
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -689,26 +674,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.state }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:30
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     State
-                                  </Text>
-                 
-                                     </View>
+                                   
                                   </View>
                                      </View>
                                   {/* end of state id section */}
@@ -717,6 +683,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    City
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -732,26 +712,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.city }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:25
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     City
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of city section */}
@@ -760,6 +721,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Pin Code
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -775,26 +750,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.pincode }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:25
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Pin Code
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of pincode section */}
@@ -803,6 +759,20 @@ export default class Profile extends Component{
                             <View style={{
                                 marginTop:20
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Role
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
@@ -818,26 +788,7 @@ export default class Profile extends Component{
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.role }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:25
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Role
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of role section */}
