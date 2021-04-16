@@ -33,7 +33,7 @@ export default class ChangePassword extends Component {
         if (this.state.mobile_number === "") {
             Alert.alert(
                 "Validation",
-                "Please Fill the form field"
+                "Please enter your registered mobile number."
             )
             return;
         }
