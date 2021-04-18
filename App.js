@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -31,7 +31,7 @@ import PushNotification from "react-native-push-notification";
 
 import { NavigationContainer } from '@react-navigation/native';
 // stack navigation
-import { createStackNavigator,CardStyleInterpolators} from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 // tab navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -42,7 +42,7 @@ const Tab = createBottomTabNavigator();
 
 // screens 
 import LoginComponent from './screens/loginScreen';
-import Icon  from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import CatelogComponnet from './screens/catelog.js';
 import Home from './screens/home';
 import StockEnquery from './screens/stockEnquery.js';
@@ -88,82 +88,74 @@ import PreviewJobView from './screens/postViewJob.js';
 
 export default class App extends Component {
 
- constructor(props) {
-    super(props);
-    
-  }
- 
+  render() {
 
-  
+    function TabNavigation() {
+      return (
+        <Tab.Navigator
+          tabBarOptions={{
+            activeTintColor: "#ffb74d",
+            inactiveTintColor: "grey"
+          }}
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-  render(){
+              if (route.name === "dashboard") {
+                iconName = focused
+                  ? 'checkmark'
+                  : 'checkmark-outline'
+              } else if (route.name === 'catelog') {
+                iconName = focused
+                  ? 'image'
+                  : 'image-outline'
+              } else if (route.name === 'home') {
+                iconName = focused
+                  ? 'home'
+                  : 'home-outline'
+              } else if (route.name === "catelogMaster") {
+                iconName = focused
+                  ? 'copy'
+                  : 'copy-outline'
+              } else if (route.name === "SearchByImage") {
+                iconName = focused
+                  ? 'camera'
+                  : 'camera-outline'
+              }
+              return <Icon name={iconName} size={18} color="#ffb74d" />
+            }
 
-function TabNavigation(){
-  return(
-    <Tab.Navigator 
-    tabBarOptions={{
-      activeTintColor:"#ffb74d",
-      inactiveTintColor:"grey"
-    }}
-    screenOptions={({route}) =>({
-      tabBarIcon: ({focused, color, size}) =>{
-      let iconName;
+          })} >
+          <Tab.Screen name="home" component={Home} />
 
-        if(route.name === "dashboard"){
-          iconName= focused
-          ? 'checkmark'
-          :'checkmark-outline'
-        }else if(route.name === 'catelog'){
-          iconName = focused
-          ? 'image'
-          :'image-outline'
-        }else if(route.name === 'home'){
-          iconName = focused
-          ? 'home'
-          :'home-outline'
-        }else if(route.name === "catelogMaster"){
-          iconName = focused
-          ? 'copy'
-          :'copy-outline'
-        }else if(route.name === "SearchByImage"){
-          iconName =focused
-          ? 'camera'
-          :'camera-outline'
-        }
-        return <Icon name={iconName} size={18} color="#ffb74d" />
-      }
+          <Tab.Screen name="catelog" component={CatelogComponnet} />
+          <Tab.Screen name="catelogMaster" component={CatelogContainer} />
+          <Tab.Screen name="SearchByImage" component={SearchPhoto} />
 
-    })} >
-      <Tab.Screen name="home"  component={Home}  /> 
- 
-      <Tab.Screen name="catelog" component={CatelogComponnet} />
-      <Tab.Screen name="catelogMaster" component={CatelogContainer} />
-      <Tab.Screen name="SearchByImage" component={SearchPhoto} />
-  
-    </Tab.Navigator>
-  )
-}
+        </Tab.Navigator>
+      )
+    }
 
-const config = {
-  animation: 'timing',
-  config: {
-    stiffness: 1000,
-    damping: 500,
-    mass: 3,
-    overshootClamping: true,
-    restDisplacementThreshold: 0.01,
-    restSpeedThreshold: 0.01,
-  },
+    const config = {
+      animation: 'timing',
+      config: {
+        stiffness: 1000,
+        damping: 500,
+        mass: 3,
+        overshootClamping: true,
+        restDisplacementThreshold: 0.01,
+        restSpeedThreshold: 0.01,
+      },
 
-};
+    };
 
 
 
-    return(
+    return (
       <NavigationContainer>
-          <Stack.Navigator 
+        <Stack.Navigator
           initialRouteName="splashScreen"
-           screenOptions={{
+          screenOptions={{
             transitionSpec: {
               open: config,
               close: config
@@ -171,153 +163,153 @@ const config = {
             gestureDirection: 'vertical',
           }}
 
-          >
-            <Stack.Screen name="splashScreen" component={SplashComponent} options={{
-              headerShown:false,
-  
+        >
+          <Stack.Screen name="splashScreen" component={SplashComponent} options={{
+            headerShown: false,
 
-            }} />
-            <Stack.Screen name="onBoard" component={onBoardPage} options={{
-              headerShown:false
-            }} />
-    <Stack.Screen name="login" component={LoginComponent} options={{
-      headerShown:false,
-      gestureDirection :"horizontal"
 
-    }} />
-    <Stack.Screen name="home" component={Home} options={{
-      headerShown:false,
-      gestureDirection :"vertical"
+          }} />
+          <Stack.Screen name="onBoard" component={onBoardPage} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="login" component={LoginComponent} options={{
+            headerShown: false,
+            gestureDirection: "horizontal"
 
-    }} />
-    <Stack.Screen name="stockEnquery" component={StockEnquery} options={{
-      headerShown:false,
+          }} />
+          <Stack.Screen name="home" component={Home} options={{
+            headerShown: false,
+            gestureDirection: "vertical"
 
-    }} />
-    <Stack.Screen name="stockDetails" component={StockDetails} options={{
-      headerShown:false,
-  
-    }} />
-    <Stack.Screen name="setGuid" component={stepGuid} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="catelogMaster" component={CatelogContainer} options={{
-      headerShown:false,
+          }} />
+          <Stack.Screen name="stockEnquery" component={StockEnquery} options={{
+            headerShown: false,
 
-    }} />
-    <Stack.Screen name="postJob" component={PostJob} options={{
-      headerShown:false,
+          }} />
+          <Stack.Screen name="stockDetails" component={StockDetails} options={{
+            headerShown: false,
 
-      
-    }} />
-    <Stack.Screen name="searchPhoto" component={SearchPhoto} options={{
-      headerShown:false,
+          }} />
+          <Stack.Screen name="setGuid" component={stepGuid} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="catelogMaster" component={CatelogContainer} options={{
+            headerShown: false,
 
-      
-    }} />
-    <Stack.Screen name="notification" component={Notification} options={{
-      headerShown:false,
+          }} />
+          <Stack.Screen name="postJob" component={PostJob} options={{
+            headerShown: false,
 
-      
-    }} />
 
-    <Stack.Screen name='profile' component={UserProfile} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="customWp" component={customiseComponent} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="editProfile" component={EditProfile} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="subCategory" component={SubCategory} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="placeorder" component={Placeorder} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="forgotPassword" component={ChangePassword} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="selectPatterns" component={SelectPatterns} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="category2" component={Category2} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen  name="products" component={Products} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="customCatelog" component={customCatlog} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="subCategory2" component={subCategory2} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="editImage" component={EditImage} options={{
-      headerShown:false
-    }} />
-    <Stack.Screen name="description" component={Description} options={{
-      headerShown:false
-    }} /> 
-    <Stack.Screen name="stockDetails2" component={StockDetails2} options={{
-      headerShown:false
-    }} />
+          }} />
+          <Stack.Screen name="searchPhoto" component={SearchPhoto} options={{
+            headerShown: false,
 
-    <Stack.Screen name="onGoingJoblist" component={onGoingJobList} options={{
-      headerShown:false
-   }} />
-   <Stack.Screen name="showsPdf" component={WebView} options={{
-     headerShown:false
-   }} />
-   <Stack.Screen name="content" component={Content} options={{
-     headerShown:false
-   }} />
-   <Stack.Screen name="subCat2" component={subCat2} options={{
-     headerShown:false
-   }} />
-   <Stack.Screen name="passwordUpdate" component={PasswordUpdate} options={{
-     headerShown:false
-   }} />
-   <Stack.Screen name="seeOnYourWall" component={SeeOnyourWall} options={{
-     headerShown:false
-   }}/>
 
-   <Stack.Screen name="StockEnquery2" component={StockEnquery2} options={{
-     headerShown:false
-   }} />
-   <Stack.Screen name="onGoingJob" component={OnGoingJob} options={{
-     headerShown:false
-   }} />
-  <Stack.Screen name="enqueryDetails" component={StockEnqueryDetails} options={{
-    headerShown:false
-     
-  }} />
-  <Stack.Screen name="tracker" component={JobTracker} options={{
-    headerShown:false
-  }} />
-  <Stack.Screen name="messaging" component={Messaging} options={{
-    headerShown:false
-  }} />
- 
-  <Stack.Screen name="changePassword" component={UpdatePassword} options={{
-    headerShown:false
-  }} />
+          }} />
+          <Stack.Screen name="notification" component={Notification} options={{
+            headerShown: false,
 
-  <Stack.Screen name="searchComponent" component={SearchComponent} options={{
-    headerShown:false
-  }} />
-  <Stack.Screen name="postViewJob" component={PreviewJobView} options={{
-    headerShown:false
-  }} />
+
+          }} />
+
+          <Stack.Screen name='profile' component={UserProfile} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="customWp" component={customiseComponent} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="editProfile" component={EditProfile} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="subCategory" component={SubCategory} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="placeorder" component={Placeorder} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="forgotPassword" component={ChangePassword} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="selectPatterns" component={SelectPatterns} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="category2" component={Category2} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="products" component={Products} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="customCatelog" component={customCatlog} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="subCategory2" component={subCategory2} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="editImage" component={EditImage} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="description" component={Description} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="stockDetails2" component={StockDetails2} options={{
+            headerShown: false
+          }} />
+
+          <Stack.Screen name="onGoingJoblist" component={onGoingJobList} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="showsPdf" component={WebView} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="content" component={Content} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="subCat2" component={subCat2} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="passwordUpdate" component={PasswordUpdate} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="seeOnYourWall" component={SeeOnyourWall} options={{
+            headerShown: false
+          }} />
+
+          <Stack.Screen name="StockEnquery2" component={StockEnquery2} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="onGoingJob" component={OnGoingJob} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="enqueryDetails" component={StockEnqueryDetails} options={{
+            headerShown: false
+
+          }} />
+          <Stack.Screen name="tracker" component={JobTracker} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="messaging" component={Messaging} options={{
+            headerShown: false
+          }} />
+
+          <Stack.Screen name="changePassword" component={UpdatePassword} options={{
+            headerShown: false
+          }} />
+
+          <Stack.Screen name="searchComponent" component={SearchComponent} options={{
+            headerShown: false
+          }} />
+          <Stack.Screen name="postViewJob" component={PreviewJobView} options={{
+            headerShown: false
+          }} />
         </Stack.Navigator>
-   
+
 
       </NavigationContainer>
     )
   }
 }
-       
+
 
 const styles = StyleSheet.create({
   scrollView: {
