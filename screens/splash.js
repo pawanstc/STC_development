@@ -70,29 +70,35 @@ componentDidMount(){
             useNativeDriver:false
         }),
         
-    ]).start(  () =>   this.checkUser());
+    ]).start(  () =>{ console.log("checkuser") 
+     this.checkUser()});
 
    
 }
 
 checkUser =  () =>{
    
-
+    console.log("function called!!")
     let uniqueId =   DeviceInfo.getUniqueId();
    AsyncStorage.getItem("app_token")
    .then(result =>{
-       console.log(result);
+       console.log(result)
+       console.log("hello");
        if(result){
         NetInfo.fetch().then(state =>{
             if(state.isConnected){
+                console.log("hello netinfo connected");
                 fetch(URL+"/get_User_Details_By_Device_Id", {
                     headers:{
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     method:"POST",
                     body:'device_id=' +uniqueId
-                }).then(response => response.json())
+                }).then(response =>{ response.json()
+                    console.log(URL)
+                    console.log(response)})
                 .then(result =>{
+                    console.log(result);
                   
                    
                     if(result.devices_id === uniqueId & result !=null){

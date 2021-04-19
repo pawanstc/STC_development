@@ -47,6 +47,7 @@ export default class onGoingJobList extends Component{
 				},
 				
 			],
+			job_id:'',
 			user_role:"",
 			desc:"Details missing", 
 			job_status:"All Jobs",

@@ -84,7 +84,9 @@ login = async () =>{
                     method:'POST',
                     body:"user_id="+result.id.toString()
                 }).then(response=>response.json())
+                
                 .then(result=>{
+                    console.log(result)
                     if(result.user_role_name.toString()=="Admin"){Alert.alert("Access Denied","You do not have permission to login")
                 this.props.navigation.replace("login")}else{
                     this.props.navigation.replace("home");

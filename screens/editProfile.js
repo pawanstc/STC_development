@@ -764,7 +764,7 @@ console.log(id);
                                             {
                                                 this.state.first_name ? (
                                                     <TextInput
-                                                        placeholder="Ente Firstname"
+                                                        placeholder="Enter First Name"
                                                         defaultValue={this.state.first_name.toString()}
                                                         onChangeText={(value) => {
 
@@ -784,7 +784,7 @@ console.log(id);
                                                     />
                                                 ) : (
                                                     <TextInput
-                                                        placeholder="Ente Firstname"
+                                                        placeholder="Enter First Name"
 
                                                         onChangeText={(value) => {
 
@@ -825,14 +825,14 @@ console.log(id);
                                                             last_name: value
                                                         })}
                                                         defaultValue={this.state.last_name.toString()}
-                                                        placeholder="Enter Lastname"
+                                                        placeholder="Enter Last Name"
                                                         style={{
                                                             height: 45,
                                                             width: 260,
                                                             borderRadius: 6,
 
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 10,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -843,68 +843,13 @@ console.log(id);
                                                             last_name: value
                                                         })}
 
-                                                        placeholder="Enter Lastname"
+                                                        placeholder="Enter Last Name"
                                                         style={{
                                                             height: 45,
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
-                                                            borderColor: "#62463e",
-                                                            padding: 13
-                                                        }}
-                                                    />
-                                                )
-                                            }
-
-                                            
-
-
-
-
-<View >
-                                                <Text style={{
-                                                    marginRight: 10,
-                                                    color: "#62463e",
-                                                    width: 500,
-                                                    fontSize: 14,
-                                                    fontWeight: "bold",
-                                                    marginTop:10
-                                                    
-
-                                                }} >Mobile Number</Text>
-                                            </View>
-                                            {
-                                                this.state.mobile_number ? (
-                                                    <TextInput
-                                                        defaultValue={this.state.mobile_number.toString()}
-                                                        onChangeText={(value) => this.setState({
-                                                            mobile_number: value
-                                                        })}
-                                                        placeholder="Enter Mobile Number"
-                                                        style={{
-                                                            height: 45,
-                                                            width: 260,
-                                                            borderRadius: 6,
-                                                            borderWidth: 0.6,
-                                                            marginTop: 20,
-                                                            borderColor: "#62463e",
-                                                            padding: 12
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <TextInput
-
-                                                        onChangeText={(value) => this.setState({
-                                                            mobile_number: value
-                                                        })}
-                                                        placeholder="Enter Mobile Number"
-                                                        style={{
-                                                            height: 45,
-                                                            width: 260,
-                                                            borderRadius: 6,
-                                                            borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -913,7 +858,11 @@ console.log(id);
                                             }
 
                                             
-<View  >
+
+
+
+
+<View>
                                                 <Text style={{
                                                     marginRight: 10,
                                                     color: "#62463e",
@@ -940,7 +889,7 @@ console.log(id);
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                           // marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -957,7 +906,7 @@ console.log(id);
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -985,13 +934,13 @@ console.log(id);
                                                         onChangeText={(value) => this.setState({
                                                             company_name: value
                                                         })}
-                                                        placeholder="Enter Company"
+                                                        placeholder="Enter Company Name"
                                                         style={{
                                                             height: 45,
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -1002,13 +951,13 @@ console.log(id);
                                                         onChangeText={(value) => this.setState({
                                                             company_name: value
                                                         })}
-                                                        placeholder="Enter Company"
+                                                        placeholder="Enter Company Name"
                                                         style={{
                                                             height: 45,
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -1042,7 +991,7 @@ console.log(id);
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -1059,7 +1008,7 @@ console.log(id);
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                            //marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}

@@ -18,7 +18,14 @@ export default class postViewJob extends Component{
          supportive_image:this.props.route.params.supportive_image,
          button_show:this.props.route.params.button_show,
          order_id:this.props.route.params.order_id,
-         ip_address:""
+         ip_address:"",
+         prev_img:'',
+         distributer_approve:false,
+         dealer_approve:false,
+         user_type:'',
+         status:'',
+         upld_stat:true
+
      } 
  }
 
@@ -29,7 +36,52 @@ export default class postViewJob extends Component{
             ip_address:ipv4Address
         })
       });
- }
+
+     
+
+      
+       fetch(URL+"/get_latest_order_status_by_post_job_order_id",{
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        method:"POST",
+        body:"post_job_order_id="+this.state.order_id
+    }).then(response=>response.json())
+    .then(result=>{
+        console.log(result);
+        if(result.order_status_id){
+            this.setState({
+               
+                status:order_status_id
+                
+            });if(this.state.status==9)get_prevImage()
+        }
+    }).catch(error=>console.log(error))
+ 
+}
+
+get_prevImage=()=>{
+
+    fetch(URL+"/get_approve_image_by_order_id",{
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        method:"POST",
+        body:"post_job_order_id="+this.state.order_id
+    }).then(response=>response.json())
+    .then(result=>{
+        if(result){
+        this.setState({
+            prev_img:result.upload_image_url
+        })}else{Alert.alert("Failed",'Failed to get preview image')}
+    })
+        this.setState({
+            upld_stat:false
+        })
+}
+     
+     
+ 
 
  approveJob = () =>{
 
@@ -134,13 +186,13 @@ export default class postViewJob extends Component{
                    }} >
                         <Text style={{
                         fontSize:16,
-                        fontWeight:"normar",
+                        fontWeight:"normal",
                         margin:8
                     }} >Pattern Number</Text>
 
 <Text style={{
                         fontSize:16,
-                        fontWeight:"normar",
+                        fontWeight:"normal",
                         margin:10,
                         color:"blue"
                     }} >{this.state.pattern_number}</Text>
@@ -202,46 +254,23 @@ export default class postViewJob extends Component{
                             <Text style={{
                                 fontSize:16,
                                 color:"grey"
-                            }} >No supportive image fround</Text>
+                            }} >No supportive image found</Text>
 
                             </View>
                     )
                 }
 
-                {/* {
-                    this.state.button_show == "Yes" ? (
-                        <View style={{
-                     flex:0.7,
-                            justifyContent:"center",
-                            alignItems:"center"
-                        }} >
-                 
-                                <View style={{
-                                    height:45,
-                                    width :180,
-                                    
-                                }} >
-                                   <Button title="Approvrd" onPress={() => this.approveJob() } color="green" />
-                                </View>
-                 
-
-                            </View>
-                    ) :( <View style={{
-                       flex:0.7,
-                        justifyContent:"center",
-                        alignItems:"center"
-                    }} >
-                       
-                            <View style={{
-                                height:45,
-                                width :180,
-                            }} >
-                                  <Button title="Approvrd" disabled={true} color="green" />
-                            </View>
-           
-
-                        </View>)
-                } */}
+                
+                {this.state.prev_img?(<Image source={{uri:imageUrl+"/"+this.state.prev_img}} style={{
+                                        height:120,
+                                        width:130,
+                                        borderWidth:1,
+                                        borderColor:"#EEEE",
+                                        borderRadius:3,
+                                        elevation:6,
+                                        margin:10,
+                                        borderWidth:0.6,
+                                        borderColor:"black"}}/>):(<Text>No Preview image Found</Text>)}
 
                    </ScrollView>
                    
@@ -249,26 +278,53 @@ export default class postViewJob extends Component{
                 </View>
 
             </View>
+            
                
 
-            {
-                    this.state.button_show == "Yes" ? (
+            
+                       
+
+                      
+                          
                         <View style={{
-                
+                            flex:0.1,
                             justifyContent:"center",
-                            alignItems:"center"
-                        }} >
+                            alignItems:"center",
+                            flexDirection:"row"
+                        }}  >
+                             <TouchableOpacity disabled={this.state.upld_stat}  >
+
+<View style={{
+        height:40,
+        width :Dimensions.get("screen").width/2,
+        backgroundColor:"#f58634",
+        justifyContent:'center',
+        //alignItems:"center"
+        flexGrow:0.5
+        
+    }} >
+       
+
+       <Text style={{
+           textAlign:"center",
+           color:"#FFFF",
+           fontSize:16
+       }} >Reject Job
+       </Text>
+    </View>
+</TouchableOpacity>
                  
-                              <TouchableOpacity onPress={() =>this.approveJob() } >
+                              <TouchableOpacity disabled={this.state.upld_stat} onPress={() =>this.approveJob() } >
                               <View style={{
                                     height:40,
-                                    width :Dimensions.get("screen").width,
-                                    backgroundColor:"green",
+                                    width :Dimensions.get("screen").width/2,
+                                    backgroundColor:"#81b214",
                                     justifyContent:"center",
-                                    alignItems:"center"
+                                    //alignItems:"center"
+                                    flexGrow:0.5
                                     
                                 }} >
-                                   {/* <Button title="Approvrd" onPress={() => this.approveJob() } color="green" /> */}
+                                  
 
                                    <Text style={{
                                        textAlign:"center",
@@ -279,45 +335,27 @@ export default class postViewJob extends Component{
                               </TouchableOpacity>
                  
 
-                            </View>
-                    ) :( <View style={{
+                          
+                            
                     
-                        justifyContent:"center",
-                        alignItems:"center"
-                    }} >
                        
-                            {/* <View style={{
-                                height:30,
-                                width :Dimensions.get("screen").width,
-                            }} >
-                                  <Button title="Approvrd" disabled={true} color="green" />
-                            </View> */}
-
-                            <TouchableOpacity   >
-
-                            <View style={{
-                                    height:40,
-                                    width :Dimensions.get("screen").width,
-                                    backgroundColor:"grey",
-                                    justifyContent:"center",
-                                    alignItems:"center"
-                                    
-                                }} >
-                                   {/* <Button title="Approvrd" onPress={() => this.approveJob() } color="green" /> */}
-
-                                   <Text style={{
-                                       textAlign:"center",
-                                       color:"#FFFF",
-                                       fontSize:16
-                                   }} >Approve Job
-                                   </Text>
-                                </View>
-                            </TouchableOpacity>
+                            
+                           
            
 
-                        </View>)
-                }
-           </View>
+                        </View>
+                       
+                        </View>
+                       
+    
+                               
+    
+    
+                           
+                        
+           
         )
-    }
-}
+                                
+                                }
+                            }
+
