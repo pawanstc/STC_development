@@ -79,7 +79,7 @@ import OnGoingJob from './screens/onGoindJobList.js';
 import StockEnqueryDetails from './screens/stockEnqueryData.js';
 import JobTracker from './screens/trackjob.js';
 import Messaging from './screens/messaging.js';
-
+import preview from './screens/preview'
 import UpdatePassword from './screens/changePassword.js';
 import SearchComponent from './screens/searchBarComponent.js';
 import PreviewJobView from './screens/postViewJob.js';
@@ -211,6 +211,9 @@ const config = {
 
       
     }} />
+    <Stack.Screen name="preview" component={preview} options={{
+      headerShown:false,
+    }}/>
 
     <Stack.Screen name='profile' component={UserProfile} options={{
       headerShown:false

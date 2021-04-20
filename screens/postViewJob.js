@@ -323,7 +323,7 @@ rejectJob=()=>{
                 }
 
                 
-                {this.state.prev_img?(<TouchableOpacity onPress={()=>{}}><Image source={{uri:imageUrl+"/"+this.state.prev_img}} style={{
+                {this.state.prev_img?(<TouchableOpacity onPress={()=>{navigation.navigate('preview',{uri:imageUrl+"/"+this.state.prev_img,order_id:order_id})}}><Image source={{uri:imageUrl+"/"+this.state.prev_img}} style={{
                                         height:120,
                                         width:130,
                                         borderWidth:1,
