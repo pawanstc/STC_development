@@ -68,7 +68,7 @@ login = async () =>{
            body:"mobile_number=" +this.state.mobile_number+ "&password="+ this.state.password+ "&device_id="+device_id
         }).then( response=>response.json())
         .then(result =>{
-         
+                console.log(result)
             if(result.error == true){
                 Alert.alert(
                     "Error",
@@ -80,18 +80,23 @@ login = async () =>{
              
                 AsyncStorage.setItem("device_id", result.devices_id.toString());
                 AsyncStorage.setItem("user_id", result.id.toString());
+                console.log(result.id.toString())
                 fetch(URL+"/get_user_details_by_user_id",{
                     method:'POST',
+                    headers:{
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                  },
                     body:"user_id="+result.id.toString()
-                }).then(response=>response.json())
-                
-                .then(result=>{
+                    }).then(response=>response.json())
+                    .then(result=>{
                     console.log(result)
+                    if(result.user_role_name){
                     if(result.user_role_name.toString()=="Admin"){Alert.alert("Access Denied","You do not have permission to login")
                 this.props.navigation.replace("login")}else{
                     this.props.navigation.replace("home");
                 }
-                })
+            }
+                }).catch(error=>console.log(error))
                 
             }
         }).catch(error =>{

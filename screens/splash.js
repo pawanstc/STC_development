@@ -94,20 +94,16 @@ checkUser =  () =>{
                     },
                     method:"POST",
                     body:'device_id=' +uniqueId
-                }).then(response =>{ response.json()
-                    console.log(URL)
-                    console.log(response)})
+                }).then(response => response.json())
+                    
                 .then(result =>{
-                    console.log(result);
-                  
-                   
                     if(result.devices_id === uniqueId & result !=null){
                         this.props.navigation.replace("home");
                     }else{
                         this.props.navigation.replace("login");
                     }
                 })
-
+                
             }else{
                 Alert.alert(
                     "Network Error",

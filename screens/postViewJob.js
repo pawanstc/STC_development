@@ -24,10 +24,21 @@ export default class postViewJob extends Component{
          dealer_approve:false,
          user_type:'',
          status:'',
-         upld_stat:true
+         upld_stat:true,
+        user_id:'',
+        description:''
 
      } 
  }
+ setUserType=()=>{
+    fetch(URL+"/get_user_details_by_user_id",{
+        method:'POST',
+        body:"user_id="+this.state.user_id
+    }).then(response=>response.json())
+    .then(result=>{
+        this.setState({user_type:result.user_role_name})
+    })
+}
 
  componentDidMount(){
      console.log(this.state.order_image);
@@ -37,7 +48,10 @@ export default class postViewJob extends Component{
         })
       });
 
-     
+      AsyncStorage.getItem("user_id")
+      .then(result=>this.setState({user_id:result}));
+
+     this.setUserType()
 
       
        fetch(URL+"/get_latest_order_status_by_post_job_order_id",{
@@ -75,15 +89,63 @@ get_prevImage=()=>{
             prev_img:result.upload_image_url
         })}else{Alert.alert("Failed",'Failed to get preview image')}
     })
-        this.setState({
-            upld_stat:false
-        })
+       if(status==9 && user_type=='Dealer')this.setState({upld_stat:false})
+       else if(status==10 && user_type=='Distributer')this.setState({upld_stat:false})
 }
-     
+
+
+
+     setStatus=()=>{
+         if(this.state.user_type=='Dealer')this.setState({status:10})
+         else if(this.state.user_type=='Distributer')this.setState({status:8})
+     }
+     rejectStatus=()=>{
+        if(this.state.user_type=='Dealer')this.setState({status:11})
+        else if(this.state.user_type=='Distributer')this.setState({status:12})
+     }
      
  
+rejectJob=()=>{
+    rejectStatus()
+
+    NetInfo.fetch().then(state =>{
+        if(state.isConnected){
+            fetch(URL+"/order_accep_reject_by_order_id", {
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+                method:"POST",
+                body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.description
+            }).then(response => response.json())
+            .then(result =>{
+                console.log(result);
+                if(result){
+                    this.setState({
+                        button_show:"No"
+                    });
+
+                    Alert.alert(
+                        "Success Message",
+                        "Rejected"
+                    )
+                    this.props.navigation.replace("onGoingJob");
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+        }else{
+            Alert.alert(
+                "Network Error",
+                "Please check your Internet connection"
+            )
+        }
+    })
+    
+}
+
 
  approveJob = () =>{
+     setStatus()
 
     AsyncStorage.getItem("user_id")
     .then(result =>{
@@ -91,12 +153,12 @@ get_prevImage=()=>{
             console.log(result);
             NetInfo.fetch().then(state =>{
                 if(state.isConnected){
-                    fetch(URL+"/distributor_approve_order_status_by_order_id", {
+                    fetch(URL+"/order_accep_reject_by_order_id", {
                         headers:{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address
+                        body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.description
                     }).then(response => response.json())
                     .then(result =>{
                         console.log(result);
@@ -179,10 +241,10 @@ get_prevImage=()=>{
                     flex:1
                 }} >
                    <ScrollView 
-                    vertical={false}
-                    showsVerticalScrollIndicator={false}
+                    vertical={true}
+                    showsVerticalScrollIndicator={true}
                    contentContainerStyle={{
-                       paddingBottom:150
+                       paddingBottom:180
                    }} >
                         <Text style={{
                         fontSize:16,
@@ -261,16 +323,16 @@ get_prevImage=()=>{
                 }
 
                 
-                {this.state.prev_img?(<Image source={{uri:imageUrl+"/"+this.state.prev_img}} style={{
+                {this.state.prev_img?(<TouchableOpacity onPress={()=>{}}><Image source={{uri:imageUrl+"/"+this.state.prev_img}} style={{
                                         height:120,
                                         width:130,
                                         borderWidth:1,
                                         borderColor:"#EEEE",
                                         borderRadius:3,
                                         elevation:6,
-                                        margin:10,
+                                        marginBottom:30,
                                         borderWidth:0.6,
-                                        borderColor:"black"}}/>):(<Text>No Preview image Found</Text>)}
+                                        borderColor:"black"}}/></TouchableOpacity>):(<Text>No Preview image Found</Text>)}
 
                    </ScrollView>
                    
@@ -292,7 +354,7 @@ get_prevImage=()=>{
                             alignItems:"center",
                             flexDirection:"row"
                         }}  >
-                             <TouchableOpacity disabled={this.state.upld_stat}  >
+                             <TouchableOpacity disabled={this.state.upld_stat} onPress={()=>this.rejectJob}  >
 
 <View style={{
         height:40,
@@ -300,7 +362,9 @@ get_prevImage=()=>{
         backgroundColor:"#f58634",
         justifyContent:'center',
         //alignItems:"center"
-        flexGrow:0.5
+        flexGrow:0.5,
+        borderRadius:10,
+        margin:10
         
     }} >
        
@@ -321,8 +385,9 @@ get_prevImage=()=>{
                                     backgroundColor:"#81b214",
                                     justifyContent:"center",
                                     //alignItems:"center"
-                                    flexGrow:0.5
-                                    
+                                    flexGrow:0.5,
+                                    borderRadius:10,
+                                    margin:10
                                 }} >
                                   
 

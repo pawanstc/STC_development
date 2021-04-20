@@ -709,7 +709,8 @@ setStatus = (value) =>{
 														  order_image:items.item.pattern_image_url,
 														  supportive_image:items.item.support_image.image_details,
 														  button_show:items.item.button_show,
-														  order_id:items.item.id
+														  order_id:items.item.id,
+														  
 													  })}  >
 													  <View style={{
 													   justifyContent:'center',
