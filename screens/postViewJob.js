@@ -37,6 +37,7 @@ export default class postViewJob extends Component{
     }).then(response=>response.json())
     .then(result=>{
         this.setState({user_type:result.user_role_name})
+        console.log(this.state.user_type)
     })
 }
 
@@ -51,7 +52,7 @@ export default class postViewJob extends Component{
       AsyncStorage.getItem("user_id")
       .then(result=>this.setState({user_id:result}));
 
-     this.setUserType()
+    ()=>setUserType()
 
       
        fetch(URL+"/get_latest_order_status_by_post_job_order_id",{
@@ -63,19 +64,26 @@ export default class postViewJob extends Component{
     }).then(response=>response.json())
     .then(result=>{
         console.log(result);
-        if(result.order_status_id){
+        console.log(result.status_details)
+        let st=result.status_details
+        console.log(st)
+        if(result){
             this.setState({
                
-                status:order_status_id
+                status:st[0].order_status_id
                 
-            });if(this.state.status==9)get_prevImage()
+            })
+            console.log("helolo")
+            console.log("h")
+            console.log(this.state.status);
+            if(this.state.status==9){this.get_prevImage()}
         }
     }).catch(error=>console.log(error))
  
 }
 
 get_prevImage=()=>{
-
+console.log("heloo preview")
     fetch(URL+"/get_approve_image_by_order_id",{
         headers:{
             "Content-Type":"application/x-www-form-urlencoded"
@@ -85,12 +93,18 @@ get_prevImage=()=>{
     }).then(response=>response.json())
     .then(result=>{
         if(result){
+            
         this.setState({
             prev_img:result.upload_image_url
-        })}else{Alert.alert("Failed",'Failed to get preview image')}
+        })
+        console.log(this.state.prev_img)}else{Alert.alert("Failed",'Failed to get preview image')}
+
     })
-       if(status==9 && user_type=='Dealer')this.setState({upld_stat:false})
-       else if(status==10 && user_type=='Distributer')this.setState({upld_stat:false})
+       if(this.state.status==9 && this.state.user_type=='Dealer'){
+           
+        this.setState({upld_stat:false})
+    console.log(this.state.upld_stat)}
+       else if(this.state.status==10 && this.state.user_type=='Distributer')this.setState({upld_stat:false})
 }
 
 
@@ -106,7 +120,7 @@ get_prevImage=()=>{
      
  
 rejectJob=()=>{
-    rejectStatus()
+    this.rejectStatus()
 
     NetInfo.fetch().then(state =>{
         if(state.isConnected){
@@ -145,7 +159,7 @@ rejectJob=()=>{
 
 
  approveJob = () =>{
-     setStatus()
+    this.setStatus()
 
     AsyncStorage.getItem("user_id")
     .then(result =>{
@@ -289,17 +303,17 @@ rejectJob=()=>{
                                     flex:1,
                                     alignItems:"center"
                                 }} >
-                                    <Image source={{uri:imageUrl+"/"+items.item.image_url}} style={{
-                                        height:120,
-                                        width:130,
-                                        borderWidth:1,
-                                        borderColor:"#EEEE",
-                                        borderRadius:3,
-                                        elevation:6,
-                                        margin:10,
-                                        borderWidth:0.6,
-                                        borderColor:"black"
-                                    }} />
+                                   <Image source={{uri:urlsDomain+"/"+items.item.image_url}}  
+                        style={{
+                            height:140,
+                            width:160,
+                            borderRadius:4,
+                            elevation:5,
+                            margin:10,
+                            borderWidth:1,
+                            borderColor:"#eeee"
+                        }}
+                    />
 
                                     </View>
                             )
@@ -310,7 +324,7 @@ rejectJob=()=>{
                     ) :(
                         <View style={{
                             justifyContent:"center",
-                            alignItems:'center',
+                            
                             marginTop:20
                         }} >
                             <Text style={{
@@ -322,21 +336,23 @@ rejectJob=()=>{
                     )
                 }
 
-                
-                {this.state.prev_img?(<TouchableOpacity onPress={()=>{navigation.navigate('preview',{uri:imageUrl+"/"+this.state.prev_img,order_id:order_id})}}> <Text style={{
-                        fontSize:14,
+<Text style={{ fontSize:14,
                         margin:20,
                         marginTop:20
-                    }} >Preview Images:</Text><Image source={{uri:imageUrl+"/"+this.state.prev_img}} style={{
-                                        height:120,
-                                        width:130,
-                                        borderWidth:1,
-                                        borderColor:"#EEEE",
-                                        borderRadius:3,
-                                        elevation:6,
-                                        marginBottom:30,
-                                        borderWidth:0.6,
-                                        borderColor:"black"}}/></TouchableOpacity>):(<Text>No Preview image Found</Text>)}
+                    }} >Preview Images:</Text>
+                {this.state.prev_img?(<TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:urlsDomain+""+this.state.prev_img,order_id:this.state.order_id})}}>
+                <Image source={{uri:urlsDomain+""+this.state.prev_img}}  
+                        style={{
+                            height:140,
+                            width:160,
+                            borderRadius:4,
+                            elevation:5,
+                            margin:10,
+                            borderWidth:1,
+                            borderColor:"#eeee"
+                        }}
+                    /></TouchableOpacity>
+                                        ):(<Text>No Preview image Found</Text>)}
 
                    </ScrollView>
                    
