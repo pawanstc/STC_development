@@ -212,6 +212,7 @@ searchBarAppear = () =>{
                     method:"GET"
                 }).then(response => response.json())
                 .then(result =>{
+                    console.log(result)
                     if(result.error == false){
                         this.setState({
                             cate_log_list:result.stock_catlog_list,
@@ -221,7 +222,7 @@ searchBarAppear = () =>{
 
                     }
                 }).catch(error =>{
-                    consoile.log(error);
+                    console.log(error);
                 });
             }else{
                 Aelrt.alert(
@@ -253,7 +254,8 @@ searchBarAppear = () =>{
                             this.setState({
                                 cate_log_list:result.stock_catlog_list,
                                 refreshing:false
-                            });
+                            })
+                            console.log(result.stock_catalog_list)
                         }else{
 
                         }

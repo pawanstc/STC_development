@@ -20,29 +20,49 @@ export default class postViewJob extends Component{
          order_id:this.props.route.params.order_id,
          ip_address:"",
          prev_img:'',
-         distributer_approve:false,
-         dealer_approve:false,
-         user_type:'',
+         distributer_approve:'',
+         dealer_approve:'',
+         user_type:'unknown',
          status:'',
-         upld_stat:true,
+         isDisabled:false,
         user_id:'',
         description:''
 
      } 
  }
- setUserType=()=>{
-    fetch(URL+"/get_user_details_by_user_id",{
-        method:'POST',
-        body:"user_id="+this.state.user_id
-    }).then(response=>response.json())
-    .then(result=>{
-        this.setState({user_type:result.user_role_name})
-        console.log(this.state.user_type)
-    })
-}
-
+ 
  componentDidMount(){
-     console.log(this.state.order_image);
+     
+
+
+     AsyncStorage.getItem("user_id")
+     .then(result =>{
+         
+         NetInfo.fetch().then(state =>{
+             if(state.isConnected){
+                 console.log('fetching')
+               fetch(URL+"/get_user_details_by_user_id", {
+                   headers:{
+                       "Content-Type":"application/x-www-form-urlencoded"
+                   },
+                   method:"POST",
+                   body:"user_id=" +result
+               }).then(response => response.json())
+               .then(result =>{
+                   if(result){
+                       
+                       console.log(result)
+                       //console.log(result.user_role_name)
+                       
+                          this.setState({user_type:result.user_role_name})
+                       console.log(this.state.user_type)
+                    }
+                })
+            }
+         })
+        })
+    
+     console.log(this.state.user_type)
     NetworkInfo.getIPV4Address().then(ipv4Address => {
         this.setState({
             ip_address:ipv4Address
@@ -52,7 +72,7 @@ export default class postViewJob extends Component{
       AsyncStorage.getItem("user_id")
       .then(result=>this.setState({user_id:result}));
 
-    ()=>setUserType()
+    
 
       
        fetch(URL+"/get_latest_order_status_by_post_job_order_id",{
@@ -70,16 +90,80 @@ export default class postViewJob extends Component{
         if(result){
             this.setState({
                
-                status:st[0].order_status_id
-                
+                status:st[0].order_status_id,
+                description:st[0].status_name
             })
             console.log("helolo")
             console.log("h")
             console.log(this.state.status);
-            if(this.state.status==9){this.get_prevImage()}
+        this.get_prevImage()
+        
+
         }
     }).catch(error=>console.log(error))
+
+    
  
+}
+setOptions=()=>{
+    if(this.state.status && this.state.user_type){
+        console.log(this.state.user_type)
+        console.log(this.state.status)
+        console.log("chana badam")
+      switch(this.state.user_type){
+          case 'Dealer':
+              switch (this.state.status) {
+                  case 9:
+                      this.setState({dealer_approve:''})
+                      this.setState({distributer_approve:''})
+                      this.setState({isDisabled:false})
+                      break;
+                  case 10:
+                      this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:true})
+                      console.log(this.state.dealer_approve)
+                      break;
+                      case 8:
+                          this.setState({dealer_approve:'Approved',distributer_approve:'Approved',isDisabled:true})
+                          break;
+                  case 11:
+                      this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
+                      break;
+                  case 12:
+                      this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})    
+                  default:
+                      break;
+              }
+              break;
+          case 'Distributer':
+              switch(this.state.status){
+                case 9:
+                    this.setState({dealer_approve:''})
+                    this.setState({distributer_approve:''})
+                    this.setState({isDisabled:true})
+                    break;
+                case 10:
+                    this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:false})
+                    
+                    break;
+                    case 8:
+                        this.setState({dealer_approve:'Approved',distributer_approve:'Approved',isDisabled:true})
+                        break;
+                case 11:
+                    this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
+                    break;
+                case 12:
+                    this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})
+                    break;    
+                default:
+                    break;
+              }   
+              
+            default:
+                console.log("Nahi chalaat baa")
+                break;  
+
+      }   
+    }
 }
 
 get_prevImage=()=>{
@@ -97,20 +181,20 @@ console.log("heloo preview")
         this.setState({
             prev_img:result.upload_image_url
         })
+        this.setOptions()
         console.log(this.state.prev_img)}else{Alert.alert("Failed",'Failed to get preview image')}
 
     })
-       if(this.state.status==9 && this.state.user_type=='Dealer'){
-           
-        this.setState({upld_stat:false})
-    console.log(this.state.upld_stat)}
-       else if(this.state.status==10 && this.state.user_type=='Distributer')this.setState({upld_stat:false})
+      
 }
 
 
 
      setStatus=()=>{
-         if(this.state.user_type=='Dealer')this.setState({status:10})
+         console.log("setting status")
+         console.log(this.state.user_type)
+         if(this.state.user_type=='Dealer'){this.setState({status:10})
+        console.log(this.state.status)}
          else if(this.state.user_type=='Distributer')this.setState({status:8})
      }
      rejectStatus=()=>{
@@ -120,8 +204,14 @@ console.log("heloo preview")
      
  
 rejectJob=()=>{
+    
     this.rejectStatus()
-
+    console.log('Rejecting')
+    AsyncStorage.getItem("user_id")
+    .then(result =>{
+        if(result){
+            console.log(result);
+    
     NetInfo.fetch().then(state =>{
         if(state.isConnected){
             fetch(URL+"/order_accep_reject_by_order_id", {
@@ -133,19 +223,21 @@ rejectJob=()=>{
             }).then(response => response.json())
             .then(result =>{
                 console.log(result);
-                if(result){
-                    this.setState({
-                        button_show:"No"
-                    });
+                if(!result.error){
+                   
 
                     Alert.alert(
                         "Success Message",
-                        "Rejected"
+                        "Preview Rejected"
                     )
                     this.props.navigation.replace("onGoingJob");
                 }
             }).catch(error =>{
-                console.log(error);
+                console.log(error)
+                Alert.alert(
+                    "Error Message",
+                    {error}
+                );
             })
         }else{
             Alert.alert(
@@ -153,12 +245,20 @@ rejectJob=()=>{
                 "Please check your Internet connection"
             )
         }
+    }).catch(err=>console.log(err))
+}
     })
-    
+}
+levelCheck=()=>{
+    let level=false
+    if(this.state.status==9 && this.state.user_type=='Dealer')level=true;
+    if(this.state.status==10 && this.state.user_type=='Distributer')level=true;
+    return level
 }
 
-
  approveJob = () =>{
+
+    if(!this.levelCheck){Alert.alert('Error','You are not allowed to approve this job yet!')}else{
     this.setStatus()
 
     AsyncStorage.getItem("user_id")
@@ -176,19 +276,23 @@ rejectJob=()=>{
                     }).then(response => response.json())
                     .then(result =>{
                         console.log(result);
-                        if(result){
+                        if(!result.error){
                             this.setState({
                                 button_show:"No"
                             });
 
                             Alert.alert(
                                 "Success Message",
-                                "Approve Successfully"
+                                "Preview Approved Successfully"
                             )
                             this.props.navigation.replace("onGoingJob");
                         }
                     }).catch(error =>{
                         console.log(error);
+                        Alert.alert(
+                            "Error Message",
+                            {error}
+                        )
                     })
                 }else{
                     Alert.alert(
@@ -201,7 +305,40 @@ rejectJob=()=>{
 
         }
     })
-   
+}
+ }
+
+ rejectJobConf=()=>{
+    Alert.alert(
+        "Reject Preview",
+        "Are You Sure You Want To Reject This Preview",
+        [
+            {
+                text:"Ok",
+                onPress:() => this.rejectJob()
+            },
+            {
+                text:"Cancel",
+                onPress:() => null
+            }
+        ]
+    )
+ }
+ approveJobconf=()=>{
+    Alert.alert(
+        "Approve Preview",
+        "Are You Sure You Want To Approve This Preview",
+        [
+            {
+                text:"Ok",
+                onPress:() => this.approveJob()
+            },
+            {
+                text:"Cancel",
+                onPress:() => null
+            }
+        ]
+    )
  }
     render(){
        
@@ -234,7 +371,7 @@ rejectJob=()=>{
                         fontSize:18,
                         color:"#FFF",
                         margin:20
-                    }} >Post View Job</Text>
+                    }} >PreView Job</Text>
                     <View style={{
                         height:40,
                         width:60
@@ -260,53 +397,94 @@ rejectJob=()=>{
                    contentContainerStyle={{
                        paddingBottom:180
                    }} >
-                        <Text style={{
-                        fontSize:16,
-                        fontWeight:"normal",
-                        margin:8
-                    }} >Pattern Number</Text>
+                         <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} >
 
-<Text style={{
-                        fontSize:16,
+                                       <Text style={{textAlign:'center',fontSize:18,color:'#62463e',marginTop:10}}>JOB STATUS</Text>
+                                       <Text style={{
+                                fontSize:16,
+                                color:"grey",
+                                textAlign:'center'}}>{this.state.description}</Text>
+                                   </View><View style={{elevation:2,marginBottom:4}}>
+                        <View style={{
+									  
+									   
+                                        flexDirection:'row',
+                                        alignItems:'center'
+								   }} >
+                        <Text style={{
+                        fontSize:18,
                         fontWeight:"normal",
-                        margin:10,
-                        color:"blue"
-                    }} >{this.state.pattern_number}</Text>
+                        margin:8,
+                        color:'#62463e'
+                    }} >Pattern-:</Text>
+                   
+                    </View>
+
+
                     <Image source={{uri:urlsDomain+""+this.state.order_image}}  
                         style={{
-                            height:140,
-                            width:160,
+                            height:240,
+                            width:'95%',
                             borderRadius:4,
                             elevation:5,
                             margin:10,
-                            borderWidth:1,
-                            borderColor:"#eeee"
+                           
                         }}
                     />
-
+                     <View style={{
+									  
+									   borderBottomWidth:0.5,
+   
+								   }} >
+                     <Text style={{
+                        fontSize:18,
+                        fontWeight:"normal",
+                        margin:8,
+                        color:"#62463e",
+                        textAlign:'center'
+                    }} >{this.state.pattern_number}</Text>
+                    </View>
+                    </View>
+                    <View style={{marginBottom:4}}>
                 {
                     this.state.supportive_image.length > 0 ? (
                         <View>
+                             <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} >
                              <Text style={{
-                        fontSize:14,
-                        margin:20,
-                        marginTop:20
+                        fontSize:18,
+                        margin:10,
+                        color:'#62463e',
+                        textAlign:'left'
                     }} >Support Images:</Text>
-
+                    </View>
+                    
                     <FlatList
-                  numColumns={2}
+                  numColumns={1}
+                  horizontal={true}
                    
                         data={this.state.supportive_image}
                         renderItem={(items) =>{
                             return(
+                               
                                 <View style={{
                                     flex:1,
                                     alignItems:"center"
                                 }} >
+                                     <ScrollView
+                                horizontal={true}
+                                 showsHorizontalScrollIndicator={true}>
                                    <Image source={{uri:urlsDomain+"/"+items.item.image_url}}  
                         style={{
-                            height:140,
-                            width:160,
+                            height:240,
+                            width:Dimensions.get('screen').width*0.80,
                             borderRadius:4,
                             elevation:5,
                             margin:10,
@@ -314,12 +492,14 @@ rejectJob=()=>{
                             borderColor:"#eeee"
                         }}
                     />
+                     </ScrollView>
 
                                     </View>
                             )
                         }}
                         keyExtractor={(item) => item.id}
                     />
+                   
                             </View>
                     ) :(
                         <View style={{
@@ -329,93 +509,63 @@ rejectJob=()=>{
                         }} >
                             <Text style={{
                                 fontSize:16,
-                                color:"grey"
+                                color:"grey",
+                                textAlign:'center'
                             }} >No supportive image found</Text>
 
                             </View>
                     )
                 }
-
-<Text style={{ fontSize:14,
-                        margin:20,
-                        marginTop:20
+                </View>
+                <View style={{marginBottom:4,borderRadius:4}}>
+                <View style={{
+									   padding:10,
+									   borderBottomWidth:0.5,
+   
+								   }} >
+<Text style={{ fontSize:18,
+                        
+                        marginTop:10,
+                        textAlign:'left',
+                        color:'#62463e'
                     }} >Preview Images:</Text>
-                {this.state.prev_img?(<TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:urlsDomain+""+this.state.prev_img,order_id:this.state.order_id})}}>
+                    </View>
+                {this.state.prev_img?(<View><TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:urlsDomain+""+this.state.prev_img,order_id:this.state.order_id})}}>
                 <Image source={{uri:urlsDomain+""+this.state.prev_img}}  
                         style={{
-                            height:140,
-                            width:160,
+                            height:240,
+                            width:'97%',
                             borderRadius:4,
                             elevation:5,
-                            margin:10,
+                            marginTop:5,
+                            alignSelf:'center',
+                            //marginBottom:1,
                             borderWidth:1,
                             borderColor:"#eeee"
                         }}
                     /></TouchableOpacity>
-                                        ):(<Text>No Preview image Found</Text>)}
-
-                   </ScrollView>
-                   
-
-                </View>
-
-            </View>
-            
-               
-
-            
-                       
-
-                      
-                          
-                        <View style={{
-                            flex:0.1,
+                         <View style={{
+                            width:'100%',
                             justifyContent:"center",
                             alignItems:"center",
-                            flexDirection:"row"
+                            flexDirection:"row",
+                            
                         }}  >
-                             <TouchableOpacity disabled={this.state.upld_stat} onPress={()=>this.rejectJob}  >
+                             <TouchableOpacity disabled={this.state.isDisabled} onPress={()=>this.rejectJobConf()}  >
 
-<View style={{
-        height:40,
-        width :Dimensions.get("screen").width/2,
-        backgroundColor:"#f58634",
-        justifyContent:'center',
-        //alignItems:"center"
-        flexGrow:0.5,
-        borderRadius:10,
-        margin:10
-        
-    }} >
+<View style={this.state.isDisabled?styles.rejectbutton_disabled:styles.rejectbutton_enabled} >
        
 
-       <Text style={{
-           textAlign:"center",
-           color:"#FFFF",
-           fontSize:16
-       }} >Reject Job
+       <Text style={this.state.isDisabled?styles.rejecttext_disabled:styles.rejecttext_enabled} >Reject Preview
        </Text>
     </View>
 </TouchableOpacity>
                  
-                              <TouchableOpacity disabled={this.state.upld_stat} onPress={() =>this.approveJob() } >
-                              <View style={{
-                                    height:40,
-                                    width :Dimensions.get("screen").width/2,
-                                    backgroundColor:"#81b214",
-                                    justifyContent:"center",
-                                    //alignItems:"center"
-                                    flexGrow:0.5,
-                                    borderRadius:10,
-                                    margin:10
-                                }} >
+                              <TouchableOpacity disabled={this.state.isDisabled} onPress={() =>this.approveJobconf() } >
+                              <View style={this.state.isDisabled?styles.approvebutton_disabled:styles.approvebutton_enabled} >
                                   
 
-                                   <Text style={{
-                                       textAlign:"center",
-                                       color:"#FFFF",
-                                       fontSize:16
-                                   }} >Approve Job</Text>
+                                   <Text style={this.state.isDisabled?styles.approvetext_disabled:styles.approvetext_enabled} >Approve Preview</Text>
                                 </View>
                               </TouchableOpacity>
                  
@@ -429,6 +579,44 @@ rejectJob=()=>{
            
 
                         </View>
+                        {this.state.dealer_approve?(<Text style={{
+                                            fontSize:16,
+                                            padding:10,
+                                            color:"grey",
+                                            textAlign:'left'
+                                            }}>Dealer Status:-{this.state.dealer_approve}</Text>):null}
+                                            {this.state.distributer_approve?(<Text style={{
+                                            fontSize:16,
+                                            padding:10,
+                                            color:"grey",
+                                            textAlign:'left'}}>Distributer Status:-{this.state.distributer_approve}</Text>):null}
+               
+                    </View>
+                                        ):(<Text style={{
+                                            fontSize:16,
+                                            color:"grey",
+                                            textAlign:'center'
+                                    
+                                        }}>No Preview image Found</Text>)}
+                                        
+                                        </View>
+
+                                      
+                        
+                   </ScrollView>
+                      
+
+                </View>
+               
+            </View>
+           
+
+            
+                       
+
+                      
+                          
+                     
                        
                         </View>
                        
@@ -444,3 +632,74 @@ rejectJob=()=>{
                                 }
                             }
 
+const styles = StyleSheet.create({
+    rejectbutton_enabled:{
+        backgroundColor:"#f4f4f4",
+        height:44,
+        width:Dimensions.get('window').width*0.43,
+        justifyContent:'center',
+        alignItems:"center",
+        
+        borderWidth:1.5,
+        borderColor:'#be0000'
+
+    },
+    rejecttext_enabled:{
+        textAlign:"center",
+           color:'#be0000',
+           
+           fontSize:16
+
+    },
+    approvebutton_enabled:{
+        backgroundColor:"#2b580c",
+        height:44,
+        width:Dimensions.get('window').width*0.43,
+       justifyContent:"center",
+        alignItems:"center",
+        //flexGrow:0.5,
+        //borderRadius:10,
+        borderColor:'#2b580c',
+        borderWidth:1.5
+    },
+    approvetext_enabled:{
+        textAlign:"center",
+        color:"#FFFF",
+        marginBottom:2,
+        fontSize:16
+
+    },
+    rejectbutton_disabled:{
+        backgroundColor:"#f4f4f4",
+        height:44,
+        width:Dimensions.get('window').width*0.43,
+        justifyContent:'center',
+        alignItems:"center",
+        
+        borderWidth:1.5,
+        borderColor:'#bababa'
+    },
+    rejecttext_disabled:{
+        textAlign:"center",
+           color:'#bababa',
+           
+           fontSize:16
+    },
+    approvebutton_disabled:{
+        backgroundColor:"#f4f4f4",
+        height:44,
+        width:Dimensions.get('window').width*0.43,
+        justifyContent:'center',
+        alignItems:"center",
+        
+        borderWidth:1.5,
+        borderColor:'#bababa'
+    },
+    approvetext_disabled:{
+        textAlign:"center",
+           color:'#bababa',
+           
+           fontSize:16
+    }
+
+});

@@ -35,8 +35,22 @@ export default class UpdatePassword extends Component{
         })
     }
 
+    Validation=()=>{
+        let e = ''
+        if(!this.state.oldPassword)e='Please Enter Old Password'
+        if(!this.state.newPassword)e='Please Enter New Password'
+        if(!this.state.reEnterPassword)e='Please Re-Enter New Password'
+if(e){
+    Alert.alert(
+        'Error',
+        {e}
+    ); return false
+}else return true
+
+    }
+
     ChangePassword = () =>{
-      
+      if(this.Validation()){
         AsyncStorage.getItem("user_id")
         .then(user_id =>{
             console.log("user_id"+this.props.route.params.user_id);
@@ -57,9 +71,10 @@ export default class UpdatePassword extends Component{
                         AsyncStorage.removeItem("user_id");
                             this.props.navigation.replace("login");
                         }else{
+                            let error=result.error.msg
                             Alert.alert(
                                 "Error",
-                                "Password update not successfully"
+                                {error}
                             )
                         }
                     }).catch(error =>{
@@ -74,6 +89,7 @@ export default class UpdatePassword extends Component{
             })
         })
     }
+}
     render(){
         return(
             <View style={{

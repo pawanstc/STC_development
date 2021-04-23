@@ -1,19 +1,34 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import ImageView from 'react-native-image-view'
-import { View,Image } from 'react-native'
+import { BackHandler,Modal } from 'react-native'
 
 function preview({navigation,route}) {
 
-   const {uri,order_id} = route.params
-    console.log(uri)
-    return (
-        <View style={{flex:1,height:'100%',width:'100%'}}>
-            <Image source={{uri:uri}} style={{
-                height:'100%',
-                width:'100%'}}/>
+    const [isModalVisible, setModalVisible] = useState(true)
 
-        </View>
+const closeModal = () => {
+  if (isModalVisible) {
+    setModalVisible(false)
+    navigation.pop()
+  }
+}
+
+useEffect(() => {
+  BackHandler.addEventListener('hardwareBackPress', closeModal)
+  return () => {BackHandler.removeEventListener()
+    }
+}, [])
+
+   const {uri,order_id} = route.params
+   const images=[{
+       url:uri
+   }]
+   
+    return (
+       <Modal visible={isModalVisible} onRequestClose={closeModal} transparent={true}>
+           <ImageViewer imageUrls={images} renderArrowLeft={()=>{null}}/>
+       </Modal>
     )
 }
 

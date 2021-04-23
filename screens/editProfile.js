@@ -1177,6 +1177,8 @@ console.log(id);
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
+
+                                                        keyboardType='number-pad'
                                                     />
                                                 )
                                             }

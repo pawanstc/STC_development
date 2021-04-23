@@ -49,6 +49,7 @@ export default class onGoingJobList extends Component{
 			],
 			job_id:'',
 			user_role:"",
+			
 			desc:"Details missing", 
 			job_status:"All Jobs",
 			status:[
@@ -150,6 +151,7 @@ cancelJob = (id) => {
 					this.setState({
 						selected_id:id
 					})
+					this.setState({user_type:result.user_role_name})
 						if(result.user_role_name === "Distributer"){
 						
 							
@@ -710,6 +712,7 @@ setStatus = (value) =>{
 														  supportive_image:items.item.support_image.image_details,
 														  button_show:items.item.button_show,
 														  order_id:items.item.id,
+														  
 														  
 													  })}  >
 													  <View style={{
