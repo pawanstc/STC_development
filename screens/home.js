@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,useEffect } from 'react';
 import Orientation from 'react-native-orientation-locker';
 import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView, AsyncStorage, Alert,ImageBackground, BackHandler } from 'react-native';
 
@@ -9,6 +9,8 @@ import NetInfo from "@react-native-community/netinfo";
 import {imageUrl, URL} from '../api.js';
 import * as Animatable from 'react-native-animatable';
 import ImageLoad from 'react-native-image-placeholder';
+import messaging from '@react-native-firebase/messaging'
+
 import {
     BallIndicator,
     BarIndicator,
@@ -40,6 +42,12 @@ export default class HomeComponent extends Component{
 
      }
  }
+
+ 
+   
+ 
+
+
  backAction = () =>{
  
     if(this.props.navigation.isFocused()){
@@ -102,7 +110,40 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
         })
      },1000)
      Orientation.lockToPortrait()
+     console.log("mounted home")
+    
+
+this.requestUserPermission();
  }
+
+
+ requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      this.getFcmToken() //<---- Add this
+      console.log('Authorization status:', authStatus);
+
+      console.log(messaging().isDeviceRegisteredForRemoteMessages)
+      const per = messaging().hasPermission()
+      messaging().registerDeviceForRemoteMessages();
+    }
+  }
+
+
+  getFcmToken = async () => {
+    const fcmToken = await messaging().getToken()
+    if (fcmToken) {
+        console.log("hello token")
+     
+     console.log("Your Firebase Token is:", fcmToken);
+     Alert.alert("Token",fcmToken)
+    } else {
+     console.log("Failed", "No token received");
+    }
+  }
 
  componentWillUnmount(){
 

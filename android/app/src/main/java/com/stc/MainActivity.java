@@ -14,6 +14,7 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "STC";
   }
+  
 
      @Override
    public void onConfigurationChanged(Configuration newConfig) {

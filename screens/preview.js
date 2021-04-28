@@ -21,13 +21,14 @@ useEffect(() => {
 }, [])
 
    const {uri,order_id} = route.params
+   console.log(uri)
    const images=[{
        url:uri
    }]
    
     return (
-       <Modal visible={isModalVisible} onRequestClose={closeModal} transparent={true}>
-           <ImageViewer imageUrls={images} renderArrowLeft={()=>{null}}/>
+       <Modal visible={true} onRequestClose={closeModal} transparent={true}>
+           <ImageViewer imageUrls={images}/>
        </Modal>
     )
 }

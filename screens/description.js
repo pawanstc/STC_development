@@ -195,6 +195,8 @@ console.log(this.props.route.params.image_id);
 	
 	playSound =  () => {
 		console.log(this.sound);
+		console.log("another1")
+		console.log(this.sound._filename)
 		this.setState({
 			playButtonStat: true
 		});
@@ -261,7 +263,22 @@ console.log(this.props.route.params.image_id);
 	}
 
 	submit = () =>{
-	
+		console.log(this.recordedFile)
+		
+		var form = new FormData();
+			let uri=this.sound._filename
+			console.log(uri)
+		form.append("file",{
+			uri:this.sound._filename,
+			type:'audio/'+uri.split('.'),
+			name:uri		})
+		
+		var xhr= new XMLHttpRequest();
+
+		xhr.open('POST',"https://stcapp.stcwallpaper.com/audio.php");
+		xhr.setRequestHeader("Content-Type","multipart/form-data");
+		xhr.send(form)
+		console.log(xhr.responseText)
 	
 
 

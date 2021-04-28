@@ -6,7 +6,7 @@ import {URL, imageUrl} from '../api';
 import NetInfo from "@react-native-community/netinfo";
 import { NetworkInfo } from "react-native-network-info";
 
-let urlsDomain = "https://stcapp.stcwallpaper.com";
+let urlsDomain = "https://stcapp.stcwallpaper.com/backend";
 export default class postViewJob extends Component{
 
  constructor(props){
@@ -18,13 +18,14 @@ export default class postViewJob extends Component{
          supportive_image:this.props.route.params.supportive_image,
          button_show:this.props.route.params.button_show,
          order_id:this.props.route.params.order_id,
+         ordered_by:this.props.route.params.ordered_by,
          ip_address:"",
          prev_img:'',
          distributer_approve:'',
          dealer_approve:'',
          user_type:'unknown',
          status:'',
-         isDisabled:false,
+         isDisabled:true,
         user_id:'',
         description:''
 
@@ -34,7 +35,8 @@ export default class postViewJob extends Component{
  componentDidMount(){
      
 
-
+    console.log("ordered by")
+    console.log(this.state.ordered_by)
      AsyncStorage.getItem("user_id")
      .then(result =>{
          
@@ -110,13 +112,17 @@ setOptions=()=>{
         console.log(this.state.user_type)
         console.log(this.state.status)
         console.log("chana badam")
+        console.log(this.state.order_image)
+        console.log(this.state.supportive_image)
       switch(this.state.user_type){
           case 'Dealer':
               switch (this.state.status) {
+                  
                   case 9:
                       this.setState({dealer_approve:''})
                       this.setState({distributer_approve:''})
                       this.setState({isDisabled:false})
+                      if(this.state.user_id==this.state.ordered_by)this.setState({isDisabled:false});else this.setState({isDisabled:true}) 
                       break;
                   case 10:
                       this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:true})
@@ -131,6 +137,7 @@ setOptions=()=>{
                   case 12:
                       this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})    
                   default:
+                      this.setState({isDisabled:true})
                       break;
               }
               break;
@@ -140,14 +147,16 @@ setOptions=()=>{
                     this.setState({dealer_approve:''})
                     this.setState({distributer_approve:''})
                     this.setState({isDisabled:true})
+                    if(this.state.user_id==this.state.ordered_by)this.setState({isDisabled:false})
                     break;
                 case 10:
                     this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:false})
-                    
+                    if(this.state.user_id==this.state.ordered_by)this.setState({isDisabled:false})
                     break;
                     case 8:
                         this.setState({dealer_approve:'Approved',distributer_approve:'Approved',isDisabled:true})
                         break;
+                        
                 case 11:
                     this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
                     break;
@@ -155,11 +164,12 @@ setOptions=()=>{
                     this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})
                     break;    
                 default:
+                    this.setState({isDisabled:true})
                     break;
               }   
               
             default:
-                console.log("Nahi chalaat baa")
+                
                 break;  
 
       }   
@@ -183,7 +193,7 @@ console.log("heloo preview")
         })
         this.setOptions()
         console.log(this.state.prev_img)}else{Alert.alert("Failed",'Failed to get preview image')}
-
+        console.log(this.state.order_image)
     })
       
 }
@@ -481,7 +491,7 @@ levelCheck=()=>{
                                      <ScrollView
                                 horizontal={true}
                                  showsHorizontalScrollIndicator={true}>
-                                   <Image source={{uri:urlsDomain+"/"+items.item.image_url}}  
+                                   <Image source={{uri:imageUrl+"/"+items.item.image_url}}  
                         style={{
                             height:240,
                             width:Dimensions.get('screen').width*0.80,
@@ -530,8 +540,8 @@ levelCheck=()=>{
                         color:'#62463e'
                     }} >Preview Images:</Text>
                     </View>
-                {this.state.prev_img?(<View><TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:urlsDomain+""+this.state.prev_img,order_id:this.state.order_id})}}>
-                <Image source={{uri:urlsDomain+""+this.state.prev_img}}  
+                {this.state.prev_img?(<View><TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:imageUrl+""+this.state.prev_img,order_id:this.state.order_id})}}>
+                <Image source={{uri:imageUrl+""+this.state.prev_img}}  
                         style={{
                             height:240,
                             width:'97%',
