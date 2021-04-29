@@ -263,22 +263,7 @@ console.log(this.props.route.params.image_id);
 	}
 
 	submit = () =>{
-		console.log(this.recordedFile)
 		
-		var form = new FormData();
-			let uri=this.sound._filename
-			console.log(uri)
-		form.append("file",{
-			uri:this.sound._filename,
-			type:'audio/'+uri.split('.'),
-			name:uri		})
-		
-		var xhr= new XMLHttpRequest();
-
-		xhr.open('POST',"https://stcapp.stcwallpaper.com/audio.php");
-		xhr.setRequestHeader("Content-Type","multipart/form-data");
-		xhr.send(form)
-		console.log(xhr.responseText)
 	
 
 
@@ -322,10 +307,25 @@ console.log(this.props.route.params.image_id);
 
   
 	if(this.props.route.params.imge_flag == 1){
-
-	// console.log(this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''));
+	//console.log("pateern url")
+	//console.log(this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''));
 	// return;
+
+		/*var form = new URLSearchParams();
+		form.append('catlog_sub_category_id',this.props.route.params.image_id)
+		form.append('width',this.props.route.params.width)
+		form.append('height',this.props.route.params.height)
+		form.append('quantity',this.props.route.params.quantity)
+		form.append('description',this.state.desc)
+		form.append('media_sheet_type_id',this.state.mediaType)
+		form.append('paper_type_id',this.state.selectPaper)
+		form.append('order_by_user_id',this.state.user_id)
+		form.append('support_image_list',JSON.stringify(this.props.route.params.supportImages))
+		form.append('pattern_image_url',this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''))
+		form.append('img_flag',this.props.route.params.imge_flag)
+		//console.log(JSON.stringify(form))*/
 		
+
 		fetch(URL+"/insert_post_job_order",{
 			headers:{
 				"Content-Type":"application/x-www-form-urlencoded"
@@ -333,6 +333,7 @@ console.log(this.props.route.params.image_id);
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
 			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, '')+"&img_flag="+ this.props.route.params.imge_flag
+			
 		}).then(response => response.json())
 		.then(result =>{
 			

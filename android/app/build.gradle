@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.stcwallpaper"
+        applicationId "com.stc"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3
@@ -215,7 +215,7 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation platform('com.google.firebase:firebase-bom:27.0.0')
-    implementation 'com.google.firebase:firebase-messaging'
+    implementation "com.google.firebase:firebase-messaging:20.1.0"
     implementation 'com.google.firebase:firebase-analytics'
     
 

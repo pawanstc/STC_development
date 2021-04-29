@@ -50,6 +50,7 @@ console.log("catlog pattenr_id"+ this.props.route.params.image_id,);
                 width:this.props.route.params.width,
                 image_flag:this.props.route.params.imge_flag
             });
+            
         }
     }
 

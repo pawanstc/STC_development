@@ -58,3 +58,7 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 android/app/src/main/assets/index.android.bundle
+android/app/keytool.exe
+android/app/jli.dll
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle

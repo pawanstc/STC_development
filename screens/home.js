@@ -112,38 +112,14 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
      Orientation.lockToPortrait()
      console.log("mounted home")
     
+        
+    
 
-this.requestUserPermission();
- }
-
-
- requestUserPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    if (enabled) {
-      this.getFcmToken() //<---- Add this
-      console.log('Authorization status:', authStatus);
-
-      console.log(messaging().isDeviceRegisteredForRemoteMessages)
-      const per = messaging().hasPermission()
-      messaging().registerDeviceForRemoteMessages();
     }
-  }
+ 
 
 
-  getFcmToken = async () => {
-    const fcmToken = await messaging().getToken()
-    if (fcmToken) {
-        console.log("hello token")
-     
-     console.log("Your Firebase Token is:", fcmToken);
-     Alert.alert("Token",fcmToken)
-    } else {
-     console.log("Failed", "No token received");
-    }
-  }
+  
 
  componentWillUnmount(){
 

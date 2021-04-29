@@ -14,7 +14,7 @@ export default class postViewJob extends Component{
 
      this.state = {
          pattern_number:this.props.route.params.pattern_number,
-         order_image:this.props.route.params.order_image.replace("\\", "/"),
+         order_image:this.props.route.params.order_image,
          supportive_image:this.props.route.params.supportive_image,
          button_show:this.props.route.params.button_show,
          order_id:this.props.route.params.order_id,

@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/dist/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import { URL } from '../api.js';
 import DeviceInfo from 'react-native-device-info';
+import messaging from '@react-native-firebase/messaging';
 export default class LoginComponent extends  Component{
 
 constructor(props){
@@ -17,12 +18,15 @@ constructor(props){
     this.state = {
        mobile_number:"",
             password:"",
-            device_id:""
+            device_id:"",
+            fcmToken:""
     }
 }
 
 componentDidMount(){
     this.animation();
+
+    messaging().getToken().then(token=>this.setState({fcmToken:token})).catch(error=>Alert.alert('Error',error.toString()))
 }
 
 // button animation
@@ -50,7 +54,7 @@ navigate = () =>{
 }
 
 login = async () =>{
-
+console.log(this.state.fcmToken)
     let device_id = DeviceInfo.getUniqueId();
     NetInfo.fetch().then( async state => {
         if(state.isConnected){
@@ -60,12 +64,12 @@ login = async () =>{
     if(this.state.username == "" || this.state.password ===  ""){
         alert("Mobile Number and Password field is required");
     }else{
-        fetch(URL+"/get_loginInfoByMobileAndPassword",{
+        fetch(URL+"/get_loginInfoByMobileAndPassword_Pushnotification",{
             method:"POST",
             headers:{
                   'Content-Type': 'application/x-www-form-urlencoded',
             },
-           body:"mobile_number=" +this.state.mobile_number+ "&password="+ this.state.password+ "&device_id="+device_id
+           body:"mobile_number=" +this.state.mobile_number+ "&password="+ this.state.password+ "&device_id="+device_id+ "&push_notification_id="+this.state.fcmToken
         }).then( response=>response.json())
         .then(result =>{
                 console.log(result)

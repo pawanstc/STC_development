@@ -706,7 +706,7 @@ setStatus = (value) =>{
 													   justifyContent:"space-around",
 													   marginTop:20
 												   }} >
-													  <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.navigate("postViewJob",{
+													  <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("postViewJob",{
 														  pattern_number:items.item.pattern_no,
 														  order_image:items.item.pattern_image_url,
 														  supportive_image:items.item.support_image.image_details,
@@ -715,7 +715,7 @@ setStatus = (value) =>{
 														  ordered_by:items.item.order_by_user_id
 														  
 														  
-													  })}  >
+													  }) } >
 													  <View style={{
 													   justifyContent:'center',
 												   
