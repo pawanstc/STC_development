@@ -167,7 +167,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
      await AsyncStorage.getItem("user_id")
       .then(result =>{
       console.log("user_id"+result);
-          
+          this.setState({user_id:result})
           NetInfo.fetch().then(state =>{
               if(state.isConnected){
                 fetch(URL+"/get_user_details_by_user_id", {
@@ -178,6 +178,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                     body:"user_id=" +result
                 }).then(response => response.json())
                 .then(result =>{
+                    
                    console.log(result);
                     if(result.error == false){
                         
@@ -343,7 +344,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                         
                                         }}
                                     loadingStyle={{ size: 'large', color: '#62463e' }}
-                                    borderRadius={6}
+                                    borderRadius={40}
                                     source={{uri:imageUrl+"/"+this.state.profile_image}}
                                 />
                             </TouchableOpacity>
@@ -372,7 +373,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                        
                                     }}
                                     loadingStyle={{ size: 'large', color: '#62463e' }}
-                                    borderRadius={6}
+                                    borderRadius={40}
                                     source={{uri:imageUrl+"/"+this.state.company_logo}}
                                 />
             </TouchableOpacity>
@@ -425,7 +426,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                    }} > 
 
                   <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.navigate("stockEnquery",{
-                      value:""
+                      value:"",user_id:this.state.user_id
                   })} >
                   <View style={{
                        height:135,

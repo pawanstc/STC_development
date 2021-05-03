@@ -25,6 +25,7 @@ export default class onGoingJobList extends Component{
 		super(props);
 	
 		this.state = {
+			jobList_rev:[],
 			jobList:[],
 			jobPreview_by_id:"",
 			current_index:null,
@@ -110,8 +111,11 @@ getJobList = () =>{
 						
 						this.setState({
 							jobList:result.order_details,
-							deletedJob:[...this.state.deletedJob, ...jobId]
+							deletedJob:[...this.state.deletedJob, ...jobId],
+							
 						});
+						
+					
 					}
 				}).catch(error =>{
 					console.log(error);
@@ -166,8 +170,20 @@ cancelJob = (id) => {
 							
 						}else{
 							Alert.alert(
-								"Confirmation Eror",
-								"Are You Sure to Delete Message"
+								"Confirmation",
+								"Are You Sure to Cancel this job",
+								[
+									{
+										text:"Cancel",
+										onPress:() => null,
+										style:"cancel"
+									},
+									{
+										text:"Yes",
+										onPress:() => this.doneCancle(),
+										style:"default"
+									}
+								]
 							)
 						}
 					}).catch(error =>{
@@ -176,20 +192,9 @@ cancelJob = (id) => {
 				}else{
 					Alert.alert(
 						"Network Error",
-						"Please check Your Internet connection",
+						"Please check Your Internet connection"
 
-						[
-							{
-								text:"Cancel",
-								onPress:() => null,
-								style:"cancel"
-							},
-							{
-								text:"Yes",
-								onPress:() => this.doneCancle(),
-								style:"default"
-							}
-						]
+						
 					)
 				}
 			})
@@ -308,7 +313,11 @@ setStatus = (value) =>{
 				}).then(response => response.json() )
 				 		.then(result =>{
 				 			console.log(result)
+							
 				 			if(result.error == false){
+
+								
+
 				 				this.setState({
 				 					jobList:result.order_details
 				 				})
@@ -352,7 +361,11 @@ setStatus = (value) =>{
 				}).then(response => response.json() )
 				 		.then(result =>{
 				 			console.log(result)
+							 
 				 			if(result.error == false){
+
+								
+
 				 				this.setState({
 				 					jobList:result.order_details
 				 				})
@@ -490,10 +503,11 @@ setStatus = (value) =>{
 				{
 					this.state.jobList.length >0 ? (
 						<View>
-							<FlatList
+							<FlatList 
 						data={this.state.jobList}
 						contentContainerStyle={{
-							paddingBottom:200
+							paddingBottom:200,
+							
 						}}
 					   showsVerticalScrollIndicator={false}
 						renderItem={(items, index) =>{
@@ -563,7 +577,7 @@ setStatus = (value) =>{
 									   
 									   padding:4,
 									   paddingLeft:30
-								   }} >{ items.item.first_name } {items.item.last_name}</Text>
+								   }} >{ items.item.parent_first_name } {items.item.parent_last_name}</Text>
    
 									   </View>
    
@@ -578,13 +592,13 @@ setStatus = (value) =>{
 								   }} >Dealer       :</Text>
 
 								   {
-								   	this.state.parent_first_name !=""  && this.state.parent_last_name ? (
+								   	this.state.first_name !=""  && this.state.last_name ? (
 								   		<Text style={{
 									   fontSize:12,
 									   paddingLeft:30,
 									   
 									   padding:4
-								   }} >{ items.item.parent_first_name } { items.item.parent_last_name }</Text>
+								   }} >{ items.item.first_name } { items.item.last_name }</Text>
 								   	) :(
 								   	<Text style={{
 									   fontSize:12,
@@ -689,7 +703,7 @@ setStatus = (value) =>{
 							   }} >View Details</Text>
 									   </TouchableOpacity>
    
-									   {
+									   { 
 										   this.state.current_index === items.item.id ? (
 											   <View>
 												   <View style={{

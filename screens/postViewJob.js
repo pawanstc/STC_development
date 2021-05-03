@@ -34,7 +34,7 @@ export default class postViewJob extends Component{
  
  componentDidMount(){
      
-
+console.log(this.state.order_image)
     console.log("ordered by")
     console.log(this.state.ordered_by)
      AsyncStorage.getItem("user_id")
@@ -435,7 +435,7 @@ levelCheck=()=>{
                     </View>
 
 
-                    <Image source={{uri:urlsDomain+""+this.state.order_image}}  
+                    <Image source={{uri:imageUrl+""+this.state.order_image}}  
                         style={{
                             height:240,
                             width:'95%',

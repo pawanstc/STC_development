@@ -292,7 +292,7 @@ export default class EditProfile extends Component {
         } else if (this.state.office_address === "") {
             Alert.alert(
                 "Validation",
-                "Office Address field required"
+                "Please Enter Company Address"
             )
         } else if (this.state.company_name === "") {
             Alert.alert(
@@ -1035,7 +1035,7 @@ console.log(id);
                                                 width: 260,
                                                 borderRadius: 6,
                                                 borderWidth: 0.6,
-                                                marginTop: 20,
+                                                //marginTop: 20,
                                                 borderColor: "#62463e",
                                                 justifyContent: "center",
                                                 alignItems: "center"
@@ -1077,7 +1077,7 @@ console.log(id);
                                                         width: 260,
                                                         borderRadius: 6,
                                                         borderWidth: 0.6,
-                                                        marginTop: 20,
+                                                        //marginTop: 20,
                                                         borderColor: "#62463e",
                                                         justifyContent: "center",
                                                         alignItems: "center"
@@ -1106,7 +1106,7 @@ console.log(id);
                                                         width: 260,
                                                         borderRadius: 6,
                                                         borderWidth: 0.6,
-                                                        marginTop: 20,
+                                                        //marginTop: 20,
                                                         borderColor: "#62463e",
                                                         justifyContent: "center",
                                                         alignItems: "center"
@@ -1156,7 +1156,7 @@ console.log(id);
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                           // marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -1167,13 +1167,13 @@ console.log(id);
                                                         onChangeText={(value) => this.setState({
                                                             pin_code: value
                                                         })}
-                                                        placeholder="Enter Pincode"
+                                                        placeholder="Enter Pin Code"
                                                         style={{
                                                             height: 45,
                                                             width: 260,
                                                             borderRadius: 6,
                                                             borderWidth: 0.6,
-                                                            marginTop: 20,
+                                                           // marginTop: 20,
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
@@ -1264,7 +1264,7 @@ console.log(id);
                                                     <TouchableOpacity onPress={() => this.openCamera2()} style={{
                                                         position: 'absolute',
                                                         top: 40,
-                                                        left: 60,
+                                                        left: 40,
                                                         right: 0
                                                     }} >
                                                         <View style={{
@@ -1274,7 +1274,7 @@ console.log(id);
                                                             borderWidth: 0.3,
                                                             borderRadiusColor: 'black',
                                                             justifyContent: 'center',
-                                                            alignItems: 'center'
+                                                            alignItems: 'left'
 
                                                         }} >
                                                             <Image source={require("../assets/edit3.png")} style={{

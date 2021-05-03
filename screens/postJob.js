@@ -256,7 +256,13 @@ launchCamera2 = async () =>{
         );
 
         return;
+      }else if(this.state.height=='' && this.state.width==''){
+        Alert.alert(
+          "Validation Error",
+          "Please Enter Width and Height"
+        )
       }
+      
 
       if(this.props.route.params.flag == null){
    
@@ -474,7 +480,7 @@ launchCamera2 = async () =>{
   
       Alert.alert(
         "STC alert",
-        "Are you sure to Delete custom image ??",
+        "Are you sure to delete custom image ??",
         [
           {text:"yes", onPress: async() =>{
              let newArray = [];

@@ -392,11 +392,7 @@ searchBarAppear = () =>{
       }}  />
 
           
-        <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.navigate("searchComponent")} >
-            
 
-    
-        </TouchableOpacity>
            
             
           
@@ -524,7 +520,7 @@ searchBarAppear = () =>{
                                     textAlign:'center',
                                     fontSize:14,
                                     width:120,
-                                    height:30,
+                                    height:35,
                                 }} >
                                     {items.item.catlog_name} 
                                 </Text>

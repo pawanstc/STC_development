@@ -50,7 +50,8 @@ export default class HomeComponent extends Component{
     patterns:this.props.route.params.value.patterns,
     cityList:[],
     city:"",
-    city_name:""
+    city_name:"",
+    user_id:this.props.route.params.user_id
 
      }
  }
@@ -58,7 +59,7 @@ export default class HomeComponent extends Component{
  componentDidMount(){
 
   
-
+    
     this.getCityList();
    
  }
@@ -66,12 +67,18 @@ export default class HomeComponent extends Component{
  getCityList = () =>{
     NetInfo.fetch().then(state =>{
         if(state.isConnected){
-            fetch(URL+"/"+"get_stock_city_list",{
-                headers:{
-                    "Content-Type":"application/json"
-                }
+
+            var form = new FormData();
+            form.append('user_id',this.state.user_id)
+
+            fetch(URL+"/get_stock_city_list",{
+                method:'POST',
+                
+                body:form
+                
             }).then(response => response.json())
             .then(result =>{
+                
                 console.log(result);
                 if(result.error ==false){
                     this.setState({
@@ -85,6 +92,9 @@ export default class HomeComponent extends Component{
                 }
             }).catch(error =>{
                 console.log(error);
+                
+                
+                
             });
         }else{
             Alert(
@@ -223,7 +233,8 @@ console.log(this.state.params)
                           {
                               this.state.cityList.map(value =>(
                                 <Picker.Item style={{
-                                    padding:20
+                                    padding:20,
+                                    alignItems:'center'
                                 }} label={value.city_name.substring(0, 12)} value={value.id}/>
                               ))
                           }

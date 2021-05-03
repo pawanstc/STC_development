@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import ImageViewer from 'react-native-image-zoom-viewer'
-import ImageView from 'react-native-image-view'
+
 import { BackHandler,Modal } from 'react-native'
 
 function preview({navigation,route}) {

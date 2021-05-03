@@ -34,7 +34,28 @@ export default class UpdatePassword extends Component{
     }
 
     ChangePassword = () =>{
-      
+         
+        if(this.state.oldPassword==''){
+            Alert.alert(
+                "Validation",
+                "Please enter your Old Password"
+            )
+        }else if(this.state.newPassword==''||this.state.reEnterPassword==''){
+            Alert.alert(
+                "Validation",
+                "Please enter New password"
+            )
+            }else if(this.state.oldPassword==this.state.newPassword){
+                Alert.alert(
+                    "Error",
+                    "Old password and new New Passwerd cannot be the same"
+                )
+            }else if(this.state.newPassword!=this.state.reEnterPassword){
+                Alert.alert(
+                    "Validation",
+                    "New Password does not match Re-enter Password"
+                )
+            }
       
        AsyncStorage.getItem("device_id")
        .then(result =>{

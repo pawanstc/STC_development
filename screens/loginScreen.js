@@ -25,7 +25,8 @@ constructor(props){
 
 componentDidMount(){
     this.animation();
-
+    console.log(messaging().isDeviceRegisteredForRemoteMessages)
+    console.log(messaging().registerDeviceForRemoteMessages());
     messaging().getToken().then(token=>this.setState({fcmToken:token})).catch(error=>Alert.alert('Error',error.toString()))
 }
 
@@ -54,13 +55,15 @@ navigate = () =>{
 }
 
 login = async () =>{
-console.log(this.state.fcmToken)
+
+
     let device_id = DeviceInfo.getUniqueId();
     NetInfo.fetch().then( async state => {
         if(state.isConnected){
             await AsyncStorage.getItem("device_id")
    .then(result =>{
-      console.log("device_id"+result);
+      console.log("device_id"+device_id);
+      console.log(this.state.fcmToken)
     if(this.state.username == "" || this.state.password ===  ""){
         alert("Mobile Number and Password field is required");
     }else{
@@ -81,8 +84,9 @@ console.log(this.state.fcmToken)
 
                
             }else{
+                if(result.devices_id){
              
-                AsyncStorage.setItem("device_id", result.devices_id.toString());
+                AsyncStorage.setItem("device_id", result.devices_id.toString());}
                 AsyncStorage.setItem("user_id", result.id.toString());
                 console.log(result.id.toString())
                 fetch(URL+"/get_user_details_by_user_id",{

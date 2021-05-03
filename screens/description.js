@@ -57,8 +57,8 @@ export default class Recorder extends Component {
 			selectPaper:"",
 			desc:"",
 			user_id:"",
-			filename:""
-
+			filename:"",
+			pattern_url:""
 		}
 
 
@@ -66,9 +66,9 @@ export default class Recorder extends Component {
 
 	componentDidMount() {
 		this.getSheet();
-
-	
-console.log(this.props.route.params.image_id);
+		
+		this.state.pattern_url= this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]/,'/b');
+console.log(this.state.pattern_url);
 		
 		
 
@@ -267,32 +267,25 @@ console.log(this.props.route.params.image_id);
 	
 
 
-	if(this.state.desc =="" || this.state.selectPaper == "" || this.state.mediaType ==""){
+	
+	 if(this.state.desc ==""){
 		Alert.alert(
 			"Validation Error",
-			"Please Check your input Field"
-		);
-
-		return;
-
-	}else if(this.state.desc ==""){
-		Alert.alert(
-			"Validation Error",
-			"Please Fill Description Fields"
+			"Please enter your job  description"
 		);
 
 		return;
 	}else if(this.state.selectPaper ==""){
 		Alert.alert(
 			"Validation Error",
-			"Please Select Paper type"
+			"Please Select Print type"
 		);
 
 		return;
 	}else if(this.state.mediaType ==""){
 		Alert.alert(
 			"Validation Error",
-			"Please Select media type"
+			"Please Select Media Type Paper"
 		);
 
 		return;
@@ -325,19 +318,19 @@ console.log(this.props.route.params.image_id);
 		form.append('img_flag',this.props.route.params.imge_flag)
 		//console.log(JSON.stringify(form))*/
 		
-
+		
 		fetch(URL+"/insert_post_job_order",{
 			headers:{
 				"Content-Type":"application/x-www-form-urlencoded"
 			},
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
-			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, '')+"&img_flag="+ this.props.route.params.imge_flag
+			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.state.pattern_url+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url= "
 			
 		}).then(response => response.json())
 		.then(result =>{
-			
-			if(result.error == false){
+			console.log(result)
+			if(result.error==false){
 			
 				Alert.alert(
 					"Success Message",
@@ -686,7 +679,7 @@ console.log(this.props.route.params.image_id);
 				<Picker.Item label="Select Paper type" value=""  />
 				{
 					this.state.paperType.map(value =>(
-						<Picker.Item label={value.paper_type_name.substring(0, 18)} value={value.id}  />
+						<Picker.Item label={value.paper_type_name} value={value.id}  />
 					))
 				}
 		

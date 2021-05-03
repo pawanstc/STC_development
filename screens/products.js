@@ -426,13 +426,15 @@ export default class ProductImage extends Component {
                                         });
                                     }}  >
                                         <Icon name="share" size={30} color="black" style={{
-                                            padding: 8
+                                            padding: 8,
+                                            paddingLeft:8
                                         }} />
 
                                         <Text style={{
                                             fontSize: 14,
                                             color: "black",
-                                            padding: 8
+                                            padding: 8,
+                                            marginLeft:8
                                         }} >Share</Text>
                                     </TouchableOpacity>
                                 </View>
