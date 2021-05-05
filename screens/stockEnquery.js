@@ -221,6 +221,7 @@ console.log(this.state.params)
                       borderRadius:5,
                       marginTop:30
                   }} >
+                      
                       <Picker 
                     selectedValue={this.state.city}
                         onValueChange={(value) => this.setState({
@@ -228,14 +229,20 @@ console.log(this.state.params)
                         })}
                       style={{
                           height:45,
-                          width:"100%"
+                          width:"100%",
+                          textAlign:'center',
+                          alignContent:'center',
+                          alignItems:'center'
+                          
                       }} >
                           {
                               this.state.cityList.map(value =>(
                                 <Picker.Item style={{
                                     padding:20,
-                                    alignItems:'center'
-                                }} label={value.city_name.substring(0, 12)} value={value.id}/>
+                                    alignItems:'center',
+                                    alignContent:'center',
+                                    textAlign:'center'
+                                }} label={value.city_name.substring(0, 12)} value={value.id} />
                               ))
                           }
 

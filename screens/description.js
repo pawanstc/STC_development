@@ -197,6 +197,8 @@ console.log(this.state.pattern_url);
 		console.log(this.sound);
 		console.log("another1")
 		console.log(this.sound._filename)
+		console.log(this.sound._filename.split('.').pop())
+		console.log(this.sound._filename.replace(/^.*[\\\/]/, ''))
 		this.setState({
 			playButtonStat: true
 		});
@@ -263,9 +265,22 @@ console.log(this.state.pattern_url);
 	}
 
 	submit = () =>{
-		
-	
+		if (this.sound){
+		var formData= new FormData()
+		formData.append("file",{
+			uri:this.sound._filename,
+			type:'file/'+this.sound._filename.split('.').pop(),
+			name:this.sound._filename.replace(/^.*[\\\/]/, '')
+		  })
 
+		  var xhr = new XMLHttpRequest();
+
+		  xhr.open("POST","https://stcapp.stcwallpaper.com/audio.php");
+		  xhr.setRequestHeader("Content-Type","multipart/form-data");
+		  xhr.send(formData);
+		  console.log(xhr.responseText)
+		  console.log(xhr.responseURL)
+		}
 
 	
 	 if(this.state.desc ==""){

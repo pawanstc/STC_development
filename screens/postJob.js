@@ -224,43 +224,44 @@ launchCamera2 = async () =>{
         return;
       }else if(this.state.photo == "" || this.state.uploadFile == ""){
         Alert.alert(
-          "Validation Error",
+          "Validation Error Image",
           "Please Add Image File Or Select Pattern"
         );
+        return;
+        }else if(this.state.height=='' && this.state.width==''){
+          Alert.alert(
+            "Validation Error",
+            "Please enter width and height"
+          )
         return;
       }else if(this.state.height == undefined){
         Alert.alert(
           "Validation Error",
-          "Please Enter Height"
+          "Please enter height"
         );
 
         return;
       }else if(this.state.width ==  undefined){
         Alert.alert(
           "Validation Error",
-          "Please Enter Width"
+          "Please enter width"
         );
 
         return;
       }else if(this.state.height ==""){
         Alert.alert(
           "Validation Error",
-          "Please Enter Height"
+          "Please enter height"
         );
 
         return;
       }else if(this.state.width ==""){
         Alert.alert(
           "Validation Error",
-          "Please Enter Width"
+          "Please Enter width"
         );
 
         return;
-      }else if(this.state.height=='' && this.state.width==''){
-        Alert.alert(
-          "Validation Error",
-          "Please Enter Width and Height"
-        )
       }
       
 

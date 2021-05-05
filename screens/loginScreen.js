@@ -233,7 +233,7 @@ login = async () =>{
           password:value
         })}
     placeholderTextColor="black"
-    maxLength={8}
+    maxLength={10}
     />
     
  </View>

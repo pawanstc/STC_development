@@ -10,7 +10,7 @@ import NetInfo from "@react-native-community/netinfo";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Picker } from '@react-native-picker/picker';
 import { imageUrl, URL } from '../api.js';
-
+import emailValidator from '../screens/Validator';
 
 
 
@@ -57,7 +57,7 @@ export default class EditProfile extends Component {
 
         this.getUsers();
         this.getStates();
-
+        this.showCity(1);
 
         NetworkInfo.getIPAddress().then(ipAddress => {
 
@@ -215,7 +215,7 @@ export default class EditProfile extends Component {
                 }
 
                 if (res) {
-
+                    console.log(res)
 
                 }
 
@@ -278,6 +278,8 @@ export default class EditProfile extends Component {
 
     updateProfile = () => {
 
+        console.log(this.state.city_id)
+        console.log(this.state.state_id)
 
         if (this.state.first_name == "") {
             Alert.alert(
@@ -289,20 +291,27 @@ export default class EditProfile extends Component {
                 "Validation",
                 "Please enter your last name"
             )
-        } else if (this.state.office_address === "") {
-            Alert.alert(
-                "Validation",
-                "Please Enter Company Address"
-            )
         } else if (this.state.company_name === "") {
             Alert.alert(
                 "Validation",
                 "Please enter company name"
             )
-        }else if(this.state.email_id ==""){
+        }else if (this.state.office_address === "") {
+            Alert.alert(
+                "Validation",
+                "Please enter office address"
+            )
+        } 
+        
+        else if(this.state.email_id ==""){
             Alert.alert(
                 "Validation Error",
                 "Please enter your email id"
+            )
+        }else if(!emailValidator(this.state.email_id)){
+            Alert.alert(
+                "Validation Error",
+                "Please enter proper email id"
             )
         } 
         else if (this.state.city === "") {
@@ -341,6 +350,7 @@ export default class EditProfile extends Component {
             xhr.open("POST", "https://stcapp.stcwallpaper.com/backend/uploads.php")
             xhr.setRequestHeader("Content-Type", "multipart/form-data");
             xhr.send(form)
+            console.log(xhr.responseText)
 
             if (xhr.upload) {
                 console.log(xhr.upload);
@@ -567,7 +577,7 @@ console.log(id);
 
                             this.setState({
                                 city: result.city_list,
-
+                               city_id:result.city_list[0].city_id
 
 
                             })
@@ -812,8 +822,8 @@ console.log(id);
                                                     width: 500,
                                                     fontSize: 14,
                                                     fontWeight: "bold",
-                                                    marginTop:10
-                                                   
+                                                    marginTop:10,
+                                                    marginBottom:10
 
                                                 }} >Last Name</Text>
                                             </View>
@@ -870,7 +880,7 @@ console.log(id);
                                                     fontSize: 14,
                                                     fontWeight: "bold",
                                                     marginTop:10,
-                                                    
+                                                    marginBottom:10
 
                                                 }} >Email Id</Text>
                                             </View>
@@ -920,7 +930,7 @@ console.log(id);
                                                     width: 300,
                                                     fontSize: 14,
                                                     fontWeight: "bold",
-                                                    
+                                                    marginBottom:10,
                                                     marginTop:10
 
                                                 }} >Company Name</Text>
@@ -972,7 +982,7 @@ console.log(id);
                                                     width: 300,
                                                     fontSize: 14,
                                                     fontWeight: "bold",
-                                                    
+                                                    marginBottom:10,
                                                     marginTop:10
 
                                                 }} >Company Address</Text>
@@ -1023,7 +1033,7 @@ console.log(id);
                                                     width: 500,
                                                     fontSize: 14,
                                                     fontWeight: "bold",
-                                                    
+                                                    marginBottom:10,
                                                     marginTop:10
 
                                                 }} >Select State</Text>
@@ -1062,7 +1072,7 @@ console.log(id);
                                                     width: 460,
                                                     fontSize: 14,
                                                     fontWeight: "bold",
-                                                   
+                                                    marginBottom:10,
                                                     marginTop:10
 
                                                 }} >Select City</Text>
@@ -1114,13 +1124,14 @@ console.log(id);
                                                         <Picker
 
                                                             style={{ height: 50, width: 260, borderRadiusColor: "black" }}
+                                                            selectedValue="baal"
                                                             onValueChange={(value) => {
                                                                 this.setState({
                                                                     city_id: value
                                                                 })
                                                             }}
                                                         >
-                                                            <Picker.Item label="Select city  found" value="" />
+                                                            <Picker.Item label="Select city  found" value="baal" />
                                                         </Picker>
 
                                                     </View>
@@ -1137,7 +1148,7 @@ console.log(id);
                                                     fontSize: 14,
                                                     fontWeight: "bold",
                                                     marginTop:15,
-                                                  
+                                                    marginBottom:10
 
                                                 }} >Pin Code</Text>
                                             </View>
@@ -1160,6 +1171,7 @@ console.log(id);
                                                             borderColor: "#62463e",
                                                             padding: 12
                                                         }}
+                                                        keyboardType='number-pad'
                                                     />
                                                 ) : (
                                                     <TextInput
@@ -1246,7 +1258,7 @@ console.log(id);
                                         <Text style={{
                                             marginTop: 6,
                                             fontSize: 14,
-                                            textAlign: "left",
+                                            textAlign: 'left',
                                             marginBottom: 16
                                         }} >Select Company Logo </Text>
 
@@ -1274,7 +1286,7 @@ console.log(id);
                                                             borderWidth: 0.3,
                                                             borderRadiusColor: 'black',
                                                             justifyContent: 'center',
-                                                            alignItems: 'left'
+                                                            alignItems: 'center'
 
                                                         }} >
                                                             <Image source={require("../assets/edit3.png")} style={{

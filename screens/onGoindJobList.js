@@ -592,7 +592,7 @@ setStatus = (value) =>{
 								   }} >Dealer       :</Text>
 
 								   {
-								   	this.state.first_name !=""  && this.state.last_name ? (
+								     items.item.first_name  && items.item.last_name ? (
 								   		<Text style={{
 									   fontSize:12,
 									   paddingLeft:30,

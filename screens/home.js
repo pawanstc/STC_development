@@ -210,6 +210,8 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                 profile_image:result.profilePicture,
                                 
                             });
+                            console.log("profile url")
+                            console.log(this.state.profile_image)
                         }
 
                         if(result.company_logo == null && result.company_logo ==""){
@@ -229,6 +231,8 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             this.setState({
                                 company_logo:result.company_logo
                             })
+                            console.log("logo of company")
+                            console.log(this.state.company_logo)
                         }
                     }else{
                         this.props.navigation.navigate("login");
@@ -307,11 +311,11 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                   <View>
                   
                       {
-                            this.state.profile_image === "" ? (
+                            !this.state.profile_image==="" ? (
                              
                                 <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
+                                <ImageLoad source={{uri:imageUrl+this.state.profile_image}}
                                 
-                                <Image source={require("../assets/userProfile.png")}
                          style={{
                              height:50,
                              width:50,
@@ -334,8 +338,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             
                             }}
                             /> */}
-                             <ImageLoad
-                                 isShowActivity={false}
+                             <Image source={require("../assets/userProfile.png")}
                                     style={{
                                         height:50,
                                         width:50,
@@ -345,7 +348,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                         }}
                                     loadingStyle={{ size: 'large', color: '#62463e' }}
                                     borderRadius={40}
-                                    source={{uri:imageUrl+"/"+this.state.profile_image}}
+                                    
                                 />
                             </TouchableOpacity>
                           )
@@ -363,7 +366,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                 
              }}
              /> */}
-             <ImageLoad
+             <Image
                                     isShowActivity={false}
                                     style={{
                                         height:50,

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
 import { NetworkInfo } from "react-native-network-info";
+import DeviceInfo from 'react-native-device-info';
 export default class UpdatePassword extends Component{
 
     constructor(props){
@@ -22,6 +23,7 @@ export default class UpdatePassword extends Component{
   
         
         this.getIpAddress();
+        
 
     }
 
@@ -38,17 +40,21 @@ export default class UpdatePassword extends Component{
         if(this.state.oldPassword==''){
             Alert.alert(
                 "Validation",
-                "Please enter your Old Password"
+                "Please enter Old Password"
             )
-        }else if(this.state.newPassword==''||this.state.reEnterPassword==''){
+        }else if(this.state.newPassword==''){
             Alert.alert(
                 "Validation",
                 "Please enter New password"
-            )
+            )}else if(this.state.reEnterPassword==''){
+                Alert.alert(
+                    "Validation",
+                "You can't leave re-enter new password field blank."
+                )
             }else if(this.state.oldPassword==this.state.newPassword){
                 Alert.alert(
                     "Error",
-                    "Old password and new New Passwerd cannot be the same"
+                    "New password cannot be same as old password."
                 )
             }else if(this.state.newPassword!=this.state.reEnterPassword){
                 Alert.alert(
@@ -60,14 +66,15 @@ export default class UpdatePassword extends Component{
        AsyncStorage.getItem("device_id")
        .then(result =>{
         console.log(result);
-           if(result){
+                
                
                this.setState({
                    device_id:result
                })
+               this.state.device_id= DeviceInfo.getUniqueId();
             AsyncStorage.getItem("user_id")
             .then(user_id =>{
-               
+               console.log(this.state.device_id)
                 NetInfo.fetch().then(state =>{
                     if(state.isConnected){
                         fetch(URL+"/update_password_by_user_id",{
@@ -101,9 +108,7 @@ export default class UpdatePassword extends Component{
                     }
                 })
             })
-           }else{
-
-           }
+        
        })
     }
     render(){
