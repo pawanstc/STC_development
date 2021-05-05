@@ -41,26 +41,31 @@ export default class UpdatePassword extends Component{
             Alert.alert(
                 "Validation",
                 "Please enter Old Password"
-            )
+                )
+                return;
         }else if(this.state.newPassword==''){
             Alert.alert(
                 "Validation",
                 "Please enter New password"
-            )}else if(this.state.reEnterPassword==''){
+            )
+        return;}else if(this.state.reEnterPassword==''){
                 Alert.alert(
                     "Validation",
                 "You can't leave re-enter new password field blank."
                 )
+                return;
             }else if(this.state.oldPassword==this.state.newPassword){
                 Alert.alert(
                     "Error",
                     "New password cannot be same as old password."
                 )
+                return;
             }else if(this.state.newPassword!=this.state.reEnterPassword){
                 Alert.alert(
                     "Validation",
                     "New Password does not match Re-enter Password"
                 )
+                return;
             }
       
        AsyncStorage.getItem("device_id")

@@ -206,7 +206,9 @@ cancelJob = (id) => {
 	})
 }
 
-
+removeNull = (array) =>{
+	return array.filter(x=>x.id!=='')
+}
 
 doneCancle = () => {
 	if(this.state.desc === ""){
@@ -319,7 +321,7 @@ setStatus = (value) =>{
 								
 
 				 				this.setState({
-				 					jobList:result.order_details
+									jobList:this.removeNull(result.order_details)
 				 				})
 				 			}else{
 				 				this.setState({
@@ -367,12 +369,15 @@ setStatus = (value) =>{
 								
 
 				 				this.setState({
-				 					jobList:result.order_details
+				 					jobList:this.removeNull(result.order_details)
 				 				})
+								 
+								 
 				 			}else{
 				 				this.setState({
 				 					jobList:[]
 				 				})
+								 
 				 			}
 				 		}).catch(error =>{
 				 			console.log(error);
@@ -413,8 +418,9 @@ setStatus = (value) =>{
 				 			console.log(result)
 				 			if(result.error == false){
 				 				this.setState({
-				 					jobList:result.order_details
+									jobList:this.removeNull(result.order_details)
 				 				})
+								 
 				 			}else if(result.error == false && result.order_details ==""){
 				 				this.setState({
 				 					jobList:[]

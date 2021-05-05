@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text, TextInput, StatusBar,FlatList, Dimension  } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text, TextInput, StatusBar,FlatList, Dimension, AsyncStorage  } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Modal, { ModalContent,SlideAnimation } from 'react-native-modals';
-
+import NetInfo from "@react-native-community/netinfo";
 import TabBarContainer from './TabnarComponent.js';
 
 // import AnimatedLoader from "react-native-animated-loader";
@@ -22,10 +22,7 @@ import {
   } from 'react-native-indicators';
 
  
-  const resources = {
-    file: Platform.OS === 'ios' ? 'test-pdf.pdf' : '/sdcard/Download/test-pdf.pdf',
-    url: 'https://www.ets.org/Media/Tests/TOEFL/pdf/SampleQuestions.pdf',
-  };
+  
 export default class Notification extends Component{
 
     
@@ -33,131 +30,47 @@ export default class Notification extends Component{
     constructor(props){
         super(props)
 
-        this.state = {
-            cateLogImage:[
-                {
-                    "id":"1",
-                    "image":"http://www.africau.edu/images/default/sample.pdf",
-                    "name":"Panache",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"2",
-                   "image":"https://cdn.decorilla.com/online-decorating/wp-content/uploads/2020/03/2020-interior-design-trends-feature.jpg",
-                   "name":"Hexagon",
-                   "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"3",
-                    "image":"https://images.adsttc.com/media/images/5f2c/8545/b357/65db/c000/008c/large_jpg/FEAT_ID.jpg?1596753213",
-                    "name":"Asahfoard",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                   
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                }
-            ],
-            isVisiable:false,
-            messageData:{},
-            modelShow:false
+        this.state={
+            notifications:[],
+            userid:''
         }
     }
 
     componentDidMount(){
-        setTimeout(() =>{
+       
+        this.setState({userid:this.props.route.params.user_id})
+        NetInfo.fetch().then(state=>{
+            if(state.isConnected){
+     
+        fetch("https://stcapp.stcwallpaper.com/backend/v1/get_notification_details_by_user_id",{
+            
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+                method:"POST",
+                body:"user_id=34"//+this.state.user_id
+        }).then(response=>response.json())
+        .then(result=>{
             this.setState({
-                isVisiable:true
+                notifications:result.notification_details
             })
-        },2000)
+            console.log(this.state.notifications)
+        }
+            
+            
+        ).catch(err=>console.log(err))
     }
+    })
+        
+    }
+
+    componentDidUpdate(){
+        
+        console.log(this.state.userid)
+       
+   
+    }
+    
 
     modelPop = (data) =>{
         this.setState({
@@ -166,14 +79,7 @@ export default class Notification extends Component{
         });
     }
 
-    checkFileExt = (url) => {
-        let ext = url.split('.').pop();
-        if(ext === "pdf"){
-            return true
-        }else{
-            return false;
-        }
-    }
+   
 
     
     render(){
@@ -228,91 +134,43 @@ export default class Notification extends Component{
                      fontSize:20,
                      marginTop:14
                  }} >Notification</Text>
+                 <View style={{
+									   padding:15,
+									   borderBottomWidth:0.5,
+                                       
+								   }} ></View>
                
                  <FlatList
                  
                     showsVerticalScrollIndicator={false}
-                    data={this.state.cateLogImage}
+                    data={this.state.notifications}
                     renderItem={(items) => {
                         return(
-                            <View style={{
-                               
-                               marginTop:40
-                              
-                            }} >
-                                {
-                                    this.checkFileExt(items.item.image) ? (
-                                        <View style={{
-                                            flexDirection:"row",
-                                            justifyContent:"space-between"
-                                        }} >
-                                            <TouchableOpacity style={{
-                                                flexDirection:"row"
-                                            }} onPress={() => this.props.navigation.navigate("showsPdf")} >
-                                            <Text numberOfLines={2} style={{
-                                    fontSize:14,
-                                    lineHeight:25,
-                                    marginRight:25,
-                                    width:200,
-                                    marginTop:20, 
-                                    marginLeft:10
-                                 
-                                }} >{items.item.des}</Text>
-                                {
-                                    this.checkFileExt(items.item.image) ? (
-                                        <Image style={{
-                                            height:80,
-                                            width:60
-                                        }} source={{uri:"https://media5.picsearch.com/is?ju5YxQahdWq4u0cgCHT_yRe_6cKTWcvnkiNFj5vNCY8&height=320"}} />
-                                    ) :(
-                                        <Image source={{uri:items.item.image}} style={{
-                                            height:80,
-                                            width:60
-                                        }} />
-                                    )
-                                }
-                                        </TouchableOpacity>
-                                            </View>
-                                    ) :(
-                                        <View style={{
-                                            flexDirection:"row",
-                                            justifyContent:"space-between"
-                                        }} >
-                                            <TouchableOpacity onPress={() => this.props.navigation.navigate("content",{
-                                                content:items.item
-                                            })} style={{
-                                                flexDirection:"row"
-                                            }} >
-                                           <Text numberOfLines={2} style={{
-                                    fontSize:14,
-                                    lineHeight:25,
-                                    marginRight:25,
-                                    width:200,
-                                    marginTop:20, 
-                                    marginLeft:10
-                                }} >{items.item.des}</Text>
-                                {
-                                    this.checkFileExt(items.item.image) ? (
-                                        <Image style={{
-                                            height:80,
-                                            width:60
-                                        }} source={{uri:"https://media5.picsearch.com/is?ju5YxQahdWq4u0cgCHT_yRe_6cKTWcvnkiNFj5vNCY8&height=320"}} />
-                                    ) :(
-                                        <Image source={{uri:items.item.image}} style={{
-                                            height:60,
-                                            width:60
-                                        }} />
-                                    )
-                                }
-                                        </TouchableOpacity>
-                                            </View>
-                                    )
-                                }
+                            <View>
+                                 <View style={{
+									   padding:10,
+									   borderBottomWidth:0.5,
+                                       backgroundColor:'#eeeeee',
+                                       
+								   }} >
+                            <View style={{height:55,width:Dimensions.get("screen").width -45,backgroundColor:'#eeeeee',borderRadius:10}}>
+                                <TouchableOpacity onPress={()=>this.props.navigation.navigate("onGoingJob")}>
+                               <Text style={{fontSize:18}}>{items.item.notification_title}</Text>
+                               <Text>{items.item.notification_body}</Text>
+                               </TouchableOpacity>
+                            
+                                   </View>
+                            
+                            
+                            
+                          
 
-                                </View>
-                        )
-                    }}
-                    keyExtractor={(item) => item.id}
+                         
+                          </View>
+                          </View>
+                        )}
+                }
+                    keyExtractor={(item) => item.date_time}
                  />
 
        

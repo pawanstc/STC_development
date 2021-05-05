@@ -5,7 +5,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Feather';
 import ImgToBase64 from 'react-native-image-base64'
 import AudioRecord from 'react-native-audio-record';
-
+import {readFile} from 'react-native-fs';
 
 
 
@@ -196,6 +196,8 @@ console.log(this.state.pattern_url);
 	playSound =  () => {
 		console.log(this.sound);
 		console.log("another1")
+		
+		
 		console.log(this.sound._filename)
 		console.log(this.sound._filename.split('.').pop())
 		console.log(this.sound._filename.replace(/^.*[\\\/]/, ''))
@@ -264,9 +266,11 @@ console.log(this.state.pattern_url);
 		})
 	}
 
+	
+
 	submit = () =>{
 		if (this.sound){
-		var formData= new FormData()
+		/*var formData= new FormData()
 		formData.append("file",{
 			uri:this.sound._filename,
 			type:'file/'+this.sound._filename.split('.').pop(),
@@ -279,8 +283,25 @@ console.log(this.state.pattern_url);
 		  xhr.setRequestHeader("Content-Type","multipart/form-data");
 		  xhr.send(formData);
 		  console.log(xhr.responseText)
-		  console.log(xhr.responseURL)
+		  console.log(xhr.responseURL)*/
+		  readFile(this.sound._filename,'base64').then(result=>{
+			  var data=result;
+			  fetch(URL+"/file_upload_test",{
+				headers:{
+					"Content-Type":"application/x-www-form-urlencoded"
+				},
+				method:'POST',
+				body:"file=data:audio/wav;base64,"+data
+			  }).then(response=>response.json()).then(result=>{
+				  if(result){
+					  console.log(result)
+					  
+				  }
+			  }).catch(error=>console.log(error))
+		  })
 		}
+
+
 
 	
 	 if(this.state.desc ==""){

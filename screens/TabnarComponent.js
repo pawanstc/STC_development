@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, Image, View, Text, TouchableOpacity,Dimensions } from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity,Dimensions, AsyncStorage } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -43,7 +43,8 @@ export default class TabComponnet extends Component{
     selectTab  =(value) =>{
     
        this.setState({
-           tabLabel:value
+           tabLabel:value,
+           uid:''
        });
       
 
@@ -54,6 +55,16 @@ export default class TabComponnet extends Component{
             }else if(value === "PostJob"){
                 this.props.navigate.navigate("postJob")
             }
+    }
+
+    componentDidMount(){
+        AsyncStorage.getItem('user_id').then(result=>{
+            if(result){
+                this.setState({uid:result})
+                console.log("tabcom")
+                console.log(this.state.uid)
+            }
+        })
     }
 
     showTab = (value) =>{
@@ -159,7 +170,9 @@ export default class TabComponnet extends Component{
              
       
          }} >
-            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigate.navigate("notification")} >
+            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigate.navigate("notification",{
+                user_id:this.state.uid
+            })} >
                     <Icon name="notifications-outline" size={18} style={{
               
                         marginLeft:15
