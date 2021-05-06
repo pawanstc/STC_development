@@ -798,13 +798,16 @@ setStatus = (value) =>{
 													   }}> View Histroy</Text>
    
 													   </View>
+
 													  </TouchableOpacity>
+													 
    
 													  <TouchableOpacity onPress={() => this.cancelJob(items.item.id)} >
 															<View style={{
 															 justifyContent:'center',
 															 alignItems:'center'
 														 }} >
+
 															 <IconName name="ban" style={{
 																 margin:10
 															 }} size={20} />
@@ -815,6 +818,7 @@ setStatus = (value) =>{
 															 </View>
 		 
 															</TouchableOpacity>
+															
 													   </View>
 												   </View>
 										   ) :null

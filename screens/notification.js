@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text, TextInput, StatusBar,FlatList, Dimension, AsyncStorage  } from 'react-native';
+import { StyleSheet, ScrollView, View, Image, TouchableOpacity, Dimensions, Text, TextInput, StatusBar,FlatList, Dimension, AsyncStorage, RefreshControl  } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Modal, { ModalContent,SlideAnimation } from 'react-native-modals';
 import NetInfo from "@react-native-community/netinfo";
@@ -32,15 +32,28 @@ export default class Notification extends Component{
 
         this.state={
             notifications:[],
-            userid:''
+            userid:'',
+            refreshing:false
         }
     }
 
     componentDidMount(){
        
+       this.getNotifications();
+        
+    }
+
+    componentDidUpdate(){
+        
+        console.log(this.state.userid)
+       
+   
+    }
+    getNotifications=()=>{
         this.setState({userid:this.props.route.params.user_id})
         NetInfo.fetch().then(state=>{
             if(state.isConnected){
+                this.setState({refreshing:true})
      
         fetch("https://stcapp.stcwallpaper.com/backend/v1/get_notification_details_by_user_id",{
             
@@ -60,15 +73,8 @@ export default class Notification extends Component{
             
         ).catch(err=>console.log(err))
     }
+    this.setState({refreshing:false})
     })
-        
-    }
-
-    componentDidUpdate(){
-        
-        console.log(this.state.userid)
-       
-   
     }
     
 
@@ -139,10 +145,11 @@ export default class Notification extends Component{
 									   borderBottomWidth:0.5,
                                        
 								   }} ></View>
+                                   
                
                  <FlatList
-                 
-                    showsVerticalScrollIndicator={false}
+                    scrollEnabled={true}
+                    showsVerticalScrollIndicator={true}
                     data={this.state.notifications}
                     renderItem={(items) => {
                         return(
@@ -171,8 +178,9 @@ export default class Notification extends Component{
                         )}
                 }
                     keyExtractor={(item) => item.date_time}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getNotifications}/>}
                  />
-
+         
        
       </View>
       

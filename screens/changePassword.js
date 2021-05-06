@@ -63,7 +63,7 @@ export default class UpdatePassword extends Component{
             }else if(this.state.newPassword!=this.state.reEnterPassword){
                 Alert.alert(
                     "Validation",
-                    "New Password does not match Re-enter Password"
+                    "New password and re-enter new password do not match"
                 )
                 return;
             }

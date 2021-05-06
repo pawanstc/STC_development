@@ -227,31 +227,38 @@ launchCamera2 = async () =>{
           "Please Add Image File Or Select Pattern"
         );
         return;
-      }else if(this.state.height == undefined){
+      }
+      else if(this.state.height=='' && this.state.width==''){
         Alert.alert(
           "Validation Error",
-          "Please Enter Height"
+          "Please enter width and height"
+        )
+      return;
+    }else if(this.state.height == undefined){
+        Alert.alert(
+          "Validation Error",
+          "Please enter height"
         );
 
         return;
       }else if(this.state.width ==  undefined){
         Alert.alert(
           "Validation Error",
-          "Please Enter Width"
+          "Please enter width"
         );
 
         return;
       }else if(this.state.height ==""){
         Alert.alert(
           "Validation Error",
-          "Please Enter Height"
+          "Please enter height"
         );
 
         return;
       }else if(this.state.width ==""){
         Alert.alert(
           "Validation Error",
-          "Please Enter Width"
+          "Please enter width"
         );
 
         return;
@@ -473,7 +480,7 @@ launchCamera2 = async () =>{
   
       Alert.alert(
         "STC alert",
-        "Are you sure to Delete custom image ??",
+        "Are you sure to delete custom image ??",
         [
           {text:"yes", onPress: async() =>{
              let newArray = [];

@@ -11,20 +11,24 @@ export default class UpdatePassword extends Component{
     constructor(props){
         super(props)
         this.state = {
-            oldPassword:"",
+          
             newPassword:"",
             ipAddress:"",
             device_id:"",
             reEnterPassword:""
         }
+
+        this.user_id=''
+
     }
+    
 
     componentDidMount(){
         
     
-
+        this.user_id=this.props.route.params.user_id;
         this.getIpAddress();
-
+        this.user_id.toString();
     }
 
     getIpAddress = () =>{
@@ -37,7 +41,7 @@ export default class UpdatePassword extends Component{
 
     Validation=()=>{
         let e = ''
-        if(!this.state.oldPassword)e='Please Enter Old Password'
+        
         if(!this.state.newPassword)e='Please Enter New Password'
         if(!this.state.reEnterPassword)e='Please Re-Enter New Password'
 if(e){
@@ -57,13 +61,12 @@ if(e){
             let uniqueId =   DeviceInfo.getUniqueId();
             NetInfo.fetch().then(state =>{
                 if(state.isConnected){
-                    fetch(URL+"/update_password_by_user_id",{
+                    fetch(URL+"/update_new_password_by_user_id",{
                         headers:{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"new_password=" +this.state.newPassword+ "&old_password="+this.state.oldPassword+
-                            "&modify_by_ip=" +this.state.getIpAddress+ "&mobile_no="+ this.props.route.params.mobile_number+ "&retype_password="+this.state.reEnterPassword
+                        body:"new_password=" +this.state.newPassword+"&retype_password="+this.state.reEnterPassword+"&user_id="+this.user_id
                     }).then(response => response.json())
                     .then(result =>{
                        console.log(result);
@@ -143,31 +146,8 @@ if(e){
                    }} >
                        
                   
-                <TextInput 
-                    placeholder="Enter Old Password"
-                    secureTextEntry={true}
-                    onChangeText={(value) => this.setState({
-                        oldPassword:value
-                    })}
-                    style={{
-                        height:45,
-                        width:280,
-                        borderWidth:0.6,
-                        borderColor
-                        :"#62463e",
-                        padding:12,
-                        borderRadius:8,
-                        fontFamily:"Roboto-Bold"
-                        
-                    }}
-                />
-                 <Text style={{
-                       fontSize:15,
-                       color:"#62463e",
-                       backgroundColor:"#FFF",
-                       position:"absolute",
-                       top:-8,
-                   }} >Enter Old Password</Text>
+               
+            
 <TextInput 
                     placeholder="Enter New Password"
                     secureTextEntry={true}

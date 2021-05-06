@@ -33,6 +33,7 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
 import { PickerItem } from 'react-native/Libraries/Components/Picker/Picker';
+import { ThemeConsumer } from 'styled-components';
 
 
 
@@ -58,7 +59,8 @@ export default class Recorder extends Component {
 			desc:"",
 			user_id:"",
 			filename:"",
-			pattern_url:""
+			pattern_url:"",
+			data:''
 		}
 
 
@@ -269,37 +271,16 @@ console.log(this.state.pattern_url);
 	
 
 	submit = () =>{
-		if (this.sound){
-		/*var formData= new FormData()
-		formData.append("file",{
-			uri:this.sound._filename,
-			type:'file/'+this.sound._filename.split('.').pop(),
-			name:this.sound._filename.replace(/^.*[\\\/]/, '')
-		  })
-
-		  var xhr = new XMLHttpRequest();
-
-		  xhr.open("POST","https://stcapp.stcwallpaper.com/audio.php");
-		  xhr.setRequestHeader("Content-Type","multipart/form-data");
-		  xhr.send(formData);
-		  console.log(xhr.responseText)
-		  console.log(xhr.responseURL)*/
-		  readFile(this.sound._filename,'base64').then(result=>{
-			  var data=result;
-			  fetch(URL+"/file_upload_test",{
-				headers:{
-					"Content-Type":"application/x-www-form-urlencoded"
-				},
-				method:'POST',
-				body:"file=data:audio/wav;base64,"+data
-			  }).then(response=>response.json()).then(result=>{
-				  if(result){
-					  console.log(result)
-					  
-				  }
-			  }).catch(error=>console.log(error))
-		  })
+		if(this.sound){
+			readFile(this.sound._filename,'base64').then(result=>{
+				this.setState({
+					data:"data:audio/wav;base64,"+result
+				})
+				
+			  
+			})
 		}
+	
 
 
 
@@ -311,13 +292,6 @@ console.log(this.state.pattern_url);
 		);
 
 		return;
-	}else if(this.state.selectPaper ==""){
-		Alert.alert(
-			"Validation Error",
-			"Please Select Print type"
-		);
-
-		return;
 	}else if(this.state.mediaType ==""){
 		Alert.alert(
 			"Validation Error",
@@ -325,6 +299,14 @@ console.log(this.state.pattern_url);
 		);
 
 		return;
+	}else if(this.state.selectPaper ==""){
+		Alert.alert(
+			"Validation Error",
+			"Please Select Print type"
+		);
+
+		return;
+	
 	}else if(this.state.desc.length < 10){
 		Alert.alert(
 			"Validation Error",
@@ -332,7 +314,7 @@ console.log(this.state.pattern_url);
 		);
 
 		return;
-	}else{
+	}
 
   
 	if(this.props.route.params.imge_flag == 1){
@@ -361,7 +343,7 @@ console.log(this.state.pattern_url);
 			},
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
-			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.state.pattern_url+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url= "
+			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.state.pattern_url+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+this.state.data
 			
 		}).then(response => response.json())
 		.then(result =>{
@@ -393,7 +375,7 @@ console.log(this.state.pattern_url);
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
 			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+
-			JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.fileObj.path+"&img_flag="+ this.props.route.params.imge_flag
+			JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.fileObj.path+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+this.state.data
 		}).then(response => response.json())
 		.then(result =>{
 			console.log(result);
@@ -417,7 +399,7 @@ console.log(this.state.pattern_url);
 	}
 		
 	}
-	}
+	
 
 
 	render(){

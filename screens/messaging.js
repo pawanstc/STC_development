@@ -243,7 +243,8 @@ export default class Messaging extends Component {
       renderBubble={this.renderBubble}
       alwaysShowSend
       renderSend={this.renderSend}
-      onSend={messages => this.onSend(messages)}
+      onSend={messages => {this.onSend(messages)
+      this.getMessage()}}
       user={{
         _id: 1,
       }} />

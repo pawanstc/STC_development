@@ -8,17 +8,7 @@ import Modal from 'react-native-modal';
 import NetInfo from "@react-native-community/netinfo";
 import { URL, imageUrl } from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
-import {
-    BallIndicator,
-    BarIndicator,
-    DotIndicator,
-    MaterialIndicator,
-    PacmanIndicator,
-    PulseIndicator,
-    SkypeIndicator,
-    UIActivityIndicator,
-    WaveIndicator,
-} from 'react-native-indicators';
+
 export default class ProductImage extends Component {
 
     constructor(props) {
@@ -51,9 +41,14 @@ export default class ProductImage extends Component {
             refreshing: false,
             modelOfPattern: "",
             data_loader: false,
-            pattern_no:""
+            pattern_no:"",
+            query: '',
+             fullData:[],
+             searchtext:''
         }
+        this.arrayholder =[];
     }
+    
 
     uploadModel = (data, id, pattern_id) => {
         console.log("pattern number is"+pattern_id);
@@ -90,10 +85,13 @@ export default class ProductImage extends Component {
                         if (result.error === false) {
                             this.setState({
                                 subCateLog: result.sub_catlog_list,
-                                refreshing: false
+                                refreshing: false,
+                                fullData:result.sub_catlog_list
                             });
+                            this.arrayholder = result.sub_catlog_list
                             this.props.navigation.navigate("products", {
                                 sub_catelogs: this.state.sub_catelog
+                                
                             })
                         } else {
                             this.setState({
@@ -122,6 +120,28 @@ export default class ProductImage extends Component {
             this.getSubCatelog();
         })
     }
+    searchCat=(text)=>{
+        
+        const newData = this.arrayholder.filter(item => {
+            const itemData = `${item.pattern_no.toUpperCase()}`;
+            const textData = text.toUpperCase();
+      
+            return itemData.indexOf(textData) > -1;
+          });
+          this.setState({
+            subCateLog: newData,
+          });
+        }
+        
+        
+    
+    contains = ({ data }, query) => {
+        const {pattern_no}=data 
+        if (pattern_no.includes(query)) {
+          return true
+        }
+        return false
+      }
 
 
     render() {
@@ -155,7 +175,8 @@ export default class ProductImage extends Component {
                     <TextInput
 
                         placeholder=" Search...."
-
+                        //onEndEditing={()=>this.searchCat(this.state.searchtext)}
+                        onChangeText={text=>this.searchCat(text)}
                         style={{
                             height: 43,
                             width: "60%",
@@ -172,7 +193,7 @@ export default class ProductImage extends Component {
                         placeholderTextColor="#000"
                     />
 
-
+                       <TouchableOpacity onPress={null}>
                     <Icon style={{
                         position: "absolute",
                         top: 27,
@@ -183,9 +204,12 @@ export default class ProductImage extends Component {
                         width: 10,
                         height: 50
                     }} />
+                    </TouchableOpacity> 
+                  
 
 
                 </View>
+                
 
                 <View style={{
                     position: 'absolute',
@@ -214,7 +238,7 @@ export default class ProductImage extends Component {
                                     showsVerticalScrollIndicator={false}
                                     refreshing={this.state.refreshing}
                                     onRefresh={this.handleRefreshing}
-
+                                    
                                     contentContainerStyle={{
                                         paddingBottom: 90
                                     }}
@@ -427,7 +451,8 @@ export default class ProductImage extends Component {
                                     }}  >
                                         <Icon name="share" size={30} color="black" style={{
                                             padding: 8,
-                                            paddingLeft:8
+                                            paddingLeft:8,
+                                            marginLeft:15
                                         }} />
 
                                         <Text style={{

@@ -1277,6 +1277,7 @@ export default class EditProfile extends Component {
                             height: 80,
                             width: 80,
                             borderRadius: 80 / 2,
+                            marginHorizontal:15
                           }}
                         />
 
@@ -1309,7 +1310,7 @@ export default class EditProfile extends Component {
                         </TouchableOpacity>
                       </View>
                     ) : (
-                      <View>
+                      <View style={{marginLeft:2}}>
                         {this.state.companyLogo != '' ? (
                           <Image
                             source={{
@@ -1319,7 +1320,7 @@ export default class EditProfile extends Component {
                               height: 80,
                               width: 80,
                               borderRadius: 80 / 2,
-                              marginRight: 20,
+                              marginLeft: 20,
                             }}
                           />
                         ) : (
@@ -1330,7 +1331,7 @@ export default class EditProfile extends Component {
                                 height: 80,
                                 width: 80,
                                 borderRadius: 80 / 2,
-                                marginRight: 20,
+                                marginLeft: 20,
                               }}
                             />
                           </View>
