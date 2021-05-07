@@ -143,24 +143,25 @@ export default class Notification extends Component{
                  <View style={{
 									   padding:15,
 									   borderBottomWidth:0.5,
-                                       
+                                       flex:1
 								   }} ></View>
                                    
                
-                 <FlatList
+                 <FlatList style={{}}
                     scrollEnabled={true}
                     showsVerticalScrollIndicator={true}
-                    data={this.state.notifications}
+                    
+                    data={this.state.notifications.reverse()}
                     renderItem={(items) => {
                         return(
-                            <View>
+                            <View style={{flex:1}}>
                                  <View style={{
 									   padding:10,
 									   borderBottomWidth:0.5,
                                        backgroundColor:'#eeeeee',
-                                       
+                                       flex:1
 								   }} >
-                            <View style={{height:55,width:Dimensions.get("screen").width -45,backgroundColor:'#eeeeee',borderRadius:10}}>
+                            <View style={{flex:1,height:55,width:Dimensions.get("screen").width -45,backgroundColor:'#eeeeee',borderRadius:10}}>
                                 <TouchableOpacity onPress={()=>this.props.navigation.navigate("onGoingJob")}>
                                <Text style={{fontSize:18}}>{items.item.notification_title}</Text>
                                <Text>{items.item.notification_body}</Text>
@@ -179,6 +180,8 @@ export default class Notification extends Component{
                 }
                     keyExtractor={(item) => item.date_time}
                     refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getNotifications}/>}
+                    scrollToOverflowEnabled={true}              
+                    ListFooterComponent={<View style={{marginBottom:150,marginTop:10}}></View>}
                  />
          
        

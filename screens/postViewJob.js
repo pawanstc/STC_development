@@ -141,7 +141,7 @@ setOptions=()=>{
                       break;
               }
               break;
-          case 'Distributer':
+          case 'Distributor':
               switch(this.state.status){
                 case 9:
                     this.setState({dealer_approve:''})
@@ -205,11 +205,11 @@ console.log("heloo preview")
          console.log(this.state.user_type)
          if(this.state.user_type=='Dealer'){this.setState({status:10})
         console.log(this.state.status)}
-         else if(this.state.user_type=='Distributer')this.setState({status:8})
+         else if(this.state.user_type=='Distributor')this.setState({status:8})
      }
      rejectStatus=()=>{
         if(this.state.user_type=='Dealer')this.setState({status:11})
-        else if(this.state.user_type=='Distributer')this.setState({status:12})
+        else if(this.state.user_type=='Distributor')this.setState({status:12})
      }
      
  
@@ -262,7 +262,7 @@ rejectJob=()=>{
 levelCheck=()=>{
     let level=false
     if(this.state.status==9 && this.state.user_type=='Dealer')level=true;
-    if(this.state.status==10 && this.state.user_type=='Distributer')level=true;
+    if(this.state.status==10 && this.state.user_type=='Distributor')level=true;
     return level
 }
 
@@ -599,7 +599,7 @@ levelCheck=()=>{
                                             fontSize:16,
                                             padding:10,
                                             color:"grey",
-                                            textAlign:'left'}}>Distributer Status:-{this.state.distributer_approve}</Text>):null}
+                                            textAlign:'left'}}>Distributor Status:-{this.state.distributer_approve}</Text>):null}
                
                     </View>
                                         ):(<Text style={{

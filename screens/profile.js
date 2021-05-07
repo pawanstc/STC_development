@@ -96,9 +96,10 @@ export default class Profile extends Component{
                             companyLogo:""
                           })
                       }else {
+                        if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")){
                         this.setState({
                           companyLogo:result.company_logo
-                        })
+                        })}else this.setState({companyLogo:""})
                       }
                           this.setState({
                               first_name:result.first_name,
@@ -291,7 +292,7 @@ export default class Profile extends Component{
                             
                         }} >
                            {
-                               this.state.companyLogo ==  ""  ?(
+                               !this.state.companyLogo   ?(
                                    <View>
                                        {
                                            this.state.profile_image == "" ? (
@@ -302,9 +303,9 @@ export default class Profile extends Component{
                                             }} />
                                            ) : (
                                             <Image source={{uri:imageUrl+"/"+this.state.profile_image}} style={{
-                                                height:60,
-                                                width:60,
-                                                borderRadius:30
+                                                height:40,
+                                                width:40,
+                                                borderRadius:20
                                             }} />
                                            )
                                        }

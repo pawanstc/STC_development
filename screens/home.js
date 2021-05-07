@@ -228,11 +228,12 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             })
                         }
                         else{
+                            if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")){
                             this.setState({
                                 company_logo:result.company_logo
                             })
                             console.log("logo of company")
-                            console.log(this.state.company_logo)
+                            console.log(this.state.company_logo)}else this.setState({company_logo:""})
                         }
                     }else{
                         this.props.navigation.navigate("login");
@@ -311,18 +312,21 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                   <View>
                   
                       {
-                            !this.state.profile_image==="" ? (
+                            this.state.profile_image!="" ? (
                              
                                 <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                                <ImageLoad source={{uri:imageUrl+this.state.profile_image}}
+                                <Image source={{uri:imageUrl+"/"+this.state.profile_image}}
                                 
                          style={{
                              height:50,
                              width:50,
-                             borderRadius:50/2,
+                             borderRadius:40,
                              margin:10,
                             
                          }}
+                         isVisable={true}
+                         loadingStyle={{ size: 'large', color: '#62463e' }}
+                         borderRadius={40}
                          />
                         </TouchableOpacity>
 

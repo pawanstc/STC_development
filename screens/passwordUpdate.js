@@ -41,13 +41,15 @@ export default class UpdatePassword extends Component{
 
     Validation=()=>{
         let e = ''
+        if(!this.state.newPassword && !this.state.reEnterPassword)e="Please enter new password and Re-enter password "
         
-        if(!this.state.newPassword)e='Please Enter New Password'
-        if(!this.state.reEnterPassword)e='Please Re-Enter New Password'
+       else if(!this.state.newPassword)e="Please Enter New Password"
+        else if(!this.state.reEnterPassword)e="Please Re-Enter New Password"
+        else if(this.state.newPassword!=this.state.reEnterPassword)e="New password and Re-enter do not match"
 if(e){
     Alert.alert(
         'Error',
-        {e}
+        e.toString()
     ); return false
 }else return true
 
@@ -77,7 +79,7 @@ if(e){
                             let error=result.error.msg
                             Alert.alert(
                                 "Error",
-                                {error}
+                                error.toString()
                             )
                         }
                     }).catch(error =>{
