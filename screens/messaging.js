@@ -24,6 +24,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons'
 import {GiftedChat, Bubble, Send} from 'react-native-gifted-chat';
 import {NetworkInfo} from 'react-native-network-info';
+import { ThemeProvider } from 'styled-components';
 export default class Messaging extends Component {
   constructor(props) {
     super(props);
@@ -83,6 +84,7 @@ export default class Messaging extends Component {
   };
 
   onSend = (messages) => {
+    GiftedChat.append(messages,messages)
     console.log(URL+'/insert_message_order_wise');
     NetInfo.fetch().then((state) => {
       if (state.isConnected) {
@@ -94,8 +96,8 @@ export default class Messaging extends Component {
             },
             method: 'POST',
             body:
-              'user_id=' +
-              this.state.user_id +
+              'user_id=1' 
+              +
               '&order_id=' +
               this.props.route.params.order_id +
               '&message=' +
@@ -230,14 +232,16 @@ export default class Messaging extends Component {
      >
 
      <ScrollView 
-
+      
      contentContainerStyle={{
         paddingBottom:20,
-        flex:1
+        flex:1,
+        flexDirection:'row'
      }}
       >
-
-           <GiftedChat
+        
+        <View style={{flex:1,alignContent:'flex-end',justifyContent:'flex-end'}}>
+           <GiftedChat 
        keyboardShouldPersistTaps={'always'}
       messages={this.state.message}
       renderBubble={this.renderBubble}
@@ -246,8 +250,9 @@ export default class Messaging extends Component {
       onSend={messages => {this.onSend(messages)
       this.getMessage()}}
       user={{
-        _id: 1,
+        _id:1,
       }} />
+      </View>
 
      </ScrollView>
 

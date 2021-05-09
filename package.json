@@ -64,6 +64,7 @@
     "react-native-screens": "^2.13.0",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-sound": "^0.11.0",
+    "react-native-sound-player": "^0.10.8",
     "react-native-sound-recorder": "^1.5.0",
     "react-native-step-indicator": "^1.0.3",
     "react-native-step-progress-bar": "^1.0.3",

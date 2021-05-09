@@ -228,20 +228,16 @@ console.log(this.state.params)
                             city:value
                         })}
                       style={{
-                          height:45,
+                          height:20,
                           width:"100%",
-                          textAlign:'center',
-                          alignContent:'center',
-                          alignItems:'center'
+                          fontWeight:'bold'
                           
                       }} >
                           {
                               this.state.cityList.map(value =>(
-                                <Picker.Item style={{
-                                    padding:20,
-                                    alignItems:'center',
-                                    alignContent:'center',
-                                    textAlign:'center'
+                                <Picker.Item style={{fontSize:16,
+                                    
+                                   
                                 }} label={value.city_name.substring(0, 12)} value={value.id} />
                               ))
                           }

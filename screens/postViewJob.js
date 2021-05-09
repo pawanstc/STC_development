@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 
 import { StyleSheet, View, Image, TouchableOpacity, Dimensions,  StatusBar,Text,FlatList , Button, Alert, AsyncStorage, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/Ionicons';
+
 import {URL, imageUrl} from '../api';
 import NetInfo from "@react-native-community/netinfo";
 import { NetworkInfo } from "react-native-network-info";
+import SoundPlayer from 'react-native-sound-player';
+import Sound from 'react-native-sound'
 
 let urlsDomain = "https://stcapp.stcwallpaper.com/backend";
 export default class postViewJob extends Component{
@@ -19,6 +23,8 @@ export default class postViewJob extends Component{
          button_show:this.props.route.params.button_show,
          order_id:this.props.route.params.order_id,
          ordered_by:this.props.route.params.ordered_by,
+         job_description:this.props.route.params.job_description,
+         audio:this.props.route.params.audio,
          ip_address:"",
          prev_img:'',
          distributer_approve:'',
@@ -33,8 +39,9 @@ export default class postViewJob extends Component{
  }
  
  componentDidMount(){
-     
-console.log(this.state.order_image)
+
+    
+console.log(this.state.job_description)
     console.log("ordered by")
     console.log(this.state.ordered_by)
      AsyncStorage.getItem("user_id")
@@ -105,6 +112,8 @@ console.log(this.state.order_image)
     }).catch(error=>console.log(error))
 
     
+
+
  
 }
 setOptions=()=>{
@@ -174,6 +183,26 @@ setOptions=()=>{
 
       }   
     }
+}
+
+playSound=()=>{
+    console.log(imageUrl+this.state.audio)
+    var url=imageUrl+this.state.audio
+    var url1='https://stcapp.stcwallpaper.com/audio/audio-20210508151225.wav'
+    url.toString();
+   var sound1 = new Sound(url1, '',
+  (error, sound) => {
+    if (error) {
+      console.log('error' + error.message);
+      return;
+    }
+    sound1.play(() => {
+      sound1.release();
+    });
+  });
+//SoundPlayer.loadUrl(url)
+//SoundPlayer.play()
+   
 }
 
 get_prevImage=()=>{
@@ -419,6 +448,50 @@ levelCheck=()=>{
                                 color:"grey",
                                 textAlign:'center'}}>{this.state.description}</Text>
                                    </View><View style={{elevation:2,marginBottom:4}}>
+
+                                   <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} >
+
+                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginLeft:10,marginTop:10}}>Description:</Text>
+                                      
+                                       <Text style={{
+                                padding:20,           
+                                fontSize:16,
+                                color:"grey",
+                                textAlign:'left'}}>{this.state.job_description}</Text>
+                                   </View>
+                                   {/*
+                                   <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} >
+
+                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginTop:10}}>Job Audio:</Text>
+                                       </View>
+                                       <View>
+                                       {this.state.audio?(<View ><Text style={{fontSize:16}}>Press to play.</Text>
+                                       <View style={{height:50,width:50}}>
+                                       <Icons name="play" style={{
+                                           height:50,
+                                           width:50,
+                                        margin:10,
+                                        marginLeft:20
+                                    }} color="blue" size={25}  onPress={() => this.playSound()} /></View>
+                                    </View>
+                                       
+                                       ):
+                                       <Text style={{
+                                padding:20,           
+                                fontSize:16,
+                                color:"grey",
+                                textAlign:'center'}}>No Job Audio</Text>}
+                                   </View>
+                                       */}
+
                         <View style={{
 									  
 									   
@@ -430,7 +503,7 @@ levelCheck=()=>{
                         fontWeight:"normal",
                         margin:8,
                         color:'#62463e'
-                    }} >Pattern-:</Text>
+                    }} >Pattern:</Text>
                    
                     </View>
 
@@ -460,10 +533,7 @@ levelCheck=()=>{
                     </View>
                     </View>
                     <View style={{marginBottom:4}}>
-                {
-                    this.state.supportive_image.length > 0 ? (
-                        <View>
-                             <View style={{
+                    <View style={{
 									   
 									   borderBottomWidth:0.5,
    
@@ -475,6 +545,15 @@ levelCheck=()=>{
                         textAlign:'left'
                     }} >Support Images:</Text>
                     </View>
+                    <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} ></View>
+                {
+                    this.state.supportive_image.length > 0 ? (
+                        <View>
+                            
                     
                     <FlatList
                   numColumns={1}
@@ -607,7 +686,7 @@ levelCheck=()=>{
                                             color:"grey",
                                             textAlign:'center'
                                     
-                                        }}>No Preview image Found</Text>)}
+                                        }}>No preview image found</Text>)}
                                         
                                         </View>
 

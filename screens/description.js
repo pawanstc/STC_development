@@ -60,7 +60,8 @@ export default class Recorder extends Component {
 			user_id:"",
 			filename:"",
 			pattern_url:"",
-			data:''
+			data:""
+			
 		}
 
 
@@ -68,6 +69,8 @@ export default class Recorder extends Component {
 
 	componentDidMount() {
 		this.getSheet();
+		console.log("audioo")
+		console.log(this.state.data)
 		
 		this.state.pattern_url= this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]/,'/b');
 console.log(this.state.pattern_url);
@@ -268,18 +271,20 @@ console.log(this.state.pattern_url);
 		})
 	}
 
-	
-
-	submit = () =>{
+	 checkSound  = async ()=>{
 		if(this.sound){
-			readFile(this.sound._filename,'base64').then(result=>{
+			  await readFile(this.sound._filename,'base64').then(result=>{
 				this.setState({
-					data:"data:audio/wav;base64,"+result
+					data:"data:audio/wav;base64,"+result.toString()
 				})
-				
+				//console.log(this.state.data)
 			  
 			})
 		}
+	}
+
+	submit = async() =>{
+		
 	
 
 
@@ -318,6 +323,8 @@ console.log(this.state.pattern_url);
 
   
 	if(this.props.route.params.imge_flag == 1){
+
+		await this.checkSound();
 	//console.log("pateern url")
 	//console.log(this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''));
 	// return;
@@ -336,14 +343,15 @@ console.log(this.state.pattern_url);
 		form.append('img_flag',this.props.route.params.imge_flag)
 		//console.log(JSON.stringify(form))*/
 		
-		
+		console.log("inside function ")
+		console.log(this.state.data)
 		fetch(URL+"/insert_post_job_order",{
 			headers:{
 				"Content-Type":"application/x-www-form-urlencoded"
 			},
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
-			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.state.pattern_url+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+this.state.data
+			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.state.pattern_url+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+ this.state.data
 			
 		}).then(response => response.json())
 		.then(result =>{
@@ -365,7 +373,10 @@ console.log(this.state.pattern_url);
 			console.log(error)
 		});
 	}else if(this.props.route.params.imge_flag == 2){
+		await this.checkSound();
 	
+		console.log("inside function ")
+		console.log(this.state.data)
 	console.log(this.props.route.params.fileObj.path);
 
 		fetch(URL+"/insert_post_job_order",{
@@ -375,7 +386,7 @@ console.log(this.state.pattern_url);
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
 			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+
-			JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.fileObj.path+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+this.state.data
+			JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.fileObj.path+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+ this.state.data
 		}).then(response => response.json())
 		.then(result =>{
 			console.log(result);

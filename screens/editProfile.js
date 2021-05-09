@@ -363,7 +363,7 @@ export default class EditProfile extends Component {
         .then((response) => response.json())
         .then((result) => {
           if (result.error == false) {
-            Alert.alert('Success', 'User Profile update successfully');
+            Alert.alert('Success', 'User Profile upload successfully');
 
             setTimeout(() => {
               this.props.navigation.goBack('profile');
@@ -713,10 +713,9 @@ export default class EditProfile extends Component {
                           />
                         ) : (
                           <Image
-                            source={{
-                              uri:
-                                'https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg',
-                            }}
+                            source={require("../assets/userProfile.png")
+                              
+                            }
                             style={{
                               height: 100,
                               width: 100,
@@ -1326,7 +1325,7 @@ export default class EditProfile extends Component {
                         ) : (
                           <View>
                             <Image
-                              source={require('../assets/companyLogo.jpg')}
+                              source={require("../assets/userProfile.png")}
                               style={{
                                 height: 80,
                                 width: 80,

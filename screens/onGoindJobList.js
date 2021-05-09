@@ -151,12 +151,12 @@ cancelJob = (id) => {
 						body:"user_id=" +result
 					}).then(response => response.json())
 					.then(result =>{
-						
+				
 					this.setState({
 						selected_id:id
 					})
 					this.setState({user_type:result.user_role_name})
-						if(result.user_role_name === "Distributer"){
+						if(result.user_role_name === "Distributor"){
 						
 							
 						
@@ -578,13 +578,18 @@ setStatus = (value) =>{
 									   color:"grey",
 									   padding:4
 								   }} >Distributer:</Text>
-								   <Text style={{
+								   {items.item.user_role_id=='2'?(<Text style={{
+									   fontSize:12,
+									   
+									   padding:4,
+									   paddingLeft:30}}>N.A.</Text>):(
+									   <Text style={{
 									   fontSize:12,
 									   
 									   padding:4,
 									   paddingLeft:30
-								   }} >{ items.item.parent_first_name } {items.item.parent_last_name}</Text>
-   
+								   }} >{ items.item.parent_first_name } {items.item.parent_last_name}</Text>)
+								}
 									   </View>
    
 									   <View style={{
@@ -648,7 +653,7 @@ setStatus = (value) =>{
 								   <Text style={{
 									   fontSize:12,
 									   
-									   padding:12
+									   padding:4
 								   }} >Sales Coordinator</Text>
    
 									   </View>
@@ -732,7 +737,9 @@ setStatus = (value) =>{
 														  supportive_image:items.item.support_image.image_details,
 														  button_show:items.item.button_show,
 														  order_id:items.item.id,
-														  ordered_by:items.item.order_by_user_id
+														  job_description:items.item.description,
+														  ordered_by:items.item.order_by_user_id,
+														  audio:items.item.audio_url
 														  
 														  
 													  }) } >
@@ -801,7 +808,7 @@ setStatus = (value) =>{
 
 													  </TouchableOpacity>
 													 
-   
+													   {items.item.cancel_job=='0'?(
 													  <TouchableOpacity onPress={() => this.cancelJob(items.item.id)} >
 															<View style={{
 															 justifyContent:'center',
@@ -817,7 +824,7 @@ setStatus = (value) =>{
 		 
 															 </View>
 		 
-															</TouchableOpacity>
+															</TouchableOpacity>):null}
 															
 													   </View>
 												   </View>

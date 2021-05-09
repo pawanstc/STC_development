@@ -174,13 +174,13 @@ export default class ProductImage extends Component {
                     </TouchableOpacity>
                     <TextInput
 
-                        placeholder=" Search...."
+                        placeholder="Search...."
                         //onEndEditing={()=>this.searchCat(this.state.searchtext)}
                         onChangeText={text=>this.searchCat(text)}
                         style={{
                             height: 43,
                             width: "60%",
-                            textAlign: "center",
+                            textAlign: "left",
                             borderRadius: 10,
                             borderWidth: 0.3,
                             borderColor: "#FFF",
@@ -409,6 +409,8 @@ export default class ProductImage extends Component {
               </>
           )
       } */}
+
+<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image})}>
                                 <ImageLoad
                                     isShowActivity={true}
                                     style={{
@@ -422,6 +424,7 @@ export default class ProductImage extends Component {
                                     borderRadius={6}
                                     source={{ uri: imageUrl + "/" + this.state.image }}
                                 />
+                               </TouchableOpacity>
 
                             </View>
 
@@ -463,7 +466,9 @@ export default class ProductImage extends Component {
                                         }} >Share</Text>
                                     </TouchableOpacity>
                                 </View>
-
+                                
+                               
+                               
                                 <View>
                                     <TouchableOpacity onPress={() => {
                                         this.setState({
