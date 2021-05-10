@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Modal, { ModalContent,SlideAnimation } from 'react-native-modals';
 import NetInfo from "@react-native-community/netinfo";
 import TabBarContainer from './TabnarComponent.js';
-
+import {route_notificationTojob,route_notificationToNotice} from '../screens/notification_route'
 // import AnimatedLoader from "react-native-animated-loader";
 
 
@@ -38,8 +38,18 @@ export default class Notification extends Component{
     }
 
     componentDidMount(){
+
+        AsyncStorage.getItem("user_id")
+        .then(result =>{this.setState({
+            userid:result
+        })
+        this.getNotifications();
+    
+    })
        
-       this.getNotifications();
+      
+
+       
         
     }
 
@@ -50,7 +60,7 @@ export default class Notification extends Component{
    
     }
     getNotifications=()=>{
-        this.setState({userid:this.props.route.params.user_id})
+        
         NetInfo.fetch().then(state=>{
             if(state.isConnected){
                 this.setState({refreshing:true})
@@ -61,7 +71,7 @@ export default class Notification extends Component{
                     "Content-Type":"application/x-www-form-urlencoded"
                 },
                 method:"POST",
-                body:"user_id=34"//+this.state.user_id
+                body:"user_id="+this.state.userid
         }).then(response=>response.json())
         .then(result=>{
             this.setState({
@@ -85,8 +95,40 @@ export default class Notification extends Component{
         });
     }
 
-   
 
+    Click=(item)=>{
+            if(item.notification_type=="Job_Details"){
+                var jd=[]
+                route_notificationTojob(item.post_job_order_id).then(res=>{jd=res
+                
+                    console.log("jobdetails",jd)
+                    if(jd!=undefined){
+                        console.log("andar",jd)
+                        this.props.navigation.navigate("postViewJob",{
+                            pattern_number:jd.pattern_no,
+                            order_image:jd.pattern_image_url,
+                            supportive_image:jd.support_image.image_details,
+                            button_show:jd.button_show,
+                            order_id:jd.order_id,
+                            job_description:jd.description,
+                            ordered_by:jd.order_by_user_id,
+                            audio:jd.audio_url})}
+                    }
+                    ).catch(err=>console.log(err))
+                
+             
+             
+                
+                
+
+            }else{
+                
+                var res=route_notificationToNotice(item.notification_doc_url)
+                if(res=="pdf")this.props.navigation.navigate("showPdf",{url:item.notification_doc_url})
+                if(res=="jpg")this.props.navigation.navigate("preview",{uri:item.notification_doc_url})
+            }
+    }
+     
     
     render(){
        
@@ -151,20 +193,21 @@ export default class Notification extends Component{
                     scrollEnabled={true}
                     showsVerticalScrollIndicator={true}
                     
-                    data={this.state.notifications.reverse()}
+                    data={this.state.notifications}
                     renderItem={(items) => {
                         return(
                             <View style={{flex:1}}>
                                  <View style={{
 									   padding:10,
 									   borderBottomWidth:0.5,
-                                       backgroundColor:'#eeeeee',
+                                       backgroundColor:'#FFFFFF',
                                        flex:1
 								   }} >
-                            <View style={{flex:1,height:55,width:Dimensions.get("screen").width -45,backgroundColor:'#eeeeee',borderRadius:10}}>
-                                <TouchableOpacity onPress={()=>this.props.navigation.navigate("onGoingJob")}>
+                            <View style={{flex:1,height:65,width:Dimensions.get("screen").width -45,backgroundColor:'#FFFFFF',borderRadius:10}}>
+                                <TouchableOpacity onPress={()=>this.Click(items.item)}>
                                <Text style={{fontSize:18}}>{items.item.notification_title}</Text>
                                <Text>{items.item.notification_body}</Text>
+                               <Text style={{fontSize:10}}>{items.item.date_time}</Text>
                                </TouchableOpacity>
                             
                                    </View>

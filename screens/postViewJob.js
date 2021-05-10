@@ -7,7 +7,6 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import {URL, imageUrl} from '../api';
 import NetInfo from "@react-native-community/netinfo";
 import { NetworkInfo } from "react-native-network-info";
-import SoundPlayer from 'react-native-sound-player';
 import Sound from 'react-native-sound'
 
 let urlsDomain = "https://stcapp.stcwallpaper.com/backend";
@@ -20,7 +19,7 @@ export default class postViewJob extends Component{
          pattern_number:this.props.route.params.pattern_number,
          order_image:this.props.route.params.order_image,
          supportive_image:this.props.route.params.supportive_image,
-         button_show:this.props.route.params.button_show,
+         //button_show:this.props.route.params.button_show,
          order_id:this.props.route.params.order_id,
          ordered_by:this.props.route.params.ordered_by,
          job_description:this.props.route.params.job_description,
@@ -190,16 +189,13 @@ playSound=()=>{
     var url=imageUrl+this.state.audio
     var url1='https://stcapp.stcwallpaper.com/audio/audio-20210508151225.wav'
     url.toString();
-   var sound1 = new Sound(url1, '',
-  (error, sound) => {
-    if (error) {
-      console.log('error' + error.message);
-      return;
-    }
-    sound1.play(() => {
-      sound1.release();
-    });
-  });
+    const track = new Sound(url1, null, (e) => {
+        if (e) {
+          console.log('error loading track:', e)
+        } else {
+          track.play()
+        }
+      })
 //SoundPlayer.loadUrl(url)
 //SoundPlayer.play()
    
@@ -463,18 +459,18 @@ levelCheck=()=>{
                                 color:"grey",
                                 textAlign:'left'}}>{this.state.job_description}</Text>
                                    </View>
-                                   {/*
+                                   {/* 
                                    <View style={{
 									   
 									   borderBottomWidth:0.5,
    
 								   }} >
-
+                                     
                                        <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginTop:10}}>Job Audio:</Text>
                                        </View>
                                        <View>
                                        {this.state.audio?(<View ><Text style={{fontSize:16}}>Press to play.</Text>
-                                       <View style={{height:50,width:50}}>
+                                       <View style={{height:70,width:70}}>
                                        <Icons name="play" style={{
                                            height:50,
                                            width:50,

@@ -84,6 +84,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
     );
 });
  componentDidMount(){
+  
    
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
  this._unsubscribe = this.props.navigation.addListener("focus", () =>{
@@ -111,14 +112,48 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
      },1000)
      Orientation.lockToPortrait()
      console.log("mounted home")
-    
+
+     messaging().onNotificationOpenedApp(remoteMessage => {
+         
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage, this.state.user_id)
+            
+          this.props.navigation.navigate("notification"
+            )
+          
+         
+     
         
+     
+    })
+
+      messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        
+      
+            
+          console.log(
+            'Notification caused app to open from quit state:',
+            
+            remoteMessage,
+            this.state.user_id
+            
+          )
+
+          this.props.navigation.navigate("notification"
+            )
+          
+     
     
 
-    }
+    
+})
  
-
-
+    
+    
+ }
   
 
  componentWillUnmount(){

@@ -517,6 +517,7 @@ setStatus = (value) =>{
 						}}
 					   showsVerticalScrollIndicator={false}
 						renderItem={(items, index) =>{
+							console.log("support image detail")
 							console.log(items.item.support_image.image_details);
 							return(
 								<View style={{

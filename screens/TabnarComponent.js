@@ -170,9 +170,9 @@ export default class TabComponnet extends Component{
              
       
          }} >
-            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigate.navigate("notification",{
-                user_id:this.state.uid
-            })} >
+            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigate.navigate("notification")
+                
+            } >
                     <Icon name="notifications-outline" size={18} style={{
               
                         marginLeft:15

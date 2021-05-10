@@ -355,6 +355,7 @@ console.log(this.state.pattern_url);
 			
 		}).then(response => response.json())
 		.then(result =>{
+			console.log("result is here")
 			console.log(result)
 			if(result.error==false){
 			
@@ -370,6 +371,7 @@ console.log(this.state.pattern_url);
 				});
 			}
 		}).catch(error =>{
+			console.log("error is here")
 			console.log(error)
 		});
 	}else if(this.props.route.params.imge_flag == 2){
