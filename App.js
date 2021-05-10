@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {Component} from 'react';
+import React, {Component,useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -24,6 +24,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import messaging from '@react-native-firebase/messaging'
 
 // app navigation
 
@@ -69,7 +70,7 @@ import Description from './screens/description.js';
 import StockDetails2 from './screens/stockDetails2.js';
 
 import onGoingJobList from './screens/onGoindJobList.js';
-import WebView from './screens/showsPdf.js';
+import WebViewComponent from './screens/showsPdf.js';
 import Content from './screens/contentNotification.js';
 import subCat2 from './screens/subCategory2.js';
 import PasswordUpdate from './screens/passwordUpdate.js';
@@ -85,8 +86,18 @@ import SearchComponent from './screens/searchBarComponent.js';
 import PreviewJobView from './screens/postViewJob.js';
 
 export default class App extends Component {
+ 
+    componentDidMount(){
+      // Assume a message-notification contains a "type" property in the data payload of the screen to open
+
+     
+
+ 
+    }
+ 
   render(){
 
+    
 function TabNavigation(){
   return(
     
@@ -261,7 +272,7 @@ const config = {
     <Stack.Screen name="onGoingJoblist" component={onGoingJobList} options={{
       headerShown:false
    }} />
-   <Stack.Screen name="showsPdf" component={WebView} options={{
+   <Stack.Screen name="showsPdf" component={WebViewComponent} options={{
      headerShown:false
    }} />
    <Stack.Screen name="content" component={Content} options={{
