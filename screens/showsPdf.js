@@ -6,8 +6,14 @@ import { Stylesheet, View, Text, TouchableOpacity, Image,Dimensions,
 import Pdf from 'react-native-pdf';
 export  default class WebViewComponent extends Component{
 
+        
+    constructor(props){
+        super(props)
 
-     url=this.props.route.params.url;
+        this.state={
+            url:this.props.route.params.url
+        }
+    }
     
     render(){
         const resourceType = 'url';
@@ -59,7 +65,7 @@ export  default class WebViewComponent extends Component{
                       alignItems:"center"
                 }} >
                     <Pdf
-source={{uri:url}}
+source={{uri:this.state.url}}
 onLoadComplete={(numberOfPages,filePath)=>{
     console.log(`number of pages: ${numberOfPages}`);
 }}

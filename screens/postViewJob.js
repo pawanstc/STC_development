@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Dimensions,  StatusBar,Text,FlatList , Button, Alert, AsyncStorage, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/Ionicons';
-
+import trackPlayerService from './track_services'
 import {URL, imageUrl} from '../api';
 import NetInfo from "@react-native-community/netinfo";
 import { NetworkInfo } from "react-native-network-info";
 import Sound from 'react-native-sound'
-
+import TrackPlayer from 'react-native-track-player';
 let urlsDomain = "https://stcapp.stcwallpaper.com/backend";
 export default class postViewJob extends Component{
 
@@ -39,6 +39,11 @@ export default class postViewJob extends Component{
  
  componentDidMount(){
 
+TrackPlayer.setupPlayer().then(()=>{
+    console.log("player set")
+
+})
+TrackPlayer.registerPlaybackService(()=>trackPlayerService)
     
 console.log(this.state.job_description)
     console.log("ordered by")
@@ -189,16 +194,27 @@ playSound=()=>{
     var url=imageUrl+this.state.audio
     var url1='https://stcapp.stcwallpaper.com/audio/audio-20210508151225.wav'
     url.toString();
-    const track = new Sound(url1, null, (e) => {
-        if (e) {
-          console.log('error loading track:', e)
-        } else {
-          track.play()
-        }
+  const track ={
+      id:'1',
+      url:url,
+      title:"audio",
+      artist:'new1'
+  }
+      TrackPlayer.add([track]).then(()=>{
+        TrackPlayer.play();
+    
       })
+    
+
+  
+     
 //SoundPlayer.loadUrl(url)
 //SoundPlayer.play()
    
+}
+
+pauseSound=()=>{
+    TrackPlayer.pause();
 }
 
 get_prevImage=()=>{
@@ -361,7 +377,6 @@ levelCheck=()=>{
  }
  approveJobconf=()=>{
     Alert.alert(
-        "Approve Preview",
         "Are You Sure You Want To Approve This Preview",
         [
             {
@@ -459,7 +474,7 @@ levelCheck=()=>{
                                 color:"grey",
                                 textAlign:'left'}}>{this.state.job_description}</Text>
                                    </View>
-                                   {/* 
+                                   
                                    <View style={{
 									   
 									   borderBottomWidth:0.5,
@@ -469,14 +484,24 @@ levelCheck=()=>{
                                        <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginTop:10}}>Job Audio:</Text>
                                        </View>
                                        <View>
-                                       {this.state.audio?(<View ><Text style={{fontSize:16}}>Press to play.</Text>
-                                       <View style={{height:70,width:70}}>
+                                       {this.state.audio?(<View style={{flexDirection:'row'}}>
+                                       <View style={{height:50,width:50}}>
                                        <Icons name="play" style={{
                                            height:50,
                                            width:50,
-                                        margin:10,
+                                        marginTop:10,
                                         marginLeft:20
-                                    }} color="blue" size={25}  onPress={() => this.playSound()} /></View>
+                                    }} color="blue" size={40}  onPress={() => this.playSound()} /></View>
+                                   
+                                    <View style={{height:50,width:50}}>
+                                       <Icons name="pause" style={{
+                                           height:50,
+                                           width:50,
+                                        marginTop:10,
+                                        marginLeft:20
+                                    }} color="blue" size={40}  onPress={() => this.pauseSound()} /></View>
+                                    
+                                    
                                     </View>
                                        
                                        ):
@@ -486,7 +511,7 @@ levelCheck=()=>{
                                 color:"grey",
                                 textAlign:'center'}}>No Job Audio</Text>}
                                    </View>
-                                       */}
+                                       
 
                         <View style={{
 									  

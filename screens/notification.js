@@ -7,7 +7,7 @@ import NetInfo from "@react-native-community/netinfo";
 import TabBarContainer from './TabnarComponent.js';
 import {route_notificationTojob,route_notificationToNotice} from '../screens/notification_route'
 // import AnimatedLoader from "react-native-animated-loader";
-
+import {URL,imageUrl} from '../api'
 
 import {
     BallIndicator,
@@ -124,8 +124,8 @@ export default class Notification extends Component{
             }else{
                 
                 var res=route_notificationToNotice(item.notification_doc_url)
-                if(res=="pdf")this.props.navigation.navigate("showPdf",{url:item.notification_doc_url})
-                if(res=="jpg")this.props.navigation.navigate("preview",{uri:item.notification_doc_url})
+                if(res=="pdf")this.props.navigation.navigate("showsPdf",{url:imageUrl+item.notification_doc_url})
+                if(res=="jpg")this.props.navigation.navigate("preview",{uri:imageUrl+item.notification_doc_url})
             }
     }
      
@@ -196,29 +196,39 @@ export default class Notification extends Component{
                     data={this.state.notifications}
                     renderItem={(items) => {
                         return(
-                            <View style={{flex:1}}>
-                                 <View style={{
-									   padding:10,
-									   borderBottomWidth:0.5,
-                                       backgroundColor:'#FFFFFF',
-                                       flex:1
-								   }} >
-                            <View style={{flex:1,height:65,width:Dimensions.get("screen").width -45,backgroundColor:'#FFFFFF',borderRadius:10}}>
-                                <TouchableOpacity onPress={()=>this.Click(items.item)}>
+                            <View>
+                            <View style={{height:65,width:Dimensions.get('screen').width-50,flexDirection:'row'}}>
+                                
+                                      
+                               
+                            <View style={{flex:1,backgroundColor:'#FFFFFF',borderRadius:10,flexDirection:'column'}}>
+                                
+                            <TouchableOpacity  onPress={()=>this.Click(items.item)}>
                                <Text style={{fontSize:18}}>{items.item.notification_title}</Text>
                                <Text>{items.item.notification_body}</Text>
                                <Text style={{fontSize:10}}>{items.item.date_time}</Text>
                                </TouchableOpacity>
-                            
-                                   </View>
+                               
+                               </View>
+                               {items.item.notification_type=="Job_Details"?(
+                               <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50}}/>
+                               ):(<Image source={require('../assets/pdflogo.jpg')} style={{height:50,width:50}}/>)
+                               }
+                              
+                                   
+                                   
+                              
+                               </View>
+                               <View style={{height:0.5,backgroundColor:'#000000'}}/>
+                                  </View>
                             
                             
                             
                           
 
                          
-                          </View>
-                          </View>
+                         
+                          
                         )}
                 }
                     keyExtractor={(item) => item.date_time}

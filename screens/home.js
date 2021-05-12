@@ -114,7 +114,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
      console.log("mounted home")
 
      messaging().onNotificationOpenedApp(remoteMessage => {
-         
+         if(remoteMessage){
         console.log(
           'Notification caused app to open from background state:',
           remoteMessage, this.state.user_id)
@@ -122,7 +122,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
           this.props.navigation.navigate("notification"
             )
           
-         
+        }
      
         
      
@@ -132,7 +132,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
       .getInitialNotification()
       .then(remoteMessage => {
         
-      
+      if(remoteMessage!=null){
             
           console.log(
             'Notification caused app to open from quit state:',
@@ -144,12 +144,12 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
 
           this.props.navigation.navigate("notification"
             )
-          
+      }
      
     
 
     
-})
+}).catch(error=>console.log(error))
  
     
     
