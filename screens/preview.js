@@ -31,6 +31,7 @@ useEffect(() => {
            <ImageViewer imageUrls={images}/>
        </Modal>
     )
+    
 }
 
 export default preview
