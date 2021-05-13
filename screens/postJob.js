@@ -742,13 +742,14 @@ launchCamera2 = async () =>{
               <TouchableOpacity  activeOpacity={2} onPress={() => this.props.navigation.navigate("customCatelog")} >
                 <Text style={{
                     textAlign:"center",
-                  
+                    alignSelf:'stretch',
                     margin:12,
+                    
                     fontSize:16,
                   color:"#404040"
 
                 }} >
-                    Select A Pattern
+                    Select A Pattern  
                 </Text>
               </TouchableOpacity>
 
@@ -901,7 +902,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:60,
+                width:'25%',
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -919,7 +920,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:60,
+                width:'25%',
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,

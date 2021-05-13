@@ -196,16 +196,16 @@ export default class Notification extends Component{
                     data={this.state.notifications}
                     renderItem={(items) => {
                         return(
-                            <View>
-                            <View style={{height:65,width:Dimensions.get('screen').width-50,flexDirection:'row'}}>
+                            <View style={{paddingLeft:20,paddingRight:20,paddingBottom:10}}>
+                            <View style={{height:65,width:Dimensions.get('screen').width-80,flexDirection:'row'}}>
                                 
                                       
                                
-                            <View style={{flex:1,backgroundColor:'#FFFFFF',borderRadius:10,flexDirection:'column'}}>
+                            <View style={{flex:1,backgroundColor:'#FFFFFF',flexDirection:'column'}}>
                                 
                             <TouchableOpacity  onPress={()=>this.Click(items.item)}>
-                               <Text style={{fontSize:18}}>{items.item.notification_title}</Text>
-                               <Text>{items.item.notification_body}</Text>
+                               <Text style={{fontSize:14}}>{items.item.notification_title}</Text>
+                               <Text style={{fontSize:12}}>{items.item.notification_body}</Text>
                                <Text style={{fontSize:10}}>{items.item.date_time}</Text>
                                </TouchableOpacity>
                                
@@ -219,7 +219,7 @@ export default class Notification extends Component{
                                    
                               
                                </View>
-                               <View style={{height:0.5,backgroundColor:'#000000'}}/>
+                               
                                   </View>
                             
                             

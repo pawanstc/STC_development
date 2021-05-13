@@ -7,6 +7,7 @@
  */
 
 import React, {Component,useEffect} from 'react';
+import DeviceInfo from 'react-native-device-info';
 import {
   SafeAreaView,
   StyleSheet,
@@ -84,18 +85,19 @@ import preview from './screens/preview'
 import UpdatePassword from './screens/changePassword.js';
 import SearchComponent from './screens/searchBarComponent.js';
 import PreviewJobView from './screens/postViewJob.js';
-
+import fixOppoTextCutOff from './screens/handlecutoff'
 export default class App extends Component {
  
     componentDidMount(){
       // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
-     
-
+     if(DeviceInfo.getBrand()=='oneplus')fixOppoTextCutOff()
+      
  
     }
  
   render(){
+   
 
     
 function TabNavigation(){
@@ -325,6 +327,10 @@ const config = {
        
 
 const styles = StyleSheet.create({
+
+  defaultFontFamily: {
+    fontFamily: 'lucida grande',
+  },
   scrollView: {
     backgroundColor: Colors.lighter,
   },

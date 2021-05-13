@@ -78,10 +78,12 @@ export default class Profile extends Component{
                               })
                         }
                         else{
-                          this.setState({
-                            profile_image:result.profilePicture
-                          });
-                        }
+                            if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")){
+                                this.setState({
+                                  profile_image:result.profilePicture
+                                })}else this.setState({profile_image:""})
+                              }
+                         
 
                       if(result.company_logo == null &&  result.company_logo ==""){
                         this.setState({

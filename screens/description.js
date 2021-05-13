@@ -34,6 +34,7 @@ import {
   } from 'react-native-indicators';
 import { PickerItem } from 'react-native/Libraries/Components/Picker/Picker';
 import { ThemeConsumer } from 'styled-components';
+import { duration } from 'moment';
 
 
 
@@ -60,8 +61,8 @@ export default class Recorder extends Component {
 			user_id:"",
 			filename:"",
 			pattern_url:"",
-			data:""
-			
+			data:"",
+			duration:""
 		}
 
 
@@ -162,6 +163,7 @@ console.log(this.state.pattern_url);
 					wavFile: 'voice1.wav' // default 'audio.wav'
 				};
 				AudioRecord.init(options);
+				
 		 	 	AudioRecord.start();
 			} else {
 				alert("sorry");
@@ -199,13 +201,8 @@ console.log(this.state.pattern_url);
 
 	
 	playSound =  () => {
-		console.log(this.sound);
-		console.log("another1")
 		
-		
-		console.log(this.sound._filename)
-		console.log(this.sound._filename.split('.').pop())
-		console.log(this.sound._filename.replace(/^.*[\\\/]/, ''))
+	
 		this.setState({
 			playButtonStat: true
 		});
@@ -221,6 +218,7 @@ console.log(this.state.pattern_url);
 					console.log(success);
 					console.log("audio play success");
 					this.sound.getCurrentTime((seconds) => {
+						console.log(seconds)
 						if (seconds ) {
 							console.log("recorde has finished");
 
@@ -272,25 +270,27 @@ console.log(this.state.pattern_url);
 	}
 
 	 checkSound  = async ()=>{
+		 this.setState({data:""})
 		if(this.sound){
-			  await readFile(this.sound._filename,'base64').then(result=>{
+			 
+			await readFile(this.sound._filename,'base64').then(result=>{
 				this.setState({
 					data:"data:audio/wav;base64,"+result.toString()
 				})
 				//console.log(this.state.data)
 			  
 			})
+			  
 		}
 	}
 
 	submit = async() =>{
 		
+		
+			
+		
 	
-
-
-
-	
-	 if(this.state.desc ==""){
+		 if(this.state.desc ==""){
 		Alert.alert(
 			"Validation Error",
 			"Please enter your job  description"
@@ -318,10 +318,10 @@ console.log(this.state.pattern_url);
 			"Minimum 10 characters required in the description."
 		);
 
-		return;
+		return
 	}
-
-  
+		
+	
 	if(this.props.route.params.imge_flag == 1){
 
 		await this.checkSound();
@@ -369,7 +369,10 @@ console.log(this.state.pattern_url);
 						{name:"home"}
 					]
 				});
-			}
+			}else{Alert.alert(
+				"Error",
+				"Server Error"
+			)}
 		}).catch(error =>{
 			console.log("error is here")
 			console.log(error)
@@ -405,9 +408,16 @@ console.log(this.state.pattern_url);
 						{name:"home"}
 					]
 				});
-			}
+			}else{Alert.alert(
+				"Error",
+				"Server Error"
+			)}
 		}).catch(error =>{
 			console.log(error)
+			Alert.alert(
+				"Error",
+				error.message
+			)
 		});
 	}
 		
@@ -643,7 +653,7 @@ console.log(this.state.pattern_url);
 </Picker> */}
 <View style={{
 	height:45,
-	width:180,
+	width:"33%",
 	justifyContent:"center",
 	alignItems:"center",
 	borderWidth:0.5,
