@@ -238,7 +238,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                
                             });
                         }
-                        else{
+                        else if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")||result.profilePicture.includes(".jpeg")){
                             console.log(result.profilePicture);
                             this.setState({
                                 user_name:result.first_name,
@@ -247,7 +247,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             });
                             console.log("profile url")
                             console.log(this.state.profile_image)
-                        }
+                        }else{this.setState({profile_image:"",user_name:result.first_name})}
 
                         if(result.company_logo == null && result.company_logo ==""){
                             this.setState({
@@ -263,7 +263,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             })
                         }
                         else{
-                            if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")){
+                            if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")||result.company_logo.includes(".jpeg")){
                             this.setState({
                                 company_logo:result.company_logo
                             })

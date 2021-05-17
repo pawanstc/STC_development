@@ -653,7 +653,7 @@ console.log(this.state.pattern_url);
 </Picker> */}
 <View style={{
 	height:45,
-	width:"33%",
+	width:180,
 	justifyContent:"center",
 	alignItems:"center",
 	borderWidth:0.5,

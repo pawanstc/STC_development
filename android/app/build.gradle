@@ -163,10 +163,10 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file("my-upload-key.jks")
-            storePassword "stc123"
+            storeFile file("my-upload-key.keystore")
+            storePassword "stc_123"
             keyAlias "key0"
-            keyPassword "stc123"
+            keyPassword "stc_123"
             v2SigningEnabled false
         }
     }

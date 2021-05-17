@@ -78,7 +78,7 @@ export default class Profile extends Component{
                               })
                         }
                         else{
-                            if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")){
+                            if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")||result.profilePicture.includes(".jpeg")){
                                 this.setState({
                                   profile_image:result.profilePicture
                                 })}else this.setState({profile_image:""})
@@ -98,7 +98,7 @@ export default class Profile extends Component{
                             companyLogo:""
                           })
                       }else {
-                        if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")){
+                        if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")||result.company_logo.includes(".jpeg")){
                         this.setState({
                           companyLogo:result.company_logo
                         })}else this.setState({companyLogo:""})

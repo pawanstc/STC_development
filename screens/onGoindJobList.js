@@ -583,7 +583,7 @@ setStatus = (value) =>{
 									   fontSize:12,
 									   
 									   padding:4,
-									   paddingLeft:30}}>N.A.</Text>):(
+									   paddingLeft:30}}>{items.item.first_name} {items.item.last_name}</Text>):(
 									   <Text style={{
 									   fontSize:12,
 									   
@@ -604,7 +604,7 @@ setStatus = (value) =>{
 								   }} >Dealer       :</Text>
 
 								   {
-								     items.item.first_name  && items.item.last_name ? (
+								    items.item.user_role_id=='3' ? (
 								   		<Text style={{
 									   fontSize:12,
 									   paddingLeft:30,

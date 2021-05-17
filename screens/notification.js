@@ -109,7 +109,7 @@ export default class Notification extends Component{
                             order_image:jd.pattern_image_url,
                             supportive_image:jd.support_image.image_details,
                             button_show:jd.button_show,
-                            order_id:jd.order_id,
+                            order_id:jd.id,
                             job_description:jd.description,
                             ordered_by:jd.order_by_user_id,
                             audio:jd.audio_url})}

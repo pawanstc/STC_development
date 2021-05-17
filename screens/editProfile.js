@@ -369,7 +369,7 @@ export default class EditProfile extends Component {
               this.props.navigation.goBack('profile');
             }, 1200);
           } else if (result.length == 0) {
-            Alert.alert('Success', 'Image upload successfull');
+            Alert.alert('Success', 'User Profile upload successfully');
 
             this.props.navigation.goBack(null);
           }

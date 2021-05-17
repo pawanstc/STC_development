@@ -87,7 +87,7 @@ console.log(this.state.job_description)
 
     
 
-      
+        console.log(this.state.order_id)
        fetch(URL+"/get_latest_order_status_by_post_job_order_id",{
         headers:{
             "Content-Type":"application/x-www-form-urlencoded"
@@ -96,6 +96,7 @@ console.log(this.state.job_description)
         body:"post_job_order_id="+this.state.order_id
     }).then(response=>response.json())
     .then(result=>{
+        
         console.log(result);
         console.log(result.status_details)
         let st=result.status_details
@@ -111,8 +112,8 @@ console.log(this.state.job_description)
             console.log(this.state.status);
         this.get_prevImage()
         
-
         }
+        
     }).catch(error=>console.log(error))
 
     
@@ -309,7 +310,7 @@ levelCheck=()=>{
 
  approveJob = () =>{
 
-    if(!this.levelCheck){Alert.alert('Error','You are not allowed to approve this job yet!')}else{
+    if(!this.levelCheck){Alert.alert('Error','You are not allowed to approve this job yet!');return}else{
     this.setStatus()
 
     AsyncStorage.getItem("user_id")
@@ -326,6 +327,8 @@ levelCheck=()=>{
                         body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.description
                     }).then(response => response.json())
                     .then(result =>{
+                        console.log(this.state.order_id)
+                        console.log("status update result")
                         console.log(result);
                         if(!result.error){
                             this.setState({
@@ -337,7 +340,7 @@ levelCheck=()=>{
                                 "Preview Approved Successfully"
                             )
                             this.props.navigation.replace("onGoingJob");
-                        }
+                        }else{console.log(result.error)}
                     }).catch(error =>{
                         console.log(error);
                         Alert.alert(
@@ -377,6 +380,7 @@ levelCheck=()=>{
  }
  approveJobconf=()=>{
     Alert.alert(
+        "Approve Preview",
         "Are You Sure You Want To Approve This Preview",
         [
             {
@@ -466,7 +470,7 @@ levelCheck=()=>{
    
 								   }} >
 
-                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginLeft:10,marginTop:10}}>Description:</Text>
+                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginLeft:10,marginTop:10}}> Job Description:</Text>
                                       
                                        <Text style={{
                                 padding:20,           
@@ -475,14 +479,10 @@ levelCheck=()=>{
                                 textAlign:'left'}}>{this.state.job_description}</Text>
                                    </View>
                                    
-                                   <View style={{
-									   
-									   borderBottomWidth:0.5,
-   
-								   }} >
+                                  
                                      
                                        <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginTop:10}}>Job Audio:</Text>
-                                       </View>
+                                       
                                        <View>
                                        {this.state.audio?(<View style={{flexDirection:'row'}}>
                                        <View style={{height:50,width:50}}>
@@ -500,7 +500,11 @@ levelCheck=()=>{
                                         marginTop:10,
                                         marginLeft:20
                                     }} color="blue" size={40}  onPress={() => this.pauseSound()} /></View>
-                                    
+                                     <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} />
                                     
                                     </View>
                                        
@@ -512,7 +516,11 @@ levelCheck=()=>{
                                 textAlign:'center'}}>No Job Audio</Text>}
                                    </View>
                                        
-
+                                   <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} />
                         <View style={{
 									  
 									   
