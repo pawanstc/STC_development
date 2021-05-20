@@ -1,4 +1,4 @@
-package com.stc;
+package com.stcwallpaper;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;

@@ -82,9 +82,10 @@ export default class HomeComponent extends Component{
                 console.log(result);
                 if(result.error ==false){
                     this.setState({
-                        cityList:result.stock_city_list,
-                        isVisiable:false
+                        cityList:result.stock_city_list
                     })
+                    console.log("Datat is hre")
+                    console.log(this.state.cityList)
                 }else{
                     this.setState({
                         isVisiable:true
@@ -137,7 +138,7 @@ export default class HomeComponent extends Component{
 //      }
 //  }
     render(){
-console.log(this.state.params)
+
     
         return(
           <View style={{
