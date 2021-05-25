@@ -9,7 +9,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { NetworkInfo } from "react-native-network-info";
 import Sound from 'react-native-sound'
 import TrackPlayer from 'react-native-track-player';
-let urlsDomain = "https://stcapp.stcwallpaper.com/backend";
+let urlsDomain = "https://stcapp.stcwallpaper.com/";
 export default class postViewJob extends Component{
 
  constructor(props){
@@ -192,7 +192,7 @@ setOptions=()=>{
 
 playSound=()=>{
     console.log(imageUrl+this.state.audio)
-    var url=imageUrl+this.state.audio
+    var url=urlsDomain+this.state.audio
     var url1='https://stcapp.stcwallpaper.com/audio/audio-20210508151225.wav'
     url.toString();
   const track ={

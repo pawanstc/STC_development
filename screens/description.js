@@ -62,7 +62,8 @@ export default class Recorder extends Component {
 			filename:"",
 			pattern_url:"",
 			data:"",
-			duration:""
+			duration:"",
+			disabled:false
 		}
 
 
@@ -199,10 +200,57 @@ console.log(this.state.pattern_url);
 
 	}
 
-	
+	uploadNew= async (value)=>{
+		console.log(value)
+		this.setState({data:""})
+		const path = 'file://'+ value;
+		const apiUrl="https://stcapp.stcwallpaper.com/backend/audio1.php"
+		/*const formData = new FormData();
+        formData.append('file', {
+            uri: path,
+			type:'audio/wav',
+            name: 'test.wav',
+            
+        })
+		var xhr = new XMLHttpRequest();
+    xhr.open("POST","https://stcapp.stcwallpaper.com/backend/audio1.php");
+    xhr.setRequestHeader("Content-Type","multipart/form-data");
+    xhr.send(formData);
+    console.log(xhr);
+	console.log(xhr.response)*/
+	let body = new FormData();
+                            //Appending file to body
+                            body.append('file', {
+                                uri: path,
+                                type: 'audio/wav', //This is the file type .. you can define according to your requirement
+                                name: 'audio.wav', //File name you want to pass
+                            });
+                            //Service call
+                            await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: new Headers({
+                                    'Content-Type': 'multipart/form-data',
+                                }),
+                                body: body,
+                            })
+                                .then((res) => res.json())
+                                .then((responseJson) => {
+                                    //GET RESPONSE SUCCESS OF FAILURE
+                                    console.log(responseJson);
+									console.log(responseJson.url.replace('https://stcapp.stcwallpaper.com/',''));
+									this.setState({data:responseJson.url.replace('https://stcapp.stcwallpaper.com/','')})
+									console.log(this.state.data)
+                                })
+                                .catch((error) => {
+                                    //ERROR
+                                    console.log(error);
+                                });
+        
+	}
 	playSound =  () => {
+		  
 		
-	
+		
 		this.setState({
 			playButtonStat: true
 		});
@@ -324,7 +372,10 @@ console.log(this.state.pattern_url);
 	
 	if(this.props.route.params.imge_flag == 1){
 
-		await this.checkSound();
+		this.setState({disabled:true})
+		if(this.sound){
+			console.log("audio detected")
+			await this.uploadNew(this.sound._filename)};
 	//console.log("pateern url")
 	//console.log(this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''));
 	// return;
@@ -372,13 +423,17 @@ console.log(this.state.pattern_url);
 			}else{Alert.alert(
 				"Error",
 				"Server Error"
-			)}
+
+			)
+			this.setState({disabled:false})}
 		}).catch(error =>{
 			console.log("error is here")
 			console.log(error)
+			this.setState({disabled:false})
 		});
 	}else if(this.props.route.params.imge_flag == 2){
-		await this.checkSound();
+		this.setState({disabled:true})
+		if(this.sound)await this.uploadNew(this.sound._filename);
 	
 		console.log("inside function ")
 		console.log(this.state.data)
@@ -411,13 +466,15 @@ console.log(this.state.pattern_url);
 			}else{Alert.alert(
 				"Error",
 				"Server Error"
-			)}
+			)
+			this.setState({disabled:false})}
 		}).catch(error =>{
 			console.log(error)
 			Alert.alert(
 				"Error",
 				error.message
 			)
+			this.setState({disabled:false})
 		});
 	}
 		
@@ -809,7 +866,7 @@ console.log(this.state.pattern_url);
 
 			</View>
 
-				<TouchableOpacity activeOpacity={0.9} onPress={() => this.submit()} >
+				<TouchableOpacity activeOpacity={0.9} disabled={this.state.disabled} onPress={() => this.submit()} >
 					<View style={{
 						height:50,
 						width:Dimensions.get("screen").width,
