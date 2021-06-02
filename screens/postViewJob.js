@@ -24,6 +24,7 @@ export default class postViewJob extends Component{
          ordered_by:this.props.route.params.ordered_by,
          job_description:this.props.route.params.job_description,
          audio:this.props.route.params.audio,
+         order_user_type:this.props.route.params.user_type,
          ip_address:"",
          prev_img:'',
          distributer_approve:'',
@@ -32,16 +33,21 @@ export default class postViewJob extends Component{
          status:'',
          isDisabled:true,
         user_id:'',
-        description:''
+        description:'',
+        dist_only:false,
+        prev_img_desc:''
 
      } 
  }
  
  componentDidMount(){
-
+    if(this.state.order_user_type=="Distributor")this.setState({dist_only:true})
+    
+    console.log(this.state.dist_only)
 TrackPlayer.setupPlayer().then(()=>{
     console.log("player set")
 
+    
 })
 TrackPlayer.registerPlaybackService(()=>trackPlayerService)
     
@@ -141,15 +147,19 @@ setOptions=()=>{
                   case 10:
                       this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:true})
                       console.log(this.state.dealer_approve)
+                      if(this.state.dist_only==true)this.setState({dealer_approve:''})
                       break;
                       case 8:
                           this.setState({dealer_approve:'Approved',distributer_approve:'Approved',isDisabled:true})
+                          if(this.state.dist_only==true)this.setState({dealer_approve:null})
                           break;
                   case 11:
                       this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
+                      if(this.state.dist_only==true)this.setState({dealer_approve:null})
                       break;
                   case 12:
-                      this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})    
+                      this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})   
+                      if(this.state.dist_only==true)this.setState({dealer_approve:null}) 
                   default:
                       this.setState({isDisabled:true})
                       break;
@@ -166,16 +176,20 @@ setOptions=()=>{
                 case 10:
                     this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:false})
                     if(this.state.user_id==this.state.ordered_by)this.setState({isDisabled:false})
+                    if(this.state.dist_only==true)this.setState({dealer_approve:null})
                     break;
                     case 8:
                         this.setState({dealer_approve:'Approved',distributer_approve:'Approved',isDisabled:true})
+                        if(this.state.dist_only==true)this.setState({dealer_approve:null})
                         break;
                         
                 case 11:
                     this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
+                    if(this.state.dist_only==true)this.setState({dealer_approve:null})
                     break;
                 case 12:
                     this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})
+                    if(this.state.dist_only==true)this.setState({dealer_approve:null})
                     break;    
                 default:
                     this.setState({isDisabled:true})
@@ -188,6 +202,8 @@ setOptions=()=>{
 
       }   
     }
+
+   
 }
 
 playSound=()=>{
@@ -229,9 +245,10 @@ console.log("heloo preview")
     }).then(response=>response.json())
     .then(result=>{
         if(result){
-            
+            console.log(result)
         this.setState({
-            prev_img:result.upload_image_url
+            prev_img:result.upload_image_url,
+            prev_img_desc:result.description
         })
         this.setOptions()
         console.log(this.state.prev_img)}else{Alert.alert("Failed",'Failed to get preview image')}
@@ -662,6 +679,23 @@ levelCheck=()=>{
                             borderColor:"#eeee"
                         }}
                     /></TouchableOpacity>
+                     <View style={{
+									   
+									   borderBottomWidth:0.5,
+   
+								   }} >
+                             <Text style={{
+                        fontSize:18,
+                        margin:5,
+                        color:'#62463e',
+                        textAlign:'left'
+                    }} >Description:</Text>
+                     <Text style={{
+                                padding:10,           
+                                fontSize:16,
+                                color:"grey",
+                                textAlign:'left'}}>{this.state.prev_img_desc}</Text>
+                    </View>
                          <View style={{
                             width:'100%',
                             justifyContent:"center",
@@ -697,7 +731,9 @@ levelCheck=()=>{
            
 
                         </View>
+                       
                         {this.state.dealer_approve?(<Text style={{
+                      
                                             fontSize:16,
                                             padding:10,
                                             color:"grey",
@@ -708,6 +744,7 @@ levelCheck=()=>{
                                             padding:10,
                                             color:"grey",
                                             textAlign:'left'}}>Distributor Status:-{this.state.distributer_approve}</Text>):null}
+                                            
                
                     </View>
                                         ):(<Text style={{

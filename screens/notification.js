@@ -112,7 +112,8 @@ export default class Notification extends Component{
                             order_id:jd.id,
                             job_description:jd.description,
                             ordered_by:jd.order_by_user_id,
-                            audio:jd.audio_url})}
+                            audio:jd.audio_url,
+                        user_type:jd.user_role_name})}
                     }
                     ).catch(err=>console.log(err))
                 

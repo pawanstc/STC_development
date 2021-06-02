@@ -740,7 +740,8 @@ setStatus = (value) =>{
 														  order_id:items.item.id,
 														  job_description:items.item.description,
 														  ordered_by:items.item.order_by_user_id,
-														  audio:items.item.audio_url
+														  audio:items.item.audio_url,
+														  user_type:items.item.user_role_name
 														  
 														  
 													  }) } >
