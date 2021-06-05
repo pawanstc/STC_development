@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Dimensions,  StatusBar,Text,FlatList , Button, Alert, AsyncStorage, ScrollView} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { StyleSheet, View, Image, TouchableOpacity, Dimensions,  StatusBar,Text,FlatList , Button, Alert, AsyncStorage, ScrollView,  TextInput} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import Modal from 'react-native-modal'
 import Icons from 'react-native-vector-icons/Ionicons';
 import trackPlayerService from './track_services'
 import {URL, imageUrl} from '../api';
@@ -9,6 +10,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { NetworkInfo } from "react-native-network-info";
 import Sound from 'react-native-sound'
 import TrackPlayer from 'react-native-track-player';
+import Textarea from 'react-native-textarea';
 let urlsDomain = "https://stcapp.stcwallpaper.com/";
 export default class postViewJob extends Component{
 
@@ -35,8 +37,13 @@ export default class postViewJob extends Component{
         user_id:'',
         description:'',
         dist_only:false,
-        prev_img_desc:''
-
+        prev_img_desc:'',
+        modalvisibale:false,
+        remark:'No remarks',
+        approve_action:false,
+        dealer_remarks:'',
+        distributer_remarks:'',
+        remark_button:true
      } 
  }
  
@@ -122,6 +129,27 @@ console.log(this.state.job_description)
         
     }).catch(error=>console.log(error))
 
+    fetch(URL+"/get_job_details_by_order_id",{
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+       },
+       method:"POST",
+       body:"post_job_order_id="+this.state.order_id
+       
+
+    }).then(response=>response.json()).then(result=>{
+        //console.log("result",result)
+        if(result){
+            console.log(result)
+           this.setState({
+               distributer_remarks:result.distributor_preview_description,
+               dealer_remarks:result.dealer_preview_description
+           })
+            
+        }
+
+    }).catch(err=>console.log("error",err))
+
     
 
 
@@ -144,6 +172,7 @@ setOptions=()=>{
                       this.setState({isDisabled:false})
                       if(this.state.user_id==this.state.ordered_by)this.setState({isDisabled:false});else this.setState({isDisabled:true}) 
                       break;
+                      
                   case 10:
                       this.setState({dealer_approve:'Approved',distributer_approve:'Pending',isDisabled:true})
                       console.log(this.state.dealer_approve)
@@ -288,7 +317,7 @@ rejectJob=()=>{
                     "Content-Type":"application/x-www-form-urlencoded"
                 },
                 method:"POST",
-                body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.description
+                body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.remark
             }).then(response => response.json())
             .then(result =>{
                 console.log(result);
@@ -341,7 +370,7 @@ levelCheck=()=>{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.description
+                        body:"order_id="+ this.state.order_id+ "&user_id="+ result+ "&created_by_ip="+ this.state.ip_address+"&status_id="+this.state.status+"&description="+this.state.remark
                     }).then(response => response.json())
                     .then(result =>{
                         console.log(this.state.order_id)
@@ -380,6 +409,13 @@ levelCheck=()=>{
  }
 
  rejectJobConf=()=>{
+     this.setState({approve_action:false})
+     this.setState({modalvisibale:true})
+ }
+
+    rejectJobAlert=()=>{
+        
+
     Alert.alert(
         "Reject Preview",
         "Are You Sure You Want To Reject This Preview",
@@ -396,6 +432,12 @@ levelCheck=()=>{
     )
  }
  approveJobconf=()=>{
+     this.setState({approve_action:true})
+    
+        this.setState({modalvisibale:true})
+ }
+ approveJobAlert=()=>{
+  
     Alert.alert(
         "Approve Preview",
         "Are You Sure You Want To Approve This Preview",
@@ -411,14 +453,75 @@ levelCheck=()=>{
         ]
     )
  }
+ checkAction=(flag)=>{
+     if(flag){
+    if(this.state.remark==='No remarks'){
+        Alert.alert("Note!","Please add remarks!")
+        return
+    }
+}
+     
+    this.setState({modalvisibale:false})
+   
+
+     if(this.state.approve_action){this.approveJobAlert()}else{
+         this.rejectJobAlert()
+     }
+ }
+
+ 
     render(){
        
         return (
            <View style={{
                flex:1
            }} >
+                <Modal backdropOpacity={0.3}
+                     
+         isVisible={this.state.modalvisibale}
+         
+         onBackButtonPress={()=>{Alert.alert("No update performed")
+         this.setState({modalvisibale:false})}} >
+            <View style={{flex:1}}>
+             <View style={{height:380,width:'88%',marginTop:200,alignSelf:'center',backgroundColor:'white',elevation:5,borderRadius:5}}>
+                 <TouchableOpacity onPress={()=>{this.setState({modalvisibale:false})}} style={{width:50,height:50,alignSelf:'flex-end'}}>
+             <Icon name='x-circle' size={20} color='#62463e' style={{alignSelf:'flex-end',padding:10}}/>
+             </TouchableOpacity>
+                 <Text style={{color:'#62463e',fontSize:18,alignSelf:'center',fontWeight:'bold'}}>Please enter your remarks below:-</Text>
+            <Textarea
+             maxLength={160}
+             onChangeText={(value) =>this.setState({remark:value}) 
+                
+             }
+containerStyle={{
+    height:150,
+    width:"88%",
+    borderWidth:0.3,
+    margin:20
+}}
+maxLength={80}
+placeholder={'Add a remark for the following action! '}
+placeholderTextColor={'#c7c7c7'}
+underlineColorAndroid={'transparent'}
+/>
+<TouchableOpacity  onPress={()=>{this.checkAction(true)}} style={{height:40,width:80,backgroundColor:'#62463e',alignSelf:'center',alignContent:'center',marginBottom:10}}>
+    <Text style={{color:'white',alignSelf:'center',fontWeight:'bold',marginTop:10,}}>NEXT</Text>
+</TouchableOpacity>
+
+<TouchableOpacity onPress={()=>{this.checkAction(false)}} style={{height:40,width:200,alignSelf:'center',backgroundColor:'white',alignContent:'center',}}>
+    <Text style={{color:'#62463e',alignSelf:'center',marginTop:10,}}>Skip without remarks</Text>
+</TouchableOpacity>
+
+
+
+             </View>
+             </View>
+
+         </Modal>
+               
                 <View style={{
                 flex:1
+                
             }} >
                 <StatusBar barStyle="default" backgroundColor="#62463e" />
                 <View style={{
@@ -432,7 +535,7 @@ levelCheck=()=>{
 
                 }} >
                   <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.goBack(null)} >
-                  <Icon name="arrow-back" style={{
+                  <Icons name="arrow-back" style={{
                         margin:20
                     }} size={18} color="#FFFF" />
                   </TouchableOpacity>
@@ -462,6 +565,7 @@ levelCheck=()=>{
                     backgroundColor:"#fff",
                     flex:1
                 }} >
+                    
                    <ScrollView 
                     vertical={true}
                     showsVerticalScrollIndicator={true}
@@ -732,18 +836,29 @@ levelCheck=()=>{
 
                         </View>
                        
-                        {this.state.dealer_approve?(<Text style={{
+                        {this.state.dealer_approve?(<View><Text style={{
                       
                                             fontSize:16,
                                             padding:10,
                                             color:"grey",
                                             textAlign:'left'
-                                            }}>Dealer Status:-{this.state.dealer_approve}</Text>):null}
-                                            {this.state.distributer_approve?(<Text style={{
+                                            }}>Dealer Status:-{this.state.dealer_approve}</Text>
+                                            <Text style={{
+                      
+                      fontSize:16,
+                      padding:10,
+                      color:"grey",
+                      textAlign:'left'}}>Dealer Remarks:-{this.state.dealer_remarks}</Text></View>):null}
+                                            {this.state.distributer_approve?(<View><Text style={{
                                             fontSize:16,
                                             padding:10,
                                             color:"grey",
-                                            textAlign:'left'}}>Distributor Status:-{this.state.distributer_approve}</Text>):null}
+                                            textAlign:'left'}}>Distributor Status:-{this.state.distributer_approve}</Text>
+                                            <Text style={{
+                                                fontSize:16,
+                                                padding:10,
+                                                color:"grey",
+                                                textAlign:'left'}}>Distributor Remarks:-{this.state.distributer_remarks}</Text></View>):null}
                                             
                
                     </View>
