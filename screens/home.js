@@ -344,7 +344,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
               </View> */}
             {
                  this.state.company_logo === ""    ? (
-                  <View>
+                  <View style={styles.logo}>
                   
                       {
                             this.state.profile_image!="" ? (
@@ -356,7 +356,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                              height:50,
                              width:50,
                              borderRadius:40,
-                             margin:10,
+                             
                             
                          }}
                          isVisable={true}
@@ -382,7 +382,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                         height:50,
                                         width:50,
                                         borderRadius:40,
-                                        margin:10,
+                                        
                                         
                                         }}
                                     loadingStyle={{ size: 'large', color: '#62463e' }}
@@ -394,7 +394,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                       }
                       </View>
                 ) :(
-                    <View>
+                    <View style={styles.logo}>
                     <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
                     {/* <Image source={{uri:imageUrl+"/"+this.state.company_logo}}
              style={{
@@ -411,7 +411,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                         height:50,
                                         width:50,
                                         borderRadius:25,
-                                        margin:10,
+                                       
                                        
                                     }}
                                     loadingStyle={{ size: 'large', color: '#62463e' }}
@@ -481,7 +481,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                        alignItems:'center',
                        elevation:6
                    }} >
-                        <Icon name="document-outline" color="#1c54b2" size={34} />
+                        <Icon name="document-outline" color="#1c54b2" size={44} />
                <Text style={{
                    textAlign:"center",
                    fontSize:14,
@@ -517,7 +517,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                        alignItems:"center",
                        elevation:6
                    }} >
-                      <Icon name="copy-outline" color="#4caf50" size={34} />
+                      <Icon name="copy-outline" color="#4caf50" size={44} />
                
                <Text style={{
                   textAlign:"center",
@@ -562,7 +562,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                         elevation:6,
                         
                    }} >
-                       <Icon  name="cube-outline" color="#673ab7" size={34} />
+                       <Icon  name="cube-outline" color="#673ab7" size={44} />
                <Text style={{
                    textAlign:"center",
                    fontSize:14,
@@ -596,7 +596,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                          alignItems:'center',
                          elevation:6
                    }} >
-                       <Icon name="flash-outline" color="#cddc39" size={34} />
+                       <Icon name="flash-outline" color="#cddc39" size={44} />
            
            <Text style={{
                textAlign:"center",
@@ -681,5 +681,9 @@ const styles = StyleSheet.create({
         alignItems:"center",
         flexDirection:"row",
         
+    },
+    logo:{
+        marginTop:10,
+        marginLeft:'12%'
     }
 })

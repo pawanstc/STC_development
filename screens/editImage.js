@@ -370,7 +370,7 @@ export default class EditImage extends Component{
                   keyboardType="numeric"
                   style={{
                     height:50,
-                    width:190,
+                    width:Dimensions.get('screen').width*0.6,
                    borderRadius:6,
                    borderWidth:0.5,
                   marginTop:20,
@@ -396,7 +396,7 @@ export default class EditImage extends Component{
                   keyboardType="numeric"
                   style={{
                     height:50,
-                    width:190,
+                    width:Dimensions.get('screen').width*0.6,
                    borderRadius:6,
                    borderWidth:0.5,
                   marginTop:20,

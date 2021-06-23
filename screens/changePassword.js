@@ -166,7 +166,11 @@ export default class UpdatePassword extends Component{
            
                }} >
                    <View style={{
-                       flex:0.7
+                       flex:0.7,
+                       width:'100%',
+                       marginLeft:20,
+                       paddingLeft:20
+                       
                    }} >
                        
                   
@@ -178,7 +182,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:'90%',
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -192,7 +196,8 @@ export default class UpdatePassword extends Component{
                        fontSize:15,
                        color:"#62463e",
                        backgroundColor:"#FFF",
-                       position:"absolute",
+                       marginLeft:25,
+                       position:'absolute',
                        top:-8,
                    }} >Enter Old Password</Text>
 <TextInput 
@@ -203,7 +208,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:'90%',
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -217,6 +222,7 @@ export default class UpdatePassword extends Component{
                        fontSize:15,
                        color:"#62463e",
                        backgroundColor:"#FFF",
+                       marginLeft:25,
                        position:"absolute",
                        top:64,
                    }} >Enter New Password</Text>
@@ -230,7 +236,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:'90%',
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -244,6 +250,7 @@ export default class UpdatePassword extends Component{
                        fontSize:15,
                        color:"#62463e",
                        backgroundColor:"#FFF",
+                       marginLeft:25,
                        position:"absolute",
                        top:140,
                    }} >Re-enter New Password</Text>
@@ -251,12 +258,14 @@ export default class UpdatePassword extends Component{
                 <TouchableOpacity onPress={() => this.ChangePassword()} activeOpacity={2} >
                     <View style={{
                         height:45,
-                        width:300,
+                        width:'80%',
                         backgroundColor:"#62463e",
                         marginTop:45,
+                        marginLeft:'5%',
                         borderRadius:6,
                         justifyContent:'center',
-                        alignItems:'center'
+                        alignItems:'center',
+                        
                     }} >
                         <Text style={{
                             color:"#FFF",

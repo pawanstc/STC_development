@@ -363,7 +363,7 @@ export default class ChangePassword extends Component {
 
                                         style={{
                                             height: 40,
-                                            width: 250,
+                                            width: Dimensions.get('screen').width*0.7,
                                             borderBottomWidth: 0.3,
                                             borderBottomColor: "black"
                                         }}
@@ -393,7 +393,7 @@ export default class ChangePassword extends Component {
                                         />
                                         <View style={{
                                             height: 50,
-                                            width: 120,
+                                            width: Dimensions.get('screen').width*0.5,
 
                                         }} >
                                             <Button

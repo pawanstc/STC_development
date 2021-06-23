@@ -216,11 +216,12 @@ export default class HomeComponent extends Component{
                   }} > Select Your City</Text>
                   <View style={{
                       height:50,
-                      width:"90%",
+                      width:"80%",
                       borderWidth:1,
                       borderColor:"black",
                       borderRadius:5,
-                      marginTop:30
+                      marginTop:30,
+                      alignItems:'center'
                   }} >
                       
                       <Picker 

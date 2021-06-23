@@ -158,7 +158,7 @@ if(e){
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:Dimensions.get('screen').width*0.7,
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -185,7 +185,7 @@ if(e){
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:Dimensions.get('screen').width*0.7,
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -211,7 +211,8 @@ if(e){
                         marginTop:45,
                         borderRadius:6,
                         justifyContent:'center',
-                        alignItems:'center'
+                        alignItems:'center',
+                        alignSelf:'center'
                     }} >
                         <Text style={{
                             color:"#FFF",

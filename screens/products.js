@@ -278,7 +278,7 @@ export default class ProductImage extends Component {
 
                                                             style={{
                                                                 height: 120,
-                                                                width: 125,
+                                                                width:Dimensions.get('screen').width*0.35,
                                                                 borderRadius: 5
                                                             }}
                                                             loadingStyle={{ size: 'large', color: '#62463e' }}
@@ -410,7 +410,7 @@ export default class ProductImage extends Component {
           )
       } */}
 
-<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image})}>
+<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image,order_id:0})}>
                                 <ImageLoad
                                     isShowActivity={true}
                                     style={{

@@ -11,7 +11,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'uuid-random';
 import * as Progress from 'react-native-progress';
 
-
+let Width = Dimensions.get('screen').width;
 let imagesGrid = []
 export default class customiseComponent extends Component{
     constructor(props){
@@ -599,7 +599,7 @@ launchCamera2 = async () =>{
                 
                 <View style={{
     height:170,
-    width:Dimensions.get("screen").width,
+    width:Width,
     backgroundColor:'#62463e',
     borderBottomLeftRadius:20,
     borderBottomRightRadius:20,
@@ -627,19 +627,19 @@ launchCamera2 = async () =>{
 
 <View style={{
    height:Dimensions.get("screen").height,
-   width:Dimensions.get("screen").width -38,
+   width:Width*0.94,
    position:"absolute",
    top:78,
-   left:20,
-   right:0,
+   //left:20,
+   //right:10,
    alignItems:"center",
-   justifyContent:"center",
-   flex:0.6,
+   justifyContent:'space-around',
+   alignSelf:'center',
 
    backgroundColor:"#FFF",
    borderTopRightRadius:18,
    borderTopLeftRadius:18,
-   flex:1
+  
 
 }} >
     <ScrollView 
@@ -649,59 +649,70 @@ launchCamera2 = async () =>{
         showsVerticalScrollIndicator={false}
     >
     <View style={{
-                    justifyContent: 'center',
+                    
       flex:1,
-      width:"100%"
+     
 
     }} >
        <Text style={{
         fontSize:16,
         margin:13,
-        color:"#404040"
+        
+        color:"#404040",
+        alignSelf:'flex-start'
         
     }} >Select Image </Text>
 
         <View style={{
+            flex:1,
             flexDirection:"row",
-            alignItems:'center'
+            alignItems:'flex-start',
+            //justifyContent:'space-around',
+            marginLeft:Width*0.1,
+            
+            
+            
 
         }} >
             {
                 this.state.photo ? (
                     <View style={{
-                      height:110,
-                      width:120,
-
+                     
+                        flex:1,
+                        
                         backgroundColor:"#fafafa",
                             elevation: 5,
-                        marginHorizontal:10
+                        marginLeft:10
                     }} >
                         <Image source={{uri:this.state.photo}} style={{
-                                height:110,
-                                width:120,
-                                marginBottom:40
+                                height:'100%',
+                                width:'100%',
+         
+                                
                             }} />
         
                     </View>
                 ) :(
                     <View style={{
-                      height:110,
-                      width:120,
+                      flex:1,
+                      //justifyContent:'space-around',
                         elevation:5,
-                        marginHorizontal:10
+                        //marginLeft:10
                     }} >
                       {
                         this.props.route.params.image =="" ? (
                           <Image source={require("../assets/uload3.jpg")} style={{
-                            height:110,
-                            width:120,
-                            marginLeft:6
+                            height:'100%',
+                            width:Width*0.30,
+      
+                            //marginLeft:6
                            }} /> 
                         ) :(
                           <Image source={require("../assets/uload3.jpg")} style={{
-                            height:110,
-                            width:120,
-                            marginLeft:6
+                            height:120,
+                            width:180,
+      
+                            //marginLeft:6
                            }} /> 
                         )
                       }
@@ -711,12 +722,19 @@ launchCamera2 = async () =>{
             }
             
            <View style={{
-               flexDirection:"column"
+               flexDirection:"column",
+               width:Width*0.5,
+              
            }} >
 
 
                 <View style={{
-                flexDirection:'row'
+                flexDirection:'row',
+                flex:1,
+                alignSelf:'flex-start'
+                //marginLeft:Dimensions.get('screen').width*0.1
+                
+               
             }} >
                 <View style={{
                     backgroundColor:'#62463e',
@@ -726,7 +744,7 @@ launchCamera2 = async () =>{
                     marginTop:5,
                     justifyContent:'center',
                     alignItems:'center',
-                    marginLeft:10
+                    //marginLeft:10
                 }} >
                    <TouchableOpacity
                    activeOpacity={2} 
@@ -742,7 +760,7 @@ launchCamera2 = async () =>{
               <TouchableOpacity  activeOpacity={2} onPress={() => this.props.navigation.navigate("customCatelog")} >
                 <Text style={{
                     textAlign:"center",
-                    alignSelf:'stretch',
+                    alignSelf:'flex-end',
                     margin:12,
                     
                     fontSize:16,
@@ -759,12 +777,13 @@ launchCamera2 = async () =>{
                     
                     fontSize:16,
                     color:'grey',
-                    marginLeft:80,
+                    marginLeft:Width*0.1,
                     fontSize:14
                 }} >------ Or ------</Text>
 
 <View style={{
-                flexDirection:'row'
+                flexDirection:'row',
+                //marginLeft:Dimensions.get('screen').width*0.1
             }} >
                 <View style={{
                     backgroundColor:'#62463e',
@@ -774,7 +793,7 @@ launchCamera2 = async () =>{
                     marginTop:5,
                     justifyContent:'center',
                     alignItems:'center',
-                    marginLeft:10
+                    //marginLeft:10
                 }} >
                   <TouchableOpacity activeOpacity={2} onPress={() => this.uploadFile()} >
                   <Icon name="cloud-upload-outline" size={18} color="#FFF" />
@@ -801,17 +820,18 @@ launchCamera2 = async () =>{
     
 
      <View style={{
-      justifyContent:'center',
+      
       alignItems:"center",
-
+      padding:10,
+      
      }} >
         <Image source={require("../assets/desc_01.jpg")} style={{
-            height:145,
-            width:235,
+            height:Dimensions.get('screen').width*0.36,
+            width:Width*0.6,
             
-            marginTop:10,
-            marginBottom:20,
-            marginRight:6
+            //marginTop:10,
+            marginBottom:10,
+            
      
 
            }} />
@@ -819,7 +839,8 @@ launchCamera2 = async () =>{
 
      
        <View style={{
-           flexDirection:'row'
+           flexDirection:'row',
+           alignSelf:'center'
        }} >
           <View style={{
               flexDirection:'column'
@@ -854,7 +875,7 @@ launchCamera2 = async () =>{
               width:value
             })}
             style={{
-                width:60,
+                width:Width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -871,7 +892,7 @@ launchCamera2 = async () =>{
               width:value
             })}
             style={{
-                width:60,
+                width:Width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -902,7 +923,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:'25%',
+                width:Width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -920,7 +941,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:'25%',
+                width:Width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -939,7 +960,9 @@ launchCamera2 = async () =>{
 
        <View style={{
            flexDirection:"row",
-           alignItems:"center"
+           //alignItems:"center",
+           alignSelf:'center',
+
        }} >
             <Text style={{
             fontFamily:'Roboto-Bold',
@@ -975,7 +998,7 @@ launchCamera2 = async () =>{
                     </View>
                     </TouchableOpacity>
                   <View style={{
-                      width:100,
+                      width:Width*0.2,
                       height:30,
                       borderRadius:13,
                       borderColor:'black',
@@ -1015,7 +1038,7 @@ launchCamera2 = async () =>{
        </View>
       
    <View style={{
-    justifyContent:'center',
+    alignSelf:'center',
     alignItems:"center"
    }} >
     <Text numberOfLines={2} style={{
@@ -1033,7 +1056,8 @@ launchCamera2 = async () =>{
     borderBottomWidth:0.6,
     borderBottomColor:'black',
     marginTop:40,
-                        alignItems: 'center',
+    width:Width,
+    alignItems: 'center',
     justifyContent:"center"
 }} />
 
@@ -1208,7 +1232,7 @@ marginHorizontal:10
 
   alignItems:'center',
   height:45,
-width:Dimensions.get("screen").width,
+width:Width,
 
 backgroundColor:"#62463e",
 justifyContent:"center"

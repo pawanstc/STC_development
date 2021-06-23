@@ -1,6 +1,6 @@
 import React, { Component  } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, Dimensions, StatusBar, FlatList, Alert, AsyncStorage	 } from 'react-native';
+import { StyleSheet, View, Image,ToastAndroid, TouchableOpacity, Text, Dimensions, StatusBar, FlatList, Alert, AsyncStorage	 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Transition, Transitioning } from 'react-native-reanimated';
 import IconName from 'react-native-vector-icons/FontAwesome';
@@ -91,7 +91,7 @@ getJobList = () =>{
 					user_id:result
 				})
 				console.log("user_id"+ result);
-				fetch(URL+"/get_all_job_by_user_id",{
+				fetch(URL+"/get_first_all_job_by_user_id",{
 					headers:{
 						"Content-Type":"application/x-www-form-urlencoded"
 					},
@@ -306,7 +306,7 @@ setStatus = (value) =>{
 				 			user_id:result
 				 		})
 
-				 		fetch(URL+"/get_inprogress_job_by_user_id",{
+				 		fetch(URL+"/get_first_inprogress_job_by_user_id",{
 					headers:{
 						 "Content-Type":"application/x-www-form-urlencoded"
 					},
@@ -354,7 +354,7 @@ setStatus = (value) =>{
 				 			user_id:result
 				 		})
 
-				 		fetch(URL+"/get_completed_job_by_user_id",{
+				 		fetch(URL+"/get_first_completed_job_by_user_id",{
 					headers:{
 						 "Content-Type":"application/x-www-form-urlencoded"
 					},
@@ -443,8 +443,48 @@ setStatus = (value) =>{
 		this.getJobList();
 	}
 
+
+
 	
 }
+
+getMore=()=>{
+	switch(this.state.job_status){
+		case ' In Progress':
+			this.getNext('/get_next_inprogress_job_by_user_id',this.state.jobList[this.state.jobList.length-1].order_id)
+			break;
+		case 'Completed':
+			this.getNext('/get_next_completed_job_by_user_id',this.state.jobList[this.state.jobList.length-1].order_id)
+			break;
+		case 'All Jobs':
+			this.getNext('/get_next_all_job_by_user_id',this.state.jobList[this.state.jobList.length-1].order_id)
+			break;
+		default:
+			break;
+	}
+
+	}
+
+	getNext=(api,job_id)=>{
+		console.log(job_id)
+		console.log(this.state.user_id)
+		fetch(URL+api,{
+			headers:{
+			"Content-Type":"application/x-www-form-urlencoded"
+	   },
+	   method:"POST",
+	   body:"user_id="+ this.state.user_id + "&post_job_order_id="+ job_id
+	}).then(res=>
+		res.json()
+	).then(result=>{
+		console.log(result)
+		if(!result.error){
+			this.setState({jobList:[...this.state.jobList,...this.removeNull(result.order_details)]})
+		}else ToastAndroid.show("No data to load..",ToastAndroid.LONG,ToastAndroid.BOTTOM)
+	}).catch(err=>console.log(err))
+		
+	}
+
     render(){
 		console.log(this.state.deletedJob);
 		
@@ -515,6 +555,11 @@ setStatus = (value) =>{
 							paddingBottom:200,
 							
 						}}
+						ListFooterComponent={<View style={{width:Dimensions.get('screen').width*0.8,height:40,backgroundColor:'#62463e',borderRadius:20,alignSelf:'center'}}>
+							<TouchableOpacity onPress={()=>this.getMore()}>
+								<Text style={{fontSize:22,color:'white',fontWeight:'bold',alignSelf:'center'}}>Load More</Text>
+							</TouchableOpacity>
+						</View>}
 					   showsVerticalScrollIndicator={false}
 						renderItem={(items, index) =>{
 							console.log("support image detail")
@@ -632,7 +677,7 @@ setStatus = (value) =>{
 									   fontSize:12,
 									   color:"grey",
 									   padding:4
-								   }} >quantity    :</Text>
+								   }} >Quantity    :</Text>
 								   <Text style={{
 									   fontSize:12,
 									   
@@ -810,7 +855,7 @@ setStatus = (value) =>{
 
 													  </TouchableOpacity>
 													 
-													   {items.item.cancel_job=='0'?(
+													   {items.item.cancel_job=='0'&&items.item.order_status_id!=8?(
 													  <TouchableOpacity onPress={() => this.cancelJob(items.item.id)} >
 															<View style={{
 															 justifyContent:'center',

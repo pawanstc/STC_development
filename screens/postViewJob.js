@@ -13,6 +13,7 @@ import TrackPlayer from 'react-native-track-player';
 import Textarea from 'react-native-textarea';
 let urlsDomain = "https://stcapp.stcwallpaper.com/";
 export default class postViewJob extends Component{
+    
 
  constructor(props){
      super(props);
@@ -43,7 +44,8 @@ export default class postViewJob extends Component{
         approve_action:false,
         dealer_remarks:'',
         distributer_remarks:'',
-        remark_button:true
+        remark_button:true,
+        job_id:''
      } 
  }
  
@@ -143,7 +145,8 @@ console.log(this.state.job_description)
             console.log(result)
            this.setState({
                distributer_remarks:result.distributor_preview_description,
-               dealer_remarks:result.dealer_preview_description
+               dealer_remarks:result.dealer_preview_description,
+               job_id:result.order_id
            })
             
         }
@@ -157,11 +160,7 @@ console.log(this.state.job_description)
 }
 setOptions=()=>{
     if(this.state.status && this.state.user_type){
-        console.log(this.state.user_type)
-        console.log(this.state.status)
-        console.log("chana badam")
-        console.log(this.state.order_image)
-        console.log(this.state.supportive_image)
+        
       switch(this.state.user_type){
           case 'Dealer':
               switch (this.state.status) {
@@ -183,11 +182,11 @@ setOptions=()=>{
                           if(this.state.dist_only==true)this.setState({dealer_approve:null})
                           break;
                   case 11:
-                      this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
+                      this.setState({dealer_approve:'Change/Reject Request',distributer_approve:'Pending',isDisabled:true})
                       if(this.state.dist_only==true)this.setState({dealer_approve:null})
                       break;
                   case 12:
-                      this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})   
+                      this.setState({dealer_approve:'Change/Reject Request',distributer_approve:'Change/Reject Request',isDisabled:true})   
                       if(this.state.dist_only==true)this.setState({dealer_approve:null}) 
                   default:
                       this.setState({isDisabled:true})
@@ -213,11 +212,11 @@ setOptions=()=>{
                         break;
                         
                 case 11:
-                    this.setState({dealer_approve:'Rejected',distributer_approve:'Pending',isDisabled:true})
+                    this.setState({dealer_approve:'Change/Reject Request',distributer_approve:'Pending',isDisabled:true})
                     if(this.state.dist_only==true)this.setState({dealer_approve:null})
                     break;
                 case 12:
-                    this.setState({dealer_approve:'Rejected',distributer_approve:'Rejected',isDisabled:true})
+                    this.setState({dealer_approve:'Change/Reject Request',distributer_approve:'Change/Reject Request',isDisabled:true})
                     if(this.state.dist_only==true)this.setState({dealer_approve:null})
                     break;    
                 default:
@@ -326,7 +325,7 @@ rejectJob=()=>{
 
                     Alert.alert(
                         "Success Message",
-                        "Preview Rejected"
+                        "Preview Change/Reject Requested"
                     )
                     this.props.navigation.replace("onGoingJob");
                 }
@@ -417,8 +416,8 @@ levelCheck=()=>{
         
 
     Alert.alert(
-        "Reject Preview",
-        "Are You Sure You Want To Reject This Preview",
+        "Change/Reject Preview",
+        "Are You Sure You Want To Change/Reject This Preview?",
         [
             {
                 text:"Ok",
@@ -437,10 +436,11 @@ levelCheck=()=>{
         this.setState({modalvisibale:true})
  }
  approveJobAlert=()=>{
+     if(this.state.user_type=='Distributor'){
   
     Alert.alert(
         "Approve Preview",
-        "Are You Sure You Want To Approve This Preview",
+        `Are You Sure You Want To Approve This Preview?\n \nNote: Once approved order cannot be cancelled.`,
         [
             {
                 text:"Ok",
@@ -451,7 +451,22 @@ levelCheck=()=>{
                 onPress:() => null
             }
         ]
-    )
+    )}else{
+        Alert.alert(
+            "Approve Preview",
+            "Are You Sure You Want To Approve This Preview?",
+            [
+                {
+                    text:"Ok",
+                    onPress:() => this.approveJob()
+                },
+                {
+                    text:"Cancel",
+                    onPress:() => null
+                }
+            ]
+        )
+    }
  }
  checkAction=(flag)=>{
      if(flag){
@@ -591,7 +606,7 @@ underlineColorAndroid={'transparent'}
    
 								   }} >
 
-                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginLeft:10,marginTop:10}}> Job Description:</Text>
+                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginLeft:10,marginTop:10}}>Job Description:</Text>
                                       
                                        <Text style={{
                                 padding:20,           
@@ -602,7 +617,7 @@ underlineColorAndroid={'transparent'}
                                    
                                   
                                      
-                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginTop:10}}>Job Audio:</Text>
+                                       <Text style={{textAlign:'left',fontSize:18,color:'#62463e',marginTop:10,marginLeft:10}}>Job Audio:</Text>
                                        
                                        <View>
                                        {this.state.audio?(<View style={{flexDirection:'row'}}>
@@ -723,7 +738,7 @@ underlineColorAndroid={'transparent'}
                                    <Image source={{uri:imageUrl+"/"+items.item.image_url}}  
                         style={{
                             height:240,
-                            width:Dimensions.get('screen').width*0.80,
+                            width:Dimensions.get('screen').width*0.9,
                             borderRadius:4,
                             elevation:5,
                             margin:10,
@@ -769,7 +784,7 @@ underlineColorAndroid={'transparent'}
                         color:'#62463e'
                     }} >Preview Images:</Text>
                     </View>
-                {this.state.prev_img?(<View><TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:imageUrl+""+this.state.prev_img,order_id:this.state.order_id})}}>
+                {this.state.prev_img?(<View><TouchableOpacity onPress={()=>{this.props.navigation.navigate('preview',{uri:imageUrl+""+this.state.prev_img,order_id:this.state.job_id})}}>
                 <Image source={{uri:imageUrl+""+this.state.prev_img}}  
                         style={{
                             height:240,
@@ -812,7 +827,7 @@ underlineColorAndroid={'transparent'}
 <View style={this.state.isDisabled?styles.rejectbutton_disabled:styles.rejectbutton_enabled} >
        
 
-       <Text style={this.state.isDisabled?styles.rejecttext_disabled:styles.rejecttext_enabled} >Reject Preview
+       <Text style={this.state.isDisabled?styles.rejecttext_disabled:styles.rejecttext_enabled} >Change/Reject Preview
        </Text>
     </View>
 </TouchableOpacity>

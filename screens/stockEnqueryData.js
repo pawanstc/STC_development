@@ -283,7 +283,7 @@ export default class StockEnqueryDetails extends Component{
                            fontSize:16,
                            color:"grey",
                            paddingLeft:88
-                       }} >1</Text>
+                       }} >{this.state.stockDetails.latest_qty}</Text>
 
                    </View>
 
@@ -308,26 +308,7 @@ export default class StockEnqueryDetails extends Component{
 
                    </View>
 
-                   <View style={{
-                       flexDirection:"row",
-                       padding:20,
-                       borderBottomColor:"#eeee",
-                       borderBottomWidth:0.6
-                   }} >
-                       <Text style={{
-                           textAlign:"right",
-                           fontSize:16
-                       }} >Paper Type</Text>
-
-                       <Text numberOfLines={2} style={{
-                           textAlign:"left",
-                           fontSize:16,
-                           color:"grey",
-                           paddingLeft:62
-                           
-                       }} >{ this.state.stockDetails.paper_type_name}</Text>
-
-                   </View>
+                   
 
                       <View style={{
                        flexDirection:"row",

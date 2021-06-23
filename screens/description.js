@@ -689,7 +689,8 @@ console.log(this.state.pattern_url);
 						flexDirection: "row",
 						justifyContent: 'space-between',
 						marginTop: 10,
-						marginHorizontal:3
+						marginHorizontal:26
+						
 				}} >
 					<Text style={{
 						fontSize: 14,
@@ -717,7 +718,7 @@ console.log(this.state.pattern_url);
 	
 }} >
 	<Picker 
-	style={{height:50,width:180}}
+	style={{height:50,width:180,alignSelf:'flex-end'}}
 	selectedValue={this.state.mediaType}
 	onValueChange={(value) => this.selectPaperType(value)}
 	>
@@ -737,7 +738,7 @@ console.log(this.state.pattern_url);
 						flexDirection: "row",
 						justifyContent: 'space-between',
 						marginTop: 10,
-						marginHorizontal:2
+						marginHorizontal:26
 				}} >
 					<Text style={{
 						fontSize: 14,
@@ -762,13 +763,13 @@ console.log(this.state.pattern_url);
 			height:50,
 			width:180,
 			justifyContent:"center",
-			alignItems:"center",
+			alignItems:"flex-end",
 			borderWidth:0.5,
 			
 			
 		}} >
 			<Picker 
-			style={{height:50,width:180}}
+			style={{height:50,width:180,alignSelf:'flex-end'}}
 			selectedValue={this.state.selectPaper}
 			onValueChange={(value) => this.setState({
 				selectPaper:value
@@ -795,7 +796,7 @@ console.log(this.state.pattern_url);
 			
 		}} >
 			<Picker 
-			style={{height:50,width:180}}
+			style={{height:50,width:180,alignSelf:'flex-end'}}
 			
 			onValueChange={(value) => this.setState({
 				selectPaper:value

@@ -380,16 +380,17 @@ searchBarAppear = () =>{
           
 
       <Text style={{
-        marginHorizontal:92,
+          marginRight:Dimensions.get('screen').width*0.2,
           fontSize:16,
           color:"#FFF",
-          margin:20,
-          marginRight:50
+          marginTop:20,
+          textAlign:'center'
+          
+        
+          
           
       }} >  Catalog</Text>
-      <View style={{
-          width:100
-      }}  />
+     
 
           
 
@@ -509,7 +510,7 @@ searchBarAppear = () =>{
                            <ImageLoad
                                      isShowActivity={true}
         style={{  height:120,
-            width:120, marginTop:20 }}
+            width:Dimensions.get('screen').width*0.35, marginHorizontal:20,marginTop:15 }}
         loadingStyle={{ size: 'large', color: '#62463e' }}
         borderRadius={6}
         source={{ uri:imageUrl+"/"+items.item.catlog_image}}
@@ -518,6 +519,7 @@ searchBarAppear = () =>{
                                 <Text numberOfLines={2} style={{
                                  
                                     textAlign:'center',
+                                    alignSelf:'center',
                                     fontSize:14,
                                     width:120,
                                     height:35,
@@ -530,7 +532,7 @@ searchBarAppear = () =>{
               
                width:120,
                marginLeft:10,
-              marginTop:12
+              
            }} >
                          <Button
                         onPress={() => this.subCatelogById(items.item.id)}

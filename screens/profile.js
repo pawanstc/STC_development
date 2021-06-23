@@ -390,7 +390,7 @@ export default class Profile extends Component{
                             backgroundColor:"#FFF",
                             borderTopLeftRadius:30,
                             borderTopRightRadius:30,
-                            alignItems:"center"
+                            alignItems:'center'
                             
                         }} >
                             <Text style={{
@@ -414,12 +414,12 @@ export default class Profile extends Component{
       
                         <View style={{
                             flex:1,
-                            justifyContent:"center",
-                      alignItems:"center",
+                            marginLeft:10,
+                      alignItems:"flex-start",
                             marginTop:20
                         }} >
                           {/* first name section */}
-                              <View  >
+                              <View  style={{width:'100%'}} >
                               <Text style={{
                                color:"black",
                                fontSize:14,
@@ -433,7 +433,8 @@ export default class Profile extends Component{
                                   
                            <View style={{
                                height:45,
-                               width:260,
+                               
+                               width:'90%',
                                borderWidth:0.4,
                                borderRadius:6,
                                borderColor:"#62463e"
@@ -454,7 +455,8 @@ export default class Profile extends Component{
       
                             {/* Last name section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <Text style={{
                                       color:"black",
@@ -470,12 +472,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -494,7 +496,8 @@ export default class Profile extends Component{
       
                                    {/* Email id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <View  >
                                        
@@ -513,12 +516,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -532,7 +535,8 @@ export default class Profile extends Component{
       
                                        {/* Mobile Number id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <View >
                                        
@@ -551,12 +555,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -570,7 +574,8 @@ export default class Profile extends Component{
       
                                              {/* Company name id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%',
                             }} >
                                  <View  >
                                        
@@ -589,12 +594,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -608,7 +613,8 @@ export default class Profile extends Component{
       
                                     {/* Company Address id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <View  >
                                        
@@ -627,12 +633,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -646,7 +652,8 @@ export default class Profile extends Component{
       
                                    {/* state id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                   <View >
                                        
@@ -665,12 +672,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -684,7 +691,8 @@ export default class Profile extends Component{
       
                                    {/* city section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <View  >
                                        
@@ -703,12 +711,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -722,7 +730,8 @@ export default class Profile extends Component{
       
                                     {/* pincode section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <View >
                                        
@@ -741,12 +750,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -760,7 +769,8 @@ export default class Profile extends Component{
       
                                    {/* role section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
                                  <View  >
                                        
@@ -779,12 +789,12 @@ export default class Profile extends Component{
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",

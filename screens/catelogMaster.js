@@ -136,7 +136,7 @@ componentDidMount(){
        <View style={{
            marginTop:10,
            width:120,
-           marginLeft:10
+           
        }} >
                      <Button
                     onPress={() => this.props.navigation.navigate("subCategory",{

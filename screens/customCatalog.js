@@ -27,14 +27,30 @@ export default class StackNavigation extends Component{
         this.state = {
          catelog_list:[],
             isVisible:true,
-            refreshing:false
+            refreshing:false,
+            
         }
+        this.arrayholder=[];
     }
 
 componentDidMount(){
 
     this.customCatelog();
  
+}
+searchCat=(text)=>{
+    
+    const newData = this.arrayholder.filter(item => {
+        console.log(item)
+        const itemData = item.catlog_name.toLowerCase();
+        const textData = text.toLowerCase();
+  
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({
+        catelog_list: newData,
+      });
+    
 }
 
 customCatelog = ()=>{
@@ -53,9 +69,11 @@ customCatelog = ()=>{
                     console.log(result);
                     this.setState({
                         catelog_list:result.catlog_list,
+                       
                         isVisiable:true,
                         refreshing:false
                     })
+                    this.arrayholder=this.state.catelog_list
                 }else{
                     this.setState({
                         isVisiable:false
@@ -97,6 +115,7 @@ handleRefreshing = () =>{
          <StatusBar barStyle="light-content" backgroundColor="#62463e" />
 
             <View style={ styles.headerBar } >
+                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
             <TouchableOpacity onPress={() => this.props.navigation.goBack(null)} >
             <Icon name="arrow-back" size={20} style={{
                     margin:22
@@ -112,11 +131,41 @@ handleRefreshing = () =>{
             marginTop:20
             
            }} >Catalog Master</Text>
+          
+           
            <View style={{
                height:40,
                width:50
            }} />
+           
+           </View>
+           <TextInput
+
+placeholder="Search...."
+//onEndEditing={()=>this.searchCat(this.state.searchtext)}
+onChangeText={text=>this.searchCat(text)}
+style={{
+    height: 43,
+    width: "70%",
+    textAlign: "left",
+    borderRadius: 10,
+    borderWidth: 0.3,
+    borderColor: "#FFF",
+    alignSelf:'center',
+    
+    color: "black",
+    backgroundColor: "#FFF",
+    
+}}
+placeholderTextColor="#000"
+/>
+
+           
+          
                 </View>
+                
+                
+              
 
                 <View style={ styles.formContainer } >
            
@@ -153,21 +202,23 @@ handleRefreshing = () =>{
                 return(
                     <View style={{
                         flexDirection:"row",
-                        justifyContent:'space-between',
+                        justifyContent:'space-evenly',
                         height:"100%",
+                        width:'50%',
                         flexGrow:1
                     }} >
                         <View style={{
                             flexDirection:"column",
-                            justifyContent:"center",
+                            justifyContent:"space-evenly",
                             alignItems:'center',
+                            width:'100%',
                             marginBottom:10
                         }} >
                        <TouchableOpacity activeOpacity={2} onPress={() => this.subCustomCatelog(value.item.id)} >
                        <ImageLoad
                                  isShowActivity={true}
     style={{  height:110,
-        width:120, marginTop:20 }}
+        width:Dimensions.get('screen').width*0.35, marginTop:20 }}
     loadingStyle={{ size: 'large', color: '#62463e' }}
     borderRadius={6}
     source={{ uri:imageUrl+"/"+value.item.catlog_image}}
@@ -176,6 +227,7 @@ handleRefreshing = () =>{
                             <Text numberOfLines={2} style={{
                              
                                 textAlign:'center',
+                                alignSelf:'center',
                                 fontSize:14,
                                 width:120,
                                 height:45
@@ -187,7 +239,7 @@ handleRefreshing = () =>{
        <View style={{
            
            width:120,
-           marginLeft:10
+           
        }} >
                      <Button
                     onPress={() => this.subCustomCatelog(value.item.id)}
@@ -195,7 +247,7 @@ touchSoundDisabled ={false}
   title="Explore"
   color="#62463e"
  containerStyle={{
-     width:200
+     width:240
  }}
   accessibilityLabel="Learn more about this purple button"
 />
@@ -229,15 +281,15 @@ const styles = StyleSheet.create({
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
-        flexDirection:"row",
-        justifyContent:"space-between"
+        flexDirection:"column",
+        
 
 
     },
     formContainer:{
 
         position:"absolute",
-        top:60,
+        top:120,
         left:0,
         right:0,
         backgroundColor:"#FFF",

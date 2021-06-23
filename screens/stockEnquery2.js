@@ -44,6 +44,7 @@ export default class StockEnquery2 extends Component {
                 }).then(response => response.json())
                 .then(result =>{
                     if(result){
+                        console.log(result)
                         let date = result.stock_city_list[0].update_stock_date;
                     var newDate = moment(date).format("MMM Do YY")
                  
@@ -251,7 +252,7 @@ export default class StockEnquery2 extends Component {
                     onChangeText={(value) => this.StockDetails(value)}
                     style={{
                         height:50,
-                        width:285,
+                        width:Dimensions.get('screen').width*0.8,
                         elevation:0,
                         padding:12,
                         marginTop:20,
@@ -264,7 +265,7 @@ export default class StockEnquery2 extends Component {
                    <Icon name="search" color="black" size={18} style={{
                        position:"absolute",
                        top:80,
-                       left:240,
+                       left:Dimensions.get('screen').width*0.75,
                        right:0
                    }} />
 

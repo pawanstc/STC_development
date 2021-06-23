@@ -126,6 +126,7 @@ export default class SubCategory extends Component {
                                alignItems:'center',
                                 margin:20,
                                 flex:1,
+                                width:Dimensions.get('screen').width*0.4,
                                 justifyContent:"center"
                             }} >
                                <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.replace("stockEnquery",{
@@ -133,7 +134,7 @@ export default class SubCategory extends Component {
                                })} >
                                <Image source={{uri:items.item.sub_category_img_url}} style={{
                                     height:120,
-                                    width:120
+                                    width:'100%'
                                 }}  />
                                 <Text style={{
                                     textAlign:"center",

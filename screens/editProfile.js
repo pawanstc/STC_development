@@ -784,7 +784,7 @@ export default class EditProfile extends Component {
                           }}
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderWidth: 0.8,
                             borderRadius: 6,
 
@@ -802,7 +802,7 @@ export default class EditProfile extends Component {
                           }}
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderWidth: 0.6,
                             borderRadius: 6,
 
@@ -838,7 +838,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Last Name"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
 
                             borderWidth: 0.6,
@@ -857,7 +857,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Last Name"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -893,7 +893,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Email id"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             // marginTop: 20,
@@ -911,7 +911,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Email id"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -946,7 +946,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Company Name"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -964,7 +964,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Company Name"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -1000,7 +1000,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Office Address"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -1018,7 +1018,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Company Address"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -1046,18 +1046,18 @@ export default class EditProfile extends Component {
                       <View
                         style={{
                           height: 45,
-                          width: 260,
+                          width: '90%',
                           borderRadius: 6,
                           borderWidth: 0.6,
                           //marginTop: 20,
                           borderColor: '#62463e',
                           justifyContent: 'center',
-                          alignItems: 'center',
+                          alignItems: 'flex-start',
                         }}>
                         <Picker
                           selectedValue={this.state.state_id}
                           enabled
-                          style={{height: 50, width: 260}}
+                          style={{height: 50, width: '100%'}}
                           onValueChange={(value) => this.showCity(value)}>
                           {this.state.states.map((value) => (
                             <Picker.Item
@@ -1087,17 +1087,17 @@ export default class EditProfile extends Component {
                         <View
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
                             borderColor: '#62463e',
                             justifyContent: 'center',
-                            alignItems: 'center',
+                            alignItems: 'flex-start',
                           }}>
                           <Picker
                             selectedValue={this.state.city_id}
-                            style={{height: 50, width: 260}}
+                            style={{height: 50, width: '100%'}}
                             onValueChange={(value) =>
                               this.setState({
                                 city_id: value,
@@ -1115,7 +1115,7 @@ export default class EditProfile extends Component {
                         <View
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             //marginTop: 20,
@@ -1126,7 +1126,7 @@ export default class EditProfile extends Component {
                           <Picker
                             style={{
                               height: 50,
-                              width: 260,
+                              width: '90%',
                               borderRadiusColor: 'black',
                             }}
                             selectedValue="baal"
@@ -1169,7 +1169,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Office Address"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             // marginTop: 20,
@@ -1188,7 +1188,7 @@ export default class EditProfile extends Component {
                           placeholder="Enter Pin Code"
                           style={{
                             height: 45,
-                            width: 260,
+                            width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
                             // marginTop: 20,
