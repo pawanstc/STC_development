@@ -849,13 +849,13 @@ getMore=()=>{
 													   <Text style={{
 														   fontSize:15,
 												   
-													   }}> View Histroy</Text>
+													   }}> View History</Text>
    
 													   </View>
 
 													  </TouchableOpacity>
 													 
-													   {items.item.cancel_job=='0'&&items.item.order_status_id!=8?(
+													   {items.item.cancel_job=='0'&&items.item.order_status_id!=8&&items.item.order_status_id!=5&&items.item.order_status_id!=7?(
 													  <TouchableOpacity onPress={() => this.cancelJob(items.item.id)} >
 															<View style={{
 															 justifyContent:'center',
