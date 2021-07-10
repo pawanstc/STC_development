@@ -28,6 +28,7 @@ import {imageUrl, URL} from '../api.js';
 import emailValidator from '../screens/Validator';
 
 import * as Progress from 'react-native-progress';
+let {height,width} = Dimensions.get('screen')
 // import { Dropdown } from 'react-native-material-dropdown';
 export default class EditProfile extends Component {
   constructor(props) {
@@ -69,7 +70,13 @@ export default class EditProfile extends Component {
   componentDidMount() {
     this.getUsers();
     
-    
+    if(width>height){
+      let temp = width;
+      width= height;
+      height=temp;
+     
+      
+  }
 
     NetworkInfo.getIPAddress().then((ipAddress) => {
       this.setState({
@@ -617,7 +624,7 @@ export default class EditProfile extends Component {
               <View
                 style={{
                   height: 170,
-                  width: Dimensions.get('screen').width,
+                  width: width,
                   backgroundColor: '#62463e',
                   borderBottomLeftRadius: 20,
                   borderBottomRightRadius: 20,
@@ -654,8 +661,8 @@ export default class EditProfile extends Component {
               <View
                 style={{
                   position: 'absolute',
-                  height: Dimensions.get('screen').height,
-                  width: Dimensions.get('screen').width - 45,
+                  height: height,
+                  width: width - 45,
                   backgroundColor: '#FFF',
                   top: 75,
                   left: 23,
@@ -666,7 +673,7 @@ export default class EditProfile extends Component {
                 <KeyboardAvoidingView
                   behavior="padding"
                   style={{
-                    height: Dimensions.get('screen').height,
+                    height: height,
                     marginBottom: 30,
                   }}>
                   <ScrollView
@@ -676,7 +683,7 @@ export default class EditProfile extends Component {
                     }}
                     style={{
                       marginBottom: 50,
-                      height: Dimensions.get('screen').height + 500,
+                      height: height + 500,
                     }}>
                     <Text
                       style={{
@@ -1377,7 +1384,7 @@ export default class EditProfile extends Component {
           <View
             style={{
               height: 50,
-              width: Dimensions.get('screen').width,
+              width: width,
               backgroundColor: '#62463e',
               justifyContent: 'center',
               alignItems: 'center',

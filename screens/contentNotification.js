@@ -4,6 +4,9 @@ import { Stylesheet, View, Text, TouchableOpacity, Image,Dimensions,
     
    } from 'react-native';
 import Pdf from 'react-native-pdf';
+let {height,width} = Dimensions.get('screen')
+
+
 export  default class WebViewComponent extends Component{
     render(){
         const resourceType = 'url';
@@ -13,7 +16,7 @@ export  default class WebViewComponent extends Component{
                 alignItems:'center'
             }} >
                 <View style={{
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     height:170,
                     backgroundColor:"#62463e",
                     borderBottomRightRadius:20,
@@ -45,8 +48,8 @@ export  default class WebViewComponent extends Component{
                       left:0,
                       right:0,
                       backgroundColor:"#FFF",
-                      height:Dimensions.get("screen").height,
-                      width:Dimensions.get("screen").width -50,
+                      height:height,
+                      width:width -50,
                       marginHorizontal:25,
                       borderRadius:20,
                       flex:1,
@@ -55,7 +58,7 @@ export  default class WebViewComponent extends Component{
                 }} >
                     <Image source={{uri:this.props.route.params.content.image}} style={{
                         height:500,
-                        width:Dimensions.get("screen").width -50,
+                        width:width -50,
                         borderTopLeftRadius:18,
                         borderTopRightRadius:18
                     }} />

@@ -5,7 +5,7 @@ import { StyleSheet, Image, View, Text, TouchableOpacity,Dimensions, AsyncStorag
 import Icon from 'react-native-vector-icons/Ionicons';
 
 Icon.loadFont();
-
+let {height,width} = Dimensions.get('screen')
 export default class TabComponnet extends Component{
 
     constructor(props){
@@ -58,6 +58,13 @@ export default class TabComponnet extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         AsyncStorage.getItem('user_id').then(result=>{
             if(result){
                 this.setState({uid:result})
@@ -200,7 +207,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:55,
-        width:Dimensions.get("screen").width ,
+        width:width ,
         backgroundColor:"#FFF",
         elevation:10,
         justifyContent:"center",

@@ -8,6 +8,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { URL } from '../api.js';
 import DeviceInfo from 'react-native-device-info';
 import messaging from '@react-native-firebase/messaging';
+let {height,width} = Dimensions.get('screen')
 export default class LoginComponent extends  Component{
 
 constructor(props){
@@ -24,6 +25,13 @@ constructor(props){
 }
 
 componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     this.animation();
     console.log(messaging().isDeviceRegisteredForRemoteMessages)
     console.log(messaging().registerDeviceForRemoteMessages());
@@ -289,7 +297,7 @@ const styles = StyleSheet.create({
     barContainerStyle:{
         backgroundColor:"#62463e",
           height:170,
-          width:Dimensions.get("screen").width,
+          width:width,
           borderBottomRightRadius:15,
           borderBottomLeftRadius:15
     },
@@ -306,8 +314,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:30,
         borderRadius:20,
         flex:1,

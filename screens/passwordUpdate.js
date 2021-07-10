@@ -6,6 +6,7 @@ import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
 import { NetworkInfo } from "react-native-network-info";
 import DeviceInfo from 'react-native-device-info';
+let {height,width} = Dimensions.get('screen')
 export default class UpdatePassword extends Component{
 
     constructor(props){
@@ -25,6 +26,13 @@ export default class UpdatePassword extends Component{
 
     componentDidMount(){
         
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
     
         this.user_id=this.props.route.params.user_id;
         this.getIpAddress();
@@ -103,7 +111,7 @@ if(e){
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -132,8 +140,8 @@ if(e){
                    flex:1,
                    justifyContent:'center',
                    alignItems:"center",
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    borderTopLeftRadius:20,
                    borderTopRightRadius:20,
                    position:"absolute",
@@ -158,7 +166,7 @@ if(e){
                     })}
                     style={{
                         height:45,
-                        width:Dimensions.get('screen').width*0.7,
+                        width:width*0.7,
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -185,7 +193,7 @@ if(e){
                     })}
                     style={{
                         height:45,
-                        width:Dimensions.get('screen').width*0.7,
+                        width:width*0.7,
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",

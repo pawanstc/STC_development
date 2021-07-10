@@ -8,6 +8,7 @@ import TabContainer from '../screens/TabnarComponent';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import NetInfo from "@react-native-community/netinfo";
+let {height,width} = Dimensions.get('screen')
 export default class Profile extends Component{
 
     constructor(props){
@@ -37,6 +38,13 @@ export default class Profile extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this._unsubscribe = this.props.navigation.addListener('focus', () =>{
             this.getUsers();
         })
@@ -246,7 +254,7 @@ export default class Profile extends Component{
                <StatusBar barStyle="light-content" backgroundColor="#62463e" />
               <View style={{
                   height:170,
-                  width:Dimensions.get("screen").width,
+                  width:width,
                   borderBottomLeftRadius:20,
                   borderBottomRightRadius:20,
                 backgroundColor:"#62463e",
@@ -281,7 +289,7 @@ export default class Profile extends Component{
                   right:24,
                  borderRadius:15,
                   backgroundColor:"#FFF",
-                  width:Dimensions.get("screen").width -45,
+                  width:width -45,
                 height:140,
                 elevation:5,
                 flex:1
@@ -360,9 +368,9 @@ export default class Profile extends Component{
               </View>
 
               <View style={{
-                  height:Dimensions.get("screen").height,
+                  height:height,
                   marginTop:45,
-                  width:Dimensions.get("screen").width -45,
+                  width:width -45,
                   borderTopLeftRadius:20,
                   borderTopRightRadius:20,
                   backgroundColor:"#FFF",
@@ -381,7 +389,7 @@ export default class Profile extends Component{
                           showsVerticalScrollIndicator={false}
                         style={{
                            flex:1,
-                          height:Dimensions.get("screen").height +300                     
+                          height:height +300                     
                         }} >
                         <View style={{
                             flexDirection:"row",

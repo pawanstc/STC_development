@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import {GiftedChat, Bubble, Send} from 'react-native-gifted-chat';
 import {NetworkInfo} from 'react-native-network-info';
 import { ThemeProvider } from 'styled-components';
+let {height,width} = Dimensions.get('screen')
 export default class Messaging extends Component {
   constructor(props) {
     super(props);
@@ -39,20 +40,33 @@ export default class Messaging extends Component {
   }
 
   componentDidMount() {
-    this.getMessage();
-
-    NetworkInfo.getIPV4Address().then((ipv4Address) => {
+    if(width>height){
+      let temp = width;
+      width= height;
+      height=temp;
+     
+      
+  }
+   
+    this.getUserType();
+        NetworkInfo.getIPV4Address().then((ipv4Address) => {
       this.setState({
         ip_address: ipv4Address,
       });
     });
   }
 
+
+  getUserType=()=>{
+    console.log("okpk")
+    console.log(this.state.user_id)
+  }
+
   getMessage = () => {
     AsyncStorage.getItem('user_id').then((result) => {
       this.setState({
         user_id: result,
-      });
+      })
 
       NetInfo.fetch().then((state) => {
         if (state.isConnected) {
@@ -139,7 +153,8 @@ export default class Messaging extends Component {
         wrapperStyle={{
             right:{
                 backgroundColor:"#62463e"
-            }
+            },
+            left:{backgroundColor:'#FFFFFF'}
         }}
             
          />
@@ -169,7 +184,7 @@ export default class Messaging extends Component {
         <View
           style={{
             height: 170,
-            width: Dimensions.get('screen').width,
+            width: width,
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
             backgroundColor: '#62463e',
@@ -206,8 +221,8 @@ export default class Messaging extends Component {
         </View>
 
         <View style={{
-            height:Dimensions.get("screen").height,
-            width:Dimensions.get("screen").width -45,
+            height:height,
+            width:width -45,
             borderTopLeftRadius:20,
             borderTopRightRadius:20,
             position:"absolute",
@@ -227,7 +242,7 @@ export default class Messaging extends Component {
         keyboardVerticalOffset={90}
 
         style={{
-            height: Dimensions.get("screen").height * 0.82
+            height: height * 0.82
         }}
      >
 
@@ -245,13 +260,11 @@ export default class Messaging extends Component {
        keyboardShouldPersistTaps={'always'}
       messages={this.state.message}
       renderBubble={this.renderBubble}
-      alwaysShowSend
+      alwaysShowSend={true}
       renderSend={this.renderSend}
       onSend={messages => {this.onSend(messages)
       this.getMessage()}}
-      user={{
-        _id:1,
-      }} />
+      user={} />
       </View>
 
      </ScrollView>

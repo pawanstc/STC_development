@@ -21,7 +21,7 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
   import {Picker} from '@react-native-picker/picker';
-
+  let {height,width} = Dimensions.get('screen')
 export default class HomeComponent extends Component{
 
  constructor(props){
@@ -58,7 +58,13 @@ export default class HomeComponent extends Component{
 
  componentDidMount(){
 
-  
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     
     this.getCityList();
    
@@ -147,7 +153,7 @@ export default class HomeComponent extends Component{
           }} >
               <View style={{
                   height:170,
-                  width:Dimensions.get("screen").width,
+                  width:width,
                   backgroundColor:"#62463e",
                   borderBottomLeftRadius:20,
                   borderBottomRightRadius:20,
@@ -185,8 +191,8 @@ export default class HomeComponent extends Component{
               </View>
 
               <View style={{
-                  height:Dimensions.get("screen").height,
-                  width:Dimensions.get("screen").width -45,
+                  height:height,
+                  width:width -45,
                   position:"absolute",
                   top:75,
                   left:24,
@@ -298,8 +304,8 @@ export default class HomeComponent extends Component{
 
 const styles = StyleSheet.create({
     headerBar:{
-        height:Dimensions.get("screen").height /4,
-        width:Dimensions.get("screen").width,
+        height:height /4,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -315,8 +321,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
         flex:1,
@@ -326,7 +332,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

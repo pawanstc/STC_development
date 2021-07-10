@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL, imageUrl} from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
+let {height,width} = Dimensions.get('screen')
 export default class subCategory2 extends Component{
 
    constructor(props){
@@ -18,6 +19,13 @@ export default class subCategory2 extends Component{
    }
 
    componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
 
         this.getSubCategory();
       
@@ -95,7 +103,7 @@ handleRefresh = ()=>{
             }} >
                 <View style={{
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:'#62463e',
                     borderBottomRightRadius:18,
                     borderBottomLeftRadius:18,
@@ -147,8 +155,8 @@ placeholderTextColor="#000"
                 </View>
 
                 <View style={{
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width -45,
+                    height:height,
+                    width:width -45,
                     backgroundColor:'#FFF',
                     position:'absolute',
                     top:120,
@@ -203,7 +211,7 @@ placeholderTextColor="#000"
                                 <ImageLoad
                                  
     style={{  height:120,
-        width:Dimensions.get('screen').width*0.4, marginTop:20 }}
+        width:width*0.4, marginTop:20 }}
     loadingStyle={{ size: 'large', color: '#62463e' }}
     borderRadius={10}
     source={{ uri: imageUrl+"/"+items.item.sub_category_img_url }}

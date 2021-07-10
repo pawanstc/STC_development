@@ -11,7 +11,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'uuid-random';
 import * as Progress from 'react-native-progress';
 
-let Width = Dimensions.get('screen').width;
+let {height,width} =Dimensions.get('screen')
 let imagesGrid = []
 export default class customiseComponent extends Component{
     constructor(props){
@@ -39,6 +39,13 @@ export default class customiseComponent extends Component{
     }
 
     componentDidMount(){
+      if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
 console.log("catlog pattenr_id"+ this.props.route.params.image_id,);
 
     console.log("flag"+this.props.route.params.flag);
@@ -599,7 +606,7 @@ launchCamera2 = async () =>{
                 
                 <View style={{
     height:170,
-    width:Width,
+    width:width,
     backgroundColor:'#62463e',
     borderBottomLeftRadius:20,
     borderBottomRightRadius:20,
@@ -626,8 +633,8 @@ launchCamera2 = async () =>{
 </View>
 
 <View style={{
-   height:Dimensions.get("screen").height,
-   width:Width*0.94,
+   height:height,
+   width:width*0.94,
    position:"absolute",
    top:78,
    //left:20,
@@ -668,7 +675,7 @@ launchCamera2 = async () =>{
             flexDirection:"row",
             alignItems:'flex-start',
             //justifyContent:'space-around',
-            marginLeft:Width*0.1,
+            marginLeft:width*0.1,
             
             
             
@@ -703,7 +710,7 @@ launchCamera2 = async () =>{
                         this.props.route.params.image =="" ? (
                           <Image source={require("../assets/uload3.jpg")} style={{
                             height:'100%',
-                            width:Width*0.30,
+                            width:width*0.30,
       
                             //marginLeft:6
                            }} /> 
@@ -723,7 +730,7 @@ launchCamera2 = async () =>{
             
            <View style={{
                flexDirection:"column",
-               width:Width*0.5,
+               width:width*0.5,
               
            }} >
 
@@ -777,7 +784,7 @@ launchCamera2 = async () =>{
                     
                     fontSize:16,
                     color:'grey',
-                    marginLeft:Width*0.1,
+                    marginLeft:width*0.1,
                     fontSize:14
                 }} >------ Or ------</Text>
 
@@ -826,8 +833,8 @@ launchCamera2 = async () =>{
       
      }} >
         <Image source={require("../assets/desc_01.jpg")} style={{
-            height:Dimensions.get('screen').width*0.36,
-            width:Width*0.6,
+            height:width*0.36,
+            width:width*0.6,
             
             //marginTop:10,
             marginBottom:10,
@@ -875,7 +882,7 @@ launchCamera2 = async () =>{
               width:value
             })}
             style={{
-                width:Width*0.2,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -892,7 +899,7 @@ launchCamera2 = async () =>{
               width:value
             })}
             style={{
-                width:Width*0.2,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -923,7 +930,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:Width*0.2,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -941,7 +948,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:Width*0.2,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -998,7 +1005,7 @@ launchCamera2 = async () =>{
                     </View>
                     </TouchableOpacity>
                   <View style={{
-                      width:Width*0.2,
+                      width:width*0.2,
                       height:30,
                       borderRadius:13,
                       borderColor:'black',
@@ -1056,7 +1063,7 @@ launchCamera2 = async () =>{
     borderBottomWidth:0.6,
     borderBottomColor:'black',
     marginTop:40,
-    width:Width,
+    width:width,
     alignItems: 'center',
     justifyContent:"center"
 }} />
@@ -1232,7 +1239,7 @@ marginHorizontal:10
 
   alignItems:'center',
   height:45,
-width:Width,
+width:width,
 
 backgroundColor:"#62463e",
 justifyContent:"center"

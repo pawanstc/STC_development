@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Dimensions , Image, ScrollVie
 import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL, imageUrl} from '../api.js';
-
+let {height,width} = Dimensions.get('screen')
 export default class StockEnqueryDetails extends Component{
     constructor(props){
         super(props);
@@ -17,6 +17,13 @@ export default class StockEnqueryDetails extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this.getStockDetails();
     }
 
@@ -86,7 +93,7 @@ export default class StockEnqueryDetails extends Component{
 
                 <View style={{
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     borderBottomLeftRadius:18,
                     borderBottomRightRadius:18,
                     backgroundColor:"#62463e",
@@ -124,8 +131,8 @@ export default class StockEnqueryDetails extends Component{
                     top:70,
                     left:24,
                     right:24,
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width -45,
+                    height:height,
+                    width:width -45,
                     backgroundColor:'#FFF',
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
@@ -174,7 +181,7 @@ export default class StockEnqueryDetails extends Component{
                                           }} >
                                                <Image style={{
                                                height:250,
-                                               width:Dimensions.get("window").width -45,
+                                               width:width -45,
                                                borderRadius:6,
                                                borderTopLeftRadius:20,
                                                borderTopRightRadius:20,

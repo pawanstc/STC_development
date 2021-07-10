@@ -22,6 +22,7 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
   import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+  let {height,width} = Dimensions.get('screen')
 export default class HomeComponent extends Component{
 
  constructor(props){
@@ -74,6 +75,14 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
     );
 });
  componentDidMount(){
+
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
  this._unsubscribe = this.props.navigation.addListener("focus", () =>{
     this.getUsers();

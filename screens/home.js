@@ -23,9 +23,10 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
 import WebView from 'react-native-webview';
-
+let {height,width} = Dimensions.get('screen')
 export default class HomeComponent extends Component{
-
+   
+   
  constructor(props){
      super(props)
 
@@ -41,11 +42,12 @@ export default class HomeComponent extends Component{
         company_logo:""
 
      }
+
+
  }
 
  
    
- 
 
 
  backAction = () =>{
@@ -84,7 +86,15 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
     );
 });
  componentDidMount(){
-  
+     console.log()
+    
+   if(width>height){
+       let temp = width;
+       width= height;
+       height=temp;
+      
+       
+   }
    
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
  this._unsubscribe = this.props.navigation.addListener("focus", () =>{
@@ -297,7 +307,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
            
                 <View style={{
                flex:1,
-               height:"100%",
+               height:height,
               
                 alignItems:"center",
     
@@ -311,7 +321,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
 
 
              <View style={{
-                 width:"75%"
+                 width:width*0.75
              }}  >
                 {
                     this.state.user_name !="" || this.state.user_name != null ? (
@@ -326,7 +336,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                     ) :(
                        <View style={{
                            height:40,
-                           width:Dimensions.get("screen").width -85
+                           width:width -85
                        }} >
                            </View>
                     )
@@ -427,8 +437,8 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                  </View>
  
             <View style={{
-                height:Dimensions.get("screen").height * 0.178,
-                width:Dimensions.get("screen").width -40,
+                height:height * 0.178,
+                width:width -40,
                 backgroundColor:"#FFF",
                 borderRadius:8,
                 backgroundColor:"#FFF",
@@ -472,7 +482,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                   })} >
                   <View style={{
                        height:135,
-                       width:Dimensions.get("screen").width *0.44,
+                       width:width *0.44,
                        backgroundColor:"#FFF",
                        borderRadius:8,
                        marginTop:20,
@@ -508,7 +518,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                    })} >
                    <View style={{
                        height:135,
-                       width:Dimensions.get("screen").width *0.44,
+                       width:width *0.44,
                        backgroundColor:"#FFF",
                        borderRadius:8,
                        marginTop:20,
@@ -552,7 +562,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                <TouchableOpacity activeOpacity={2}onPress={() => this.props.navigation.navigate("onGoingJob")} >
                <View style={{
                         height:135,
-                        width:Dimensions.get("screen").width *0.44,
+                        width:width *0.44,
                         backgroundColor:"#FFF",
                         borderRadius:8,
                         marginTop:20,
@@ -587,7 +597,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
               <TouchableOpacity activeOpacity={2 } onPress={() => this.props.navigation.navigate("seeOnYourWall")} >
               <View style={{
                          height:135,
-                         width:Dimensions.get("screen").width *0.44,
+                         width:width *0.44,
                          backgroundColor:"#FFF",
                          borderRadius:8,
                          marginTop:20,
@@ -632,7 +642,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
 const styles = StyleSheet.create({
     headerBar:{
         height:175,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -641,8 +651,8 @@ const styles = StyleSheet.create({
 
     },
     buttonTabView:{
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -45,
+        height:height,
+        width:width -45,
         position:"absolute",
         top:75,
         left:25,
@@ -666,7 +676,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

@@ -4,6 +4,7 @@ import { StyleSheet, View , Text, Image, TouchableOpacity, Dimensions, FlatList 
 import Icon from 'react-native-vector-icons/Ionicons'
 import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
+let {height,width} = Dimensions.get('screen')
 export default class SubCategory extends Component {
 
     constructor(props){
@@ -17,6 +18,13 @@ export default class SubCategory extends Component {
 
     componentDidMount(){
        
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this.getSubCategory();
     }
 
@@ -66,7 +74,7 @@ export default class SubCategory extends Component {
                
             }} >
                <View style={{
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    height:175,
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -96,8 +104,8 @@ export default class SubCategory extends Component {
                </View>
 
                <View style={{
-                   height:Dimensions.get("screen").height +100,
-                   width:Dimensions.get("screen").width -45,
+                   height:height +100,
+                   width:width -45,
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
                     backgroundColor:"#FFF",
@@ -113,9 +121,9 @@ export default class SubCategory extends Component {
                    <FlatList
               numColumns={2}
                    style={{
-                       height:Dimensions.get("screen").height,
+                       height:height,
                        marginBottom:200,
-                       width:Dimensions.get("screen").width -45
+                       width:width -45
                    }}
                     data={this.state.subCategory2}
                     showsVerticalScrollIndicator={false}
@@ -126,7 +134,7 @@ export default class SubCategory extends Component {
                                alignItems:'center',
                                 margin:20,
                                 flex:1,
-                                width:Dimensions.get('screen').width*0.4,
+                                width:width*0.4,
                                 justifyContent:"center"
                             }} >
                                <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.replace("stockEnquery",{

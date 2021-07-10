@@ -12,6 +12,7 @@ import Sound from 'react-native-sound'
 import TrackPlayer from 'react-native-track-player';
 import Textarea from 'react-native-textarea';
 let urlsDomain = "https://stcapp.stcwallpaper.com/";
+let {height,width} = Dimensions.get('screen')
 export default class postViewJob extends Component{
     
 
@@ -50,6 +51,13 @@ export default class postViewJob extends Component{
  }
  
  componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     if(this.state.order_user_type=="Distributor")this.setState({dist_only:true})
     
     console.log(this.state.dist_only)
@@ -504,7 +512,7 @@ levelCheck=()=>{
              </TouchableOpacity>
                  <Text style={{color:'#62463e',fontSize:18,alignSelf:'center',fontWeight:'bold'}}>Please enter your remarks below:-</Text>
             <Textarea
-             maxLength={160}
+             maxLength={1000}
              onChangeText={(value) =>this.setState({remark:value}) 
                 
              }
@@ -542,7 +550,7 @@ underlineColorAndroid={'transparent'}
                 <View style={{
                     justifyContent:"space-between",
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:"#62463e",
                     borderBottomLeftRadius:20,
                     borderBottomRightRadius:20,
@@ -569,8 +577,8 @@ underlineColorAndroid={'transparent'}
                 </View>
 
                 <View style={{
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width -45,
+                    height:height,
+                    width:width -45,
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
                     position:"absolute",
@@ -675,7 +683,7 @@ underlineColorAndroid={'transparent'}
 
                     <Image source={{uri:imageUrl+""+this.state.order_image}}  
                         style={{
-                            height:240,
+                            height:240, 
                             width:'95%',
                             borderRadius:4,
                             elevation:5,
@@ -738,7 +746,7 @@ underlineColorAndroid={'transparent'}
                                    <Image source={{uri:imageUrl+"/"+items.item.image_url}}  
                         style={{
                             height:240,
-                            width:Dimensions.get('screen').width*0.9,
+                            width:width*0.9,
                             borderRadius:4,
                             elevation:5,
                             margin:10,
@@ -921,7 +929,7 @@ const styles = StyleSheet.create({
     rejectbutton_enabled:{
         backgroundColor:"#f4f4f4",
         height:44,
-        width:Dimensions.get('window').width*0.43,
+        width:width*0.43,
         justifyContent:'center',
         alignItems:"center",
         
@@ -939,7 +947,7 @@ const styles = StyleSheet.create({
     approvebutton_enabled:{
         backgroundColor:"#2b580c",
         height:44,
-        width:Dimensions.get('window').width*0.43,
+        width:width*0.43,
        justifyContent:"center",
         alignItems:"center",
         //flexGrow:0.5,
@@ -957,7 +965,7 @@ const styles = StyleSheet.create({
     rejectbutton_disabled:{
         backgroundColor:"#f4f4f4",
         height:44,
-        width:Dimensions.get('window').width*0.43,
+        width:width*0.43,
         justifyContent:'center',
         alignItems:"center",
         
@@ -973,7 +981,7 @@ const styles = StyleSheet.create({
     approvebutton_disabled:{
         backgroundColor:"#f4f4f4",
         height:44,
-        width:Dimensions.get('window').width*0.43,
+        width:width*0.43,
         justifyContent:'center',
         alignItems:"center",
         

@@ -21,6 +21,7 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
 
+  let {height,width} = Dimensions.get('screen')
  
   
 export default class Notification extends Component{
@@ -38,6 +39,13 @@ export default class Notification extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
 
         AsyncStorage.getItem("user_id")
         .then(result =>{this.setState({
@@ -198,7 +206,7 @@ export default class Notification extends Component{
                     renderItem={(items) => {
                         return(
                             <View style={{paddingLeft:20,paddingRight:20,paddingBottom:10}}>
-                            <View style={{height:65,width:Dimensions.get('screen').width-80,flexDirection:'row'}}>
+                            <View style={{height:65,width:width-80,flexDirection:'row'}}>
                                 
                                       
                                
@@ -281,7 +289,7 @@ export default class Notification extends Component{
 const styles = StyleSheet.create({
     headerBar:{
         height:170,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -296,8 +304,8 @@ const styles = StyleSheet.create({
         left:25,
         right:25,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -45,
+        height:height,
+        width:width -45,
   
         borderRadius:20,
         flex:1,
@@ -307,7 +315,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

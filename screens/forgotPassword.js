@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CountDown from 'react-native-countdown-component';
 import NetInfo from "@react-native-community/netinfo";
 import { URL } from '../api.js';
+let {height,width} = Dimensions.get('screen')
 export default class ChangePassword extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +19,15 @@ export default class ChangePassword extends Component {
             timer_time: "",
             user_id: ""
 
+        }
+    }
+    componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
         }
     }
 
@@ -170,7 +180,7 @@ export default class ChangePassword extends Component {
                 <StatusBar barStyle="light-content" backgroundColor="#62463e" />
                 <View style={{
                     height: 170,
-                    width: Dimensions.get("screen").width,
+                    width: width,
                     backgroundColor: '#62463e',
                     borderBottomLeftRadius: 18,
                     borderBottomRightRadius: 18,
@@ -201,8 +211,8 @@ export default class ChangePassword extends Component {
                 </View>
 
                 <View style={{
-                    height: Dimensions.get("screen").height,
-                    width: Dimensions.get("screen").width - 45,
+                    height: height,
+                    width: width - 45,
                     backgroundColor: '#FFF',
                     position: 'absolute',
                     top: 75,
@@ -363,7 +373,7 @@ export default class ChangePassword extends Component {
 
                                         style={{
                                             height: 40,
-                                            width: Dimensions.get('screen').width*0.7,
+                                            width: width*0.7,
                                             borderBottomWidth: 0.3,
                                             borderBottomColor: "black"
                                         }}
@@ -393,7 +403,7 @@ export default class ChangePassword extends Component {
                                         />
                                         <View style={{
                                             height: 50,
-                                            width: Dimensions.get('screen').width*0.5,
+                                            width: width*0.5,
 
                                         }} >
                                             <Button

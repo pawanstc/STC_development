@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import RNFetchBlob from 'rn-fetch-blob';
 
 import { BackHandler,Modal,View,Text, Dimensions, TouchableOpacity} from 'react-native'
-
 function preview({navigation,route}) {
-
+  let {height,width} = Dimensions.get('screen')
+  
     const [isModalVisible, setModalVisible] = useState(true)
 
 const closeModal = () => {
@@ -20,9 +20,17 @@ const closeModal = () => {
 
 
 useEffect(() => {
+  if(width>height){
+    let temp = width;
+    width= height;
+    height=temp;
+   
+    
+}
   BackHandler.addEventListener('hardwareBackPress', closeModal)
   return () => {BackHandler.removeEventListener()
     }
+    
 }, [])
 
    const {uri,order_id} = route.params
@@ -75,7 +83,7 @@ useEffect(() => {
            <ImageViewer imageUrls={images}/>
            {order_id!=0?(
            <TouchableOpacity  onPress={()=>ShareImage()}>
-           <View  style={{width:Dimensions.get('screen').width+5,height:60,borderColor:'#FFFFFF',borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
+           <View  style={{width:width+5,height:60,borderColor:'#FFFFFF',borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
            <Icon name="share" size={30} color="white" style={{
                                             padding: 8,
                                             paddingLeft:8,

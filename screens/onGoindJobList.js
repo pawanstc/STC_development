@@ -18,7 +18,7 @@ const transition = () =>{
 	</Transition.Together>
 }
 
-
+let {height,width} = Dimensions.get('screen')
 export default class onGoingJobList extends Component{
 
 	constructor(props){
@@ -76,6 +76,14 @@ export default class onGoingJobList extends Component{
 	}
 
     componentDidMount(){
+
+		if(width>height){
+			let temp = width;
+			width= height;
+			height=temp;
+		   
+			
+		}
 		this.getJobList();
 	}
 	
@@ -505,7 +513,7 @@ getMore=()=>{
             }} >
               <View style={{
 				  height:170,
-				  width:Dimensions.get("screen").width,
+				  width:width,
 				  backgroundColor:"#62463e",
 				  borderBottomLeftRadius:20,
 				  borderBottomRightRadius:20,
@@ -533,8 +541,8 @@ getMore=()=>{
 			  </View>
 
 			  <View style={{
-				  height:Dimensions.get("screen").height,
-				  width:Dimensions.get("screen").width -45,
+				  height:height,
+				  width:width -45,
 				  backgroundColor:"#FFF",
 				  borderTopLeftRadius:20,
 				  borderTopRightRadius:20,
@@ -555,7 +563,7 @@ getMore=()=>{
 							paddingBottom:200,
 							
 						}}
-						ListFooterComponent={<View style={{width:Dimensions.get('screen').width*0.8,height:40,backgroundColor:'#62463e',borderRadius:20,alignSelf:'center'}}>
+						ListFooterComponent={<View style={{width:width*0.8,height:40,backgroundColor:'#62463e',borderRadius:20,alignSelf:'center'}}>
 							<TouchableOpacity onPress={()=>this.getMore()}>
 								<Text style={{fontSize:22,color:'white',fontWeight:'bold',alignSelf:'center'}}>Load More</Text>
 							</TouchableOpacity>
@@ -573,7 +581,7 @@ getMore=()=>{
 								}} >
 									<View style={{
 								   flexGrow:1,
-								   width:Dimensions.get("screen").width *0.74,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+								   width:width *0.74,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 									borderRadius:8,
 									backgroundColor:"#FFF",
 									elevation:10,
@@ -591,6 +599,10 @@ getMore=()=>{
 									   fontWeight:"normal", 
 									   padding:4
 									}} > Job id:   {items.item.order_id}</Text>
+									
+									<Image  source={{uri:imageUrl+items.item.pattern_image_url}}
+									style={{height:100,width:150,borderRadius:10}}/>
+									
 									<Text style={{
 										color:"#ff9800",
 										fontSize:14,
@@ -916,7 +928,7 @@ getMore=()=>{
 			 alignitems:'center',
 			 backgroundColor:"#FFF",
 			 height:50,
-			 width:Dimensions.get("screen").width,
+			 width:width,
 			 elevation:3,
 			 borderTopWidth:0.3,
 			 borderTopColor:"#eeee"
@@ -973,7 +985,7 @@ getMore=()=>{
   style={{
 	  height:400
   }}
-	 deviceHeight={ Dimensions.get("screen").height  }
+	 deviceHeight={ height  }
   isVisible={ this.state.is_model_view } >
   <View style={{
 

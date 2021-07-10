@@ -19,6 +19,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import NetInfo from "@react-native-community/netinfo";
 import { URL, imageUrl } from '../api.js';
+let {height,width} = Dimensions.get('screen')
 export default class StackNavigation extends Component{
 
     constructor(props){
@@ -35,6 +36,13 @@ export default class StackNavigation extends Component{
 
 componentDidMount(){
 
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     this.customCatelog();
  
 }
@@ -110,7 +118,7 @@ handleRefreshing = () =>{
          
  <View style={{
                flex:1,
-               height:Dimensions.get("screen").height +200
+               height:height +200
             }} >
          <StatusBar barStyle="light-content" backgroundColor="#62463e" />
 
@@ -218,7 +226,7 @@ placeholderTextColor="#000"
                        <ImageLoad
                                  isShowActivity={true}
     style={{  height:110,
-        width:Dimensions.get('screen').width*0.35, marginTop:20 }}
+        width:width*0.35, marginTop:20 }}
     loadingStyle={{ size: 'large', color: '#62463e' }}
     borderRadius={6}
     source={{ uri:imageUrl+"/"+value.item.catlog_image}}
@@ -277,7 +285,7 @@ touchSoundDisabled ={false}
 const styles = StyleSheet.create({
     headerBar:{
         height:170,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -293,8 +301,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
         flex:1,
@@ -304,7 +312,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

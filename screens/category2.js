@@ -15,6 +15,7 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
 import { ScrollView } from 'react-native-gesture-handler';
+let {height,width} = Dimensions.get('screen')
 
 export default class Category2 extends Component{
 
@@ -111,6 +112,13 @@ export default class Category2 extends Component{
  }
 
  componentDidMount() {
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
 
      setTimeout(() =>{
          this.setState({
@@ -126,7 +134,7 @@ export default class Category2 extends Component{
             }} >
                 <View style={{
                     height:170,
-                    width: Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:'#62463e',
                     borderBottomLeftRadius:18,
                     borderBottomRightRadius:18,
@@ -152,8 +160,8 @@ export default class Category2 extends Component{
                 </View>
 
                 <View style={{
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width - 45,
+                    height:height,
+                    width:width - 45,
                     backgroundColor:'#FFF',
                     top:70,
                     left:24,

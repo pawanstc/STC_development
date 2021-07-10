@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 import NetInfo from "@react-native-community/netinfo";
 import { URL, imageUrl } from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
-
+let {height,width} = Dimensions.get('screen')
 export default class ProductImage extends Component {
 
     constructor(props) {
@@ -63,7 +63,13 @@ export default class ProductImage extends Component {
 
     componentDidMount() {
 
-
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this.getSubCatelog();
 
     }
@@ -152,13 +158,13 @@ export default class ProductImage extends Component {
             <View style={{
                 flexGrow: 1,
                 alignItems: 'center',
-                height: Dimensions.get("screen").height
+                height: height
 
             }} >
                 <StatusBar barStyle="light-content" backgroundColor="#62463e" />
                 <View style={{
                     height: 170,
-                    width: Dimensions.get("screen").width,
+                    width: width,
                     backgroundColor: '#62463e',
                     borderBottomLeftRadius: 18,
                     borderBottomRightRadius: 18,
@@ -214,8 +220,8 @@ export default class ProductImage extends Component {
                 <View style={{
                     position: 'absolute',
                     top: 70,
-                    width: Dimensions.get("screen").width - 45,
-                    height: Dimensions.get("screen").height,
+                    width: width - 45,
+                    height: height,
                     backgroundColor: 'red',
                     left: 24,
                     right: 0,
@@ -278,7 +284,7 @@ export default class ProductImage extends Component {
 
                                                             style={{
                                                                 height: 120,
-                                                                width:Dimensions.get('screen').width*0.35,
+                                                                width:width*0.35,
                                                                 borderRadius: 5
                                                             }}
                                                             loadingStyle={{ size: 'large', color: '#62463e' }}

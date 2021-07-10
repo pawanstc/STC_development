@@ -11,7 +11,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'uuid-random';
 import * as Progress from 'react-native-progress';
 
-const Width = Dimensions.get('screen').width;
+let {height,width} = Dimensions.get('screen')
 let imagesGrid = []
 export default class customiseComponent extends Component{
     constructor(props){
@@ -42,6 +42,13 @@ export default class customiseComponent extends Component{
 
    
     componentDidMount(){
+      if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
 console.log("catlog pattenr_id"+ this.props.route.params.image_id,);
 
     console.log("flag"+this.props.route.params.flag);
@@ -601,7 +608,7 @@ launchCamera2 = async () =>{
                 
                 <View style={{
     height:170,
-    width:Dimensions.get("screen").width,
+    width:width,
     backgroundColor:'#62463e',
     borderBottomLeftRadius:20,
     borderBottomRightRadius:20,
@@ -628,8 +635,8 @@ launchCamera2 = async () =>{
 </View>
 
 <View style={{
-   height:Dimensions.get("screen").height,
-   width:Dimensions.get("screen").width*0.94,
+   height:height,
+   width:width*0.94,
    position:"absolute",
    top:78,
    //left:20,
@@ -1216,7 +1223,7 @@ marginHorizontal:10
 
   alignItems:'center',
   height:45,
-width:Dimensions.get("screen").width,
+width:width,
 
 backgroundColor:"#62463e",
 justifyContent:"center"

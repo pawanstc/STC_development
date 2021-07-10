@@ -24,7 +24,7 @@ import {
     UIActivityIndicator,
     WaveIndicator,
   } from 'react-native-indicators';
-
+  let {height,width} = Dimensions.get('screen')
 export default class StockDetails extends Component{
 
     scale = new Animated.Value(0);
@@ -131,6 +131,15 @@ export default class StockDetails extends Component{
         }
     };
 
+    componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
+    }
     setSelectIndex = event =>{
         // get  width of the view size 
         const viewWidth = event.nativeEvent.layoutMeasurement.width;
@@ -224,14 +233,14 @@ export default class StockDetails extends Component{
         
                     return(
                         <ImageZoom cropHeight={230}
-                            cropWidth={Dimensions.get("screen").width -50}
-                            imageWidth={Dimensions.get("screen").width -50}
+                            cropWidth={width -50}
+                            imageWidth={width -50}
                             imageHeight={230}
                         
                           >
                                <Image source={{uri:value.image}} style={{
                                             height:245,
-                                            width:Dimensions.get("screen").width -50,
+                                            width:width -50,
                                             borderTopRightRadius:18,
                                             borderTopLeftRadius:18,
                                            
@@ -473,7 +482,7 @@ export default class StockDetails extends Component{
             })} >
             <View style={{
       	height:50,
-      	width: Dimensions.get("screen").width,
+      	width: width,
       	backgroundColor:"#62463e",
       	 justifyContent:"center",
       	 alignItems:"center",
@@ -495,8 +504,8 @@ export default class StockDetails extends Component{
 
 const styles = StyleSheet.create({
     headerBar:{
-        height:Dimensions.get("screen").height /5,
-        width:Dimensions.get("screen").width,
+        height:height /5,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -511,8 +520,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
         flex:1,
@@ -521,7 +530,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

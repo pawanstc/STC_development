@@ -16,7 +16,7 @@ import Modal from 'react-native-modal';
 const default_image_size = 400;
 const default_image_width = 420;
 
-
+let {height,width} = Dimensions.get('screen')
 export default class EditImage extends Component{
 
     constructor(props){
@@ -33,7 +33,7 @@ export default class EditImage extends Component{
             imageEdit:"",
             imageObj:{},
             cropImageHeight:240,
-            cropImageWidth:Dimensions.get("screen").width - 40,
+            cropImageWidth:width - 40,
             x:"",
             y:"",
             fileObj:null,
@@ -41,6 +41,16 @@ export default class EditImage extends Component{
             progressStat:false
            
         }
+    }
+
+    componentDidMount(){
+      if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     }
 
    validation1 = () =>{
@@ -237,7 +247,7 @@ export default class EditImage extends Component{
              }} >
                <View style={{
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:'#62463e',
                     borderBottomLeftRadius:20,
                     borderBottomRightRadius:20,
@@ -268,8 +278,8 @@ export default class EditImage extends Component{
                     top:90,
                     left:24,
                     right:24,
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width -45,
+                    height:height,
+                    width:width -45,
                     backgroundColor:'#FFF',
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
@@ -302,7 +312,7 @@ export default class EditImage extends Component{
                  this.state.imageEdit != "" ? (
                   <Image source={{uri:this.state.imageEdit}} style={{
                     height:this.state.cropImageHeight,
-                    width:Dimensions.get("screen").width * 0.8,
+                    width:width * 0.8,
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
                     marginTop:12
@@ -310,7 +320,7 @@ export default class EditImage extends Component{
                  ) :(
                   <Image source={{uri:imageUrl+"/"+this.props.route.params.stocks}} style={{
                     height:this.state.cropImageHeight,
-                    width:Dimensions.get("screen").width * 0.8,
+                    width:width * 0.8,
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
                     marginTop:12
@@ -370,7 +380,7 @@ export default class EditImage extends Component{
                   keyboardType="numeric"
                   style={{
                     height:50,
-                    width:Dimensions.get('screen').width*0.6,
+                    width:width*0.6,
                    borderRadius:6,
                    borderWidth:0.5,
                   marginTop:20,
@@ -396,7 +406,7 @@ export default class EditImage extends Component{
                   keyboardType="numeric"
                   style={{
                     height:50,
-                    width:Dimensions.get('screen').width*0.6,
+                    width:width*0.6,
                    borderRadius:6,
                    borderWidth:0.5,
                   marginTop:20,
@@ -433,7 +443,7 @@ export default class EditImage extends Component{
              <TouchableOpacity  activeOpacity={2} onPress={() => this.submit()} >
                 <View style={{
               height:50,
-              width:Dimensions.get("screen").width,
+              width:width,
               backgroundColor:"#62463e",
               justifyContent:"center",
                    alignItems:'center',

@@ -22,6 +22,7 @@ import {
   } from 'react-native-indicators';
   import NetInfo from "@react-native-community/netinfo";
   import ImageLoad from 'react-native-image-placeholder';
+  let {height,width} = Dimensions.get('screen')
 export default class StackNavigation extends Component{
 
     constructor(props){
@@ -59,6 +60,13 @@ export default class StackNavigation extends Component{
     }
 
 componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
    
 this.getCatlog();
     setTimeout(() =>{
@@ -380,7 +388,7 @@ searchBarAppear = () =>{
           
 
       <Text style={{
-          marginRight:Dimensions.get('screen').width*0.2,
+          marginRight:width*0.2,
           fontSize:16,
           color:"#FFF",
           marginTop:20,
@@ -510,7 +518,7 @@ searchBarAppear = () =>{
                            <ImageLoad
                                      isShowActivity={true}
         style={{  height:120,
-            width:Dimensions.get('screen').width*0.35, marginHorizontal:20,marginTop:15 }}
+            width:width*0.35, marginHorizontal:20,marginTop:15 }}
         loadingStyle={{ size: 'large', color: '#62463e' }}
         borderRadius={6}
         source={{ uri:imageUrl+"/"+items.item.catlog_image}}
@@ -584,7 +592,7 @@ searchBarAppear = () =>{
 const styles = StyleSheet.create({
     headerBar:{
         height:170,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -600,8 +608,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
     
@@ -611,7 +619,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

@@ -37,7 +37,7 @@ const customStyles = {
     labelSize: 13,
     currentStepLabelColor: '#fe7013'
   }
-   
+  let {height,width} = Dimensions.get('screen')
 export default class TrackJob extends Component{
     constructor(props){
         super(props);
@@ -50,6 +50,13 @@ export default class TrackJob extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this.statusGet();
     }
 
@@ -91,7 +98,7 @@ export default class TrackJob extends Component{
                 }} >
                    <View style={{
                        height:170,
-                       width:Dimensions.get("screen").width,
+                       width:width,
                        backgroundColor:"#62463e",
                        borderBottomLeftRadius:20,
                        borderBottomRightRadius:20,
@@ -120,8 +127,8 @@ export default class TrackJob extends Component{
                    <View style={{
                        flex:1,
                    
-                       height:Dimensions.get("screen").height,
-                       width:Dimensions.get("screen").width -45,
+                       height:height,
+                       width:width -45,
                        backgroundColor:"#FFF",
                        position:"absolute",
                        top:70,
@@ -140,7 +147,7 @@ export default class TrackJob extends Component{
                        }} >STATUS & PHASE HISTROY</Text> 
     
                        <View style={{
-                           width:Dimensions.get("window").width -45,
+                           width:width -45,
                            borderBottomWidth:0.4,
                            borderColor:"black"
                        }}  />
@@ -182,7 +189,7 @@ export default class TrackJob extends Component{
                              <View style={{
                                marginTop:10,
                       
-                               width:Dimensions.get("screen").width -100
+                               width:width -100
                              }} >
                                  <Text style={{
                                      fontSize:14,
@@ -216,7 +223,7 @@ export default class TrackJob extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -245,8 +252,8 @@ export default class TrackJob extends Component{
                <View style={{
                    flex:1,
                
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    backgroundColor:"#FFF",
                    position:"absolute",
                    top:70,
@@ -265,7 +272,7 @@ export default class TrackJob extends Component{
                    }} >STATUS & PHASE HISTROY</Text> 
 
                    <View style={{
-                       width:Dimensions.get("window").width -45,
+                       width:width -45,
                        borderBottomWidth:0.4,
                        borderColor:"black"
                    }}  />
@@ -307,7 +314,7 @@ export default class TrackJob extends Component{
                          <View style={{
                            marginTop:10,
                   
-                           width:Dimensions.get("screen").width -100
+                           width:width -100
                          }} >
                              <Text style={{
                                  fontSize:14,
@@ -340,7 +347,7 @@ export default class TrackJob extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -369,8 +376,8 @@ export default class TrackJob extends Component{
                <View style={{
                    flex:1,
                
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    backgroundColor:"#FFF",
                    position:"absolute",
                    top:70,
@@ -389,7 +396,7 @@ export default class TrackJob extends Component{
                    }} >STATUS & PHASE HISTROY</Text> 
 
                    <View style={{
-                       width:Dimensions.get("window").width -45,
+                       width:width -45,
                        borderBottomWidth:0.4,
                        borderColor:"black"
                    }}  />
@@ -431,7 +438,7 @@ export default class TrackJob extends Component{
                          <View style={{
                            marginTop:10,
                   
-                           width:Dimensions.get("screen").width -100
+                           width:width -100
                          }} >
                              <Text style={{
                                  fontSize:14,
@@ -464,7 +471,7 @@ export default class TrackJob extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -493,8 +500,8 @@ export default class TrackJob extends Component{
                <View style={{
                    flex:1,
                
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    backgroundColor:"#FFF",
                    position:"absolute",
                    top:70,
@@ -513,7 +520,7 @@ export default class TrackJob extends Component{
                    }} >STATUS & PHASE HISTROY</Text> 
 
                    <View style={{
-                       width:Dimensions.get("window").width -45,
+                       width:width -45,
                        borderBottomWidth:0.4,
                        borderColor:"black"
                    }}  />
@@ -555,7 +562,7 @@ export default class TrackJob extends Component{
                          <View style={{
                            marginTop:10,
                   
-                           width:Dimensions.get("screen").width -100
+                           width:width -100
                          }} >
                              <Text style={{
                                  fontSize:14,
@@ -588,7 +595,7 @@ export default class TrackJob extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -617,8 +624,8 @@ export default class TrackJob extends Component{
                <View style={{
                    flex:1,
                
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    backgroundColor:"#FFF",
                    position:"absolute",
                    top:70,
@@ -637,7 +644,7 @@ export default class TrackJob extends Component{
                    }} >STATUS & PHASE HISTROY</Text> 
 
                    <View style={{
-                       width:Dimensions.get("window").width -45,
+                       width:width -45,
                        borderBottomWidth:0.4,
                        borderColor:"black"
                    }}  />
@@ -679,7 +686,7 @@ export default class TrackJob extends Component{
                          <View style={{
                            marginTop:10,
                   
-                           width:Dimensions.get("screen").width -100
+                           width:width -100
                          }} >
                              <Text style={{
                                  fontSize:14,
@@ -712,7 +719,7 @@ export default class TrackJob extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -742,8 +749,8 @@ export default class TrackJob extends Component{
                <View style={{
                    flex:1,
                
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    backgroundColor:"#FFF",
                    position:"absolute",
                    top:70,
@@ -762,7 +769,7 @@ export default class TrackJob extends Component{
                    }} >STATUS & PHASE HISTROY</Text> 
 
                    <View style={{
-                       width:Dimensions.get("window").width -45,
+                       width:width -45,
                        borderBottomWidth:0.4,
                        borderColor:"black"
                    }}  />
@@ -804,7 +811,7 @@ export default class TrackJob extends Component{
                          <View style={{
                            marginTop:10,
                   
-                           width:Dimensions.get("screen").width -100
+                           width:width -100
                          }} >
                              <Text style={{
                                  fontSize:14,
@@ -838,7 +845,7 @@ export default class TrackJob extends Component{
           }} >
               <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -869,8 +876,8 @@ export default class TrackJob extends Component{
                    top:75,
                    left:24,
                    right:24,
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    borderTopLeftRadius:20,
                    borderTopRightRadius:20,
                    backgroundColor:"#FFF",
@@ -903,7 +910,7 @@ export default class TrackJob extends Component{
 
 const style = StyleSheet.create({
     indicatorContainer:{
-        height:Dimensions.get("screen").height-300,
+        height:height-300,
  
         padding:12,
         margin:3,
