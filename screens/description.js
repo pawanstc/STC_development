@@ -37,7 +37,7 @@ import { ThemeConsumer } from 'styled-components';
 import { duration } from 'moment';
 
 
-
+let {height,width} = Dimensions.get('screen')
 export default class Recorder extends Component {
 	sound = null;
 
@@ -53,11 +53,11 @@ export default class Recorder extends Component {
 			loaded: false,
 			pause:false,
 			visible:false,
-			papper_list:[],
+			papper_list:[],	
 			mediaType:"",
 			paperType:[],
 			selectPaper:"",
-			desc:"",
+			desc:" ",
 			user_id:"",
 			filename:"",
 			pattern_url:"",
@@ -70,6 +70,14 @@ export default class Recorder extends Component {
 	}
 
 	componentDidMount() {
+
+		if(width>height){
+			let temp = width;
+			width= height;
+			height=temp;
+		   
+			
+		}
 		this.getSheet();
 		console.log("audioo")
 		console.log(this.state.data)
@@ -338,14 +346,7 @@ console.log(this.state.pattern_url);
 			
 		
 	
-		 if(this.state.desc ==""){
-		Alert.alert(
-			"Validation Error",
-			"Please enter your job  description"
-		);
-
-		return;
-	}else if(this.state.mediaType ==""){
+		 if(this.state.mediaType ==""){
 		Alert.alert(
 			"Validation Error",
 			"Please Select Media Type Paper"
@@ -360,13 +361,6 @@ console.log(this.state.pattern_url);
 
 		return;
 	
-	}else if(this.state.desc.length < 10){
-		Alert.alert(
-			"Validation Error",
-			"Minimum 10 characters required in the description."
-		);
-
-		return
 	}
 		
 	
@@ -494,7 +488,7 @@ console.log(this.state.pattern_url);
 				<StatusBar barStyle="light-content" backgroundColor="#62463e" />
 				<View style={{
 					height: 170,
-					width: Dimensions.get("screen").width,
+					width:width,
 					backgroundColor: "#62463e",
 					borderBottomLeftRadius: 18,
 					borderBottomRightRadius: 18,
@@ -518,8 +512,8 @@ console.log(this.state.pattern_url);
 				</View>
 
 				<View style={{
-					height: Dimensions.get("screen").height +500,
-					width: Dimensions.get("screen").width - 45,
+					height: height +500,
+					width: width - 45,
 					position: "absolute",
 					top: 75,
 					left: 24,
@@ -870,7 +864,7 @@ console.log(this.state.pattern_url);
 				<TouchableOpacity activeOpacity={0.9} disabled={this.state.disabled} onPress={() => this.submit()} >
 					<View style={{
 						height:50,
-						width:Dimensions.get("screen").width,
+						width:width,
 						backgroundColor:"#62463e",
 						justifyContent:"center",
 						alignItems:'center'
