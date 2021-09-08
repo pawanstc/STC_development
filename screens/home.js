@@ -249,6 +249,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             });
                         }
                         else if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")||result.profilePicture.includes(".jpeg")){
+                            AsyncStorage.setItem("profilePicture", result.profilePicture);
                             console.log(result.profilePicture);
                             this.setState({
                                 user_name:result.first_name,

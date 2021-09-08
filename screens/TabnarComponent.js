@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import { StyleSheet, Image, View, Text, TouchableOpacity,Dimensions, AsyncStorage } from 'react-native';
-
+import NetInfo from "@react-native-community/netinfo";
 import Icon from 'react-native-vector-icons/Ionicons';
+import {URL,imageUrl} from '../api'
 
 Icon.loadFont();
 let {height,width} = Dimensions.get('screen')
@@ -36,15 +37,39 @@ export default class TabComponnet extends Component{
                 
                 
             ],
-            tabLabel: "Home"
+            tabLabel: "Home",
+            uid:'',
+            notifications: []
         }
+    }
+
+    getNotifications=(userId)=>{
+        NetInfo.fetch().then(state=>{
+            if(state.isConnected){
+                fetch(URL + "/get_notification_details_by_user_id",{
+                    
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+                        method:"POST",
+                        body:"user_id="+userId
+                }).then(response=>response.json())
+                .then(result=>{
+                    this.setState({
+                        notifications:result.notification_details
+                    })
+                }
+                    
+                    
+                ).catch(err=>console.log(err))
+            }
+        })
     }
 
     selectTab  =(value) =>{
     
        this.setState({
            tabLabel:value,
-           uid:''
        });
       
 
@@ -67,11 +92,12 @@ export default class TabComponnet extends Component{
         }
         AsyncStorage.getItem('user_id').then(result=>{
             if(result){
+                this.getNotifications(result);
+
                 this.setState({uid:result})
-                console.log("tabcom")
-                console.log(this.state.uid)
             }
         })
+
     }
 
     showTab = (value) =>{
@@ -184,6 +210,23 @@ export default class TabComponnet extends Component{
               
                         marginLeft:15
                     }} color="#ffcc80"  />
+                    {this.state.notifications && this.state.notifications.length > 1 ?
+                        <View style={{
+                            position:'absolute', 
+                            height: 15, 
+                            width: 15,
+                            borderRadius: 8, 
+                            backgroundColor: '#ffcc80', 
+                            justifyContent: 'center', 
+                            alignItems: 'center',
+                            right: 17,
+                            top: -5
+                            }}>
+                            <Text style={{ fontSize: 7, fontWeight: 'bold', color: 'white'}}>
+                                {this.state.notifications.length || 0} 
+                            </Text>
+                        </View>
+                    : null}
                     <Text style={{
                         
                          fontSize:10,

@@ -73,7 +73,7 @@ export default class Notification extends Component{
             if(state.isConnected){
                 this.setState({refreshing:true})
      
-        fetch("https://stcapp.stcwallpaper.com/backend/v1/get_notification_details_by_user_id",{
+        fetch(URL + "/get_notification_details_by_user_id",{
             
                 headers:{
                     "Content-Type":"application/x-www-form-urlencoded"
@@ -137,10 +137,9 @@ export default class Notification extends Component{
                 if(res=="jpg")this.props.navigation.navigate("preview",{uri:imageUrl+item.notification_doc_url})
             }
     }
-     
     
     render(){
-       
+        console.log('this.state.notifications=============>', this.state.notifications)
         return(
            <View style={{
                flex:1
@@ -213,15 +212,18 @@ export default class Notification extends Component{
                             <View style={{flex:1,backgroundColor:'#FFFFFF',flexDirection:'column'}}>
                                 
                             <TouchableOpacity  onPress={()=>this.Click(items.item)}>
-                               <Text style={{fontSize:14}}>{items.item.notification_title}</Text>
+                                <View style={{ flexDirection: 'row'}}>
+                                    <Text style={{fontSize:14}}>{items.item.notification_title}</Text>
+                                    <Text style={{fontSize:14}}> (#{items.item.post_job_order_id})</Text>
+                                </View>
                                <Text style={{fontSize:12}}>{items.item.notification_body}</Text>
                                <Text style={{fontSize:10}}>{items.item.date_time}</Text>
                                </TouchableOpacity>
                                
                                </View>
                                {items.item.notification_type=="Job_Details"?(
-                               <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50}}/>
-                               ):(<Image source={require('../assets/pdflogo.jpg')} style={{height:50,width:50}}/>)
+                               <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
+                               ):(<Image source={require('../assets/pdflogo.jpg')} style={{height:50,width:50, borderRadius: 25}}/>)
                                }
                               
                                    
