@@ -821,7 +821,9 @@ underlineColorAndroid={'transparent'}
                                 padding:10,           
                                 fontSize:16,
                                 color:"grey",
-                                textAlign:'left'}}>{this.state.prev_img_desc}</Text>
+                                textAlign:'left'}}
+                                selectable={true}
+                                >{this.state.prev_img_desc}</Text>
                     </View>
                          <View style={{
                             width:'100%',

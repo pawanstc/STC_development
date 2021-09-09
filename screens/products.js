@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 import NetInfo from "@react-native-community/netinfo";
 import { URL, imageUrl } from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
-import { downloadFile } from './helper/utility.js';
+import { downloadFile, showToastMessage } from './helper/utility.js';
 let {height,width} = Dimensions.get('screen')
 export default class ProductImage extends Component {
 
@@ -75,6 +75,14 @@ export default class ProductImage extends Component {
 
     }
 
+    onPressDownloadBrochure = () => {
+        if (this.props.route.params.catalogue_pdf && this.props.route.params.catalogue_pdf !== "0") {
+            downloadFile(imageUrl+this.props.route.params.catalogue_pdf)
+        } else {
+            showToastMessage('Brochure not available.')
+        }
+    }
+
     getSubCatelog = () => {
         let id = this.props.route.params.id;
 
@@ -88,7 +96,6 @@ export default class ProductImage extends Component {
                     body: "catlog_master_id=" + id
                 }).then(response => response.json())
                     .then(result => {
-                        console.log('result=============>', result.sub_catlog_list)
                         if (result.error === false) {
                             this.setState({
                                 subCateLog: result.sub_catlog_list,
@@ -417,7 +424,7 @@ export default class ProductImage extends Component {
           )
       } */}
 
-<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image,order_id:1})}>
+<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image,order_id:0})}>
                                 <ImageLoad
                                     isShowActivity={true}
                                     style={{
@@ -474,26 +481,6 @@ export default class ProductImage extends Component {
                                     </TouchableOpacity>
                                 </View>
                                 
-                                <View style={{ alignItems: 'center'}}>
-                                    <TouchableOpacity onPress={() => {
-                                        this.setState({isvisible: false});
-                                        downloadFile(imageUrl + "/" + this.state.image)
-                                    }}  >
-                                        <Icon name="download" size={30} color="black" style={{
-                                            padding: 8,
-                                            paddingLeft:8,
-                                            marginLeft:25
-                                        }} />
-
-                                        <Text style={{
-                                            fontSize: 14,
-                                            color: "black",
-                                            padding: 8,
-                                            marginLeft:8
-                                        }} >Download</Text>
-                                    </TouchableOpacity>
-                                </View>
-                               
                                 <View>
                                     <TouchableOpacity onPress={() => {
                                         this.setState({
@@ -530,6 +517,24 @@ export default class ProductImage extends Component {
                             </View>
                         </View>
                     </Modal>
+
+                    <TouchableOpacity style={{ 
+                        position: 'absolute', 
+                        backgroundColor: "#8B4513",
+                        paddingVertical: 10,
+                        paddingHorizontal: 15,
+                        borderRadius: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        bottom: 110
+                    }}
+                    onPress={this.onPressDownloadBrochure}>
+                        <Text style={{ 
+                            color: "#ffffff", 
+                            fontWeight: 'bold', 
+                            fontSize: 12
+                        }}>Download Brochure</Text>
+                    </TouchableOpacity>
 
                 </View>
             </View>

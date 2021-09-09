@@ -154,10 +154,10 @@ searchBarAppear = () =>{
    
  }
 
- subCatelogById = (id, name) =>{
+ subCatelogById = (id, catalogue_pdf) =>{
     this.props.navigation.navigate("products",{
         id:id,
-        name:name
+        catalogue_pdf
     })
  }
 
@@ -165,7 +165,7 @@ searchBarAppear = () =>{
      console.log(value);
      NetInfo.fetch().then(state =>{
         if(state.isConnected){
-           fetch("http://phpstack-525410-1692898.cloudwaysapps.com/backend/v1/get_catlog_details_by_catlog_master_name",{
+           fetch(URL + "/get_catlog_details_by_catlog_master_name",{
                headers:{
                    "Content-Type":"application/x-www-form-urlencoded"
                },
@@ -258,6 +258,7 @@ searchBarAppear = () =>{
                         method:"GET"
                     }).then(response => response.json())
                     .then(result =>{
+                        console.log('get_stock_details_wallpaper_platinum=======>', result)
                         if(result.error == false){
                             this.setState({
                                 cate_log_list:result.stock_catlog_list,
@@ -292,6 +293,7 @@ searchBarAppear = () =>{
                         method:"GET"
                     }).then(response => response.json())
                     .then(result =>{
+                        console.log('get_stock_details_wallpaper_economical=======>', result)
                         if(result.error == false){
                             this.setState({
                                 cate_log_list:result.stock_catlog_list,
@@ -321,7 +323,7 @@ searchBarAppear = () =>{
                 
             }).then(response => response.json())
             .then(result =>{
-                console.log(result)
+                console.log('get_customise_catlog_details_by_catlog_master_name========>', result)
                 if(result.error == false){
                     console.log(result);
                     this.setState({
@@ -364,7 +366,7 @@ searchBarAppear = () =>{
     inputRange:[0,1],
     outputRange:[0,1]
   });
- 
+
         return(
            <View style={{
                flexGrow:1
@@ -514,7 +516,7 @@ searchBarAppear = () =>{
                                 alignItems:'center',
                               
                             }} >
-                           <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id)} >
+                           <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf)} >
                            <ImageLoad
                                      isShowActivity={true}
         style={{  height:120,
@@ -543,7 +545,7 @@ searchBarAppear = () =>{
               
            }} >
                          <Button
-                        onPress={() => this.subCatelogById(items.item.id)}
+                        onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf)}
     touchSoundDisabled ={false}
       title="Explore"
       color="#62463e"
