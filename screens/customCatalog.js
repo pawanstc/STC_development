@@ -74,7 +74,6 @@ customCatelog = ()=>{
             .then(result =>{
                 console.log(result)
                 if(result.error == false){
-                    console.log(result);
                     this.setState({
                         catelog_list:result.catlog_list,
                        

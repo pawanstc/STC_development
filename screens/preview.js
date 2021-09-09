@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import RNFetchBlob from 'rn-fetch-blob';
 
 import { BackHandler,Modal,View,Text, Dimensions, TouchableOpacity} from 'react-native'
+import { downloadFile } from './helper/utility';
+
 function preview({navigation,route}) {
   let {height,width} = Dimensions.get('screen')
   
@@ -80,25 +82,23 @@ useEffect(() => {
    
     return (
        <Modal visible={true} onRequestClose={closeModal} transparent={true}>
-           <ImageViewer imageUrls={images}/>
-           {order_id!=0?(
-           <TouchableOpacity  onPress={()=>ShareImage()}>
-           <View  style={{width:width+5,height:60,borderColor:'#FFFFFF',borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
-           <Icon name="share" size={30} color="white" style={{
-                                            padding: 8,
-                                            paddingLeft:8,
-                                            marginLeft:15
-                                        }} />
-
-                                        <Text style={{
-                                            fontSize: 14,
-                                            color: "white",
-                                            padding: 8,
-                                            marginLeft:8
-                                        }} >Share</Text>
-             
-           </View>
-           </TouchableOpacity>):null}
+            <ImageViewer imageUrls={images}/>
+            {order_id!==0?(
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, backgroundColor: '#000000' }}>
+                <TouchableOpacity  onPress={()=>ShareImage()}>
+                  <View  style={{height:60,borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
+                    <Icon name="share" size={30} color="white" style={{ padding: 8, paddingLeft:8, marginLeft:15 }} />
+                    <Text style={{ fontSize: 14, color: "white", padding: 8, marginLeft:8 }} >Share</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={()=>downloadFile(uri)}>
+                  <View  style={{height:60,borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
+                    <Icon name="download" size={30} color="white" style={{ padding: 8, paddingLeft:8, marginLeft:15 }} />
+                    <Text style={{ fontSize: 14, color: "white", padding: 8, marginLeft:8 }} >Download</Text>
+                  </View>
+              </TouchableOpacity>
+            </View>
+           ):null}
        </Modal>
     )
     

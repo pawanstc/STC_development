@@ -8,6 +8,7 @@ import Modal from 'react-native-modal';
 import NetInfo from "@react-native-community/netinfo";
 import { URL, imageUrl } from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
+import { downloadFile } from './helper/utility.js';
 let {height,width} = Dimensions.get('screen')
 export default class ProductImage extends Component {
 
@@ -87,7 +88,7 @@ export default class ProductImage extends Component {
                     body: "catlog_master_id=" + id
                 }).then(response => response.json())
                     .then(result => {
-                     
+                        console.log('result=============>', result.sub_catlog_list)
                         if (result.error === false) {
                             this.setState({
                                 subCateLog: result.sub_catlog_list,
@@ -416,7 +417,7 @@ export default class ProductImage extends Component {
           )
       } */}
 
-<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image,order_id:0})}>
+<TouchableOpacity  onPress={()=>this.props.navigation.navigate('preview',{uri:imageUrl + "/" + this.state.image,order_id:1})}>
                                 <ImageLoad
                                     isShowActivity={true}
                                     style={{
@@ -473,7 +474,25 @@ export default class ProductImage extends Component {
                                     </TouchableOpacity>
                                 </View>
                                 
-                               
+                                <View style={{ alignItems: 'center'}}>
+                                    <TouchableOpacity onPress={() => {
+                                        this.setState({isvisible: false});
+                                        downloadFile(imageUrl + "/" + this.state.image)
+                                    }}  >
+                                        <Icon name="download" size={30} color="black" style={{
+                                            padding: 8,
+                                            paddingLeft:8,
+                                            marginLeft:25
+                                        }} />
+
+                                        <Text style={{
+                                            fontSize: 14,
+                                            color: "black",
+                                            padding: 8,
+                                            marginLeft:8
+                                        }} >Download</Text>
+                                    </TouchableOpacity>
+                                </View>
                                
                                 <View>
                                     <TouchableOpacity onPress={() => {
@@ -495,7 +514,7 @@ export default class ProductImage extends Component {
                                     }} >
                                         <Icon name="add-outline" size={30} color="black" style={{
                                             padding: 10,
-                                            paddingLeft: 6
+                                            paddingLeft: 12
                                         }} />
 
                                         <Text style={{

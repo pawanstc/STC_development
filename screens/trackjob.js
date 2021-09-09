@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions, Alert,ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions, Alert,ActivityIndicator, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
@@ -45,7 +45,7 @@ export default class TrackJob extends Component{
         this.state = {
             status:[],
             currentPosition:0,
-
+            user_id: '',
         }
     }
 
@@ -53,22 +53,28 @@ export default class TrackJob extends Component{
         if(width>height){
             let temp = width;
             width= height;
-            height=temp;
-           
-            
+            height=temp; 
         }
         this.statusGet();
+        AsyncStorage.getItem('user_id').then((result) => {
+            this.setState({
+              user_id: result,
+            })
+            console.log('user_id============>', this.state.user_id)
+        });
     }
 
     statusGet = () =>{
         NetInfo.fetch().then(state =>{
             if(state.isConnected){
-                fetch(URL+"/get_order_status_by_order_id",{
+                // fetch(URL+"/get_order_status_by_order_id",{
+                fetch(URL+"/get_all_log_by_user_id",{
                     headers:{
                         "Content-Type":"application/x-www-form-urlencoded"
                     },
                     method:"POST",
-                    body:"order_id="+ this.props.route.params.order_id
+                    body:"order_id="+ this.props.route.params.order_id+
+                    "&user_id="+this.state.user_id
                 }).then(response  => response.json())
                 .then(result =>{
                   console.log(result);
