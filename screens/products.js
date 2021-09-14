@@ -202,10 +202,24 @@ export default class ProductImage extends Component {
                             paddingLeft: 20,
                             color: "black",
                             backgroundColor: "#FFF",
-                            marginRight: 45
+                            marginRight: 20
                         }}
                         placeholderTextColor="#000"
                     />
+
+                    <TouchableOpacity activeOpacity={0.95} onPress={() => this.onPressDownloadBrochure()}
+                    style={{ 
+                        marginRight: 20, 
+                        marginTop: 23, 
+                        backgroundColor: 'white', 
+                        height: 30, 
+                        width: 30, 
+                        borderRadius: 15,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }} >
+                        <Icon name="download" color="#62463e" size={20} />
+                    </TouchableOpacity>
 
                        <TouchableOpacity onPress={null}>
                     <Icon style={{
@@ -518,23 +532,6 @@ export default class ProductImage extends Component {
                         </View>
                     </Modal>
 
-                    <TouchableOpacity style={{ 
-                        position: 'absolute', 
-                        backgroundColor: "#8B4513",
-                        paddingVertical: 10,
-                        paddingHorizontal: 15,
-                        borderRadius: 20,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        bottom: 110
-                    }}
-                    onPress={this.onPressDownloadBrochure}>
-                        <Text style={{ 
-                            color: "#ffffff", 
-                            fontWeight: 'bold', 
-                            fontSize: 12
-                        }}>Download Brochure</Text>
-                    </TouchableOpacity>
 
                 </View>
             </View>
