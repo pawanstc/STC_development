@@ -210,7 +210,7 @@ export default class ProductImage extends Component {
 
                     <TouchableOpacity activeOpacity={0.95} onPress={() => this.onPressDownloadBrochure()}
                     style={{ 
-                        marginRight: 20, 
+                        marginRight: 5, 
                         marginTop: 15, 
                         backgroundColor: 'white', 
                         height: 42, 
