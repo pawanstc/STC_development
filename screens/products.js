@@ -202,7 +202,7 @@ export default class ProductImage extends Component {
                             paddingLeft: 20,
                             color: "black",
                             backgroundColor: "#FFF",
-                            marginRight: 20
+                            marginRight: 10
                         }}
                         placeholderTextColor="#000"
                     />
@@ -210,15 +210,19 @@ export default class ProductImage extends Component {
                     <TouchableOpacity activeOpacity={0.95} onPress={() => this.onPressDownloadBrochure()}
                     style={{ 
                         marginRight: 20, 
-                        marginTop: 23, 
+                        marginTop: 15, 
                         backgroundColor: 'white', 
-                        height: 30, 
-                        width: 30, 
-                        borderRadius: 15,
+                        height: 42, 
+                        width: 42, 
+                        borderRadius: 21,
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
                     }} >
-                        <Icon name="download" color="#62463e" size={20} />
+                        <Image source={require("../assets/downloadIcon.png")} style={{
+                            height:36,
+                            width:36,
+                            borderRadius: 12,
+                        }}/>
                     </TouchableOpacity>
 
                        <TouchableOpacity onPress={null}>
