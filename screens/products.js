@@ -182,8 +182,9 @@ export default class ProductImage extends Component {
 
                     <TouchableOpacity activeOpacity={0.95} onPress={() => this.props.navigation.goBack(null)} >
                         <Icon name="arrow-back" style={{
-                            margin: 23,
-
+                            marginVertical: 23,
+                            marginLeft: 23,
+                            marginRight: 10
                         }} color="#FFF" size={20} />
                     </TouchableOpacity>
                     <TextInput
