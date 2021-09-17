@@ -1,4 +1,4 @@
-import { Image, PermissionsAndroid, Platform, Alert, Linking } from 'react-native'
+import { Image, PermissionsAndroid, Platform, Linking } from 'react-native'
 import CameraRoll from '@react-native-community/cameraroll'
 import Toast from 'react-native-simple-toast'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -9,6 +9,10 @@ const isIOS = Platform.OS === 'ios'
 export const showToastMessage = (message, duration) => {
     const toastDuration = duration === 'long' ? Toast.LONG : Toast.SHORT
     return Toast.show(message, toastDuration)
+}
+
+async function requestPermission(permission) {
+  return PermissionsAndroid.request(permission)
 }
 
 export async function checkAndroidHardwarePermission(permission) {
