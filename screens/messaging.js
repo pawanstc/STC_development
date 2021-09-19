@@ -33,10 +33,10 @@ export default class Messaging extends Component {
     this.state = {
       message: [],
       user_id: '',
-      profile_image: '',
       refresh: false,
       sendMessage: [],
       ip_address: '',
+      flowDirection: this.props.route.params.flowDirection,
     };
   }
 
@@ -47,10 +47,6 @@ export default class Messaging extends Component {
       height=temp;
     }
     
-    AsyncStorage.getItem('profilePicture').then((result) => {
-      console.log('profileImage======', result)
-      this.setState({ profile_image: result })
-    });
     this.getUserType();
     this.getMessage();
     NetworkInfo.getIPV4Address().then((ipv4Address) => {
@@ -72,19 +68,41 @@ export default class Messaging extends Component {
 
       NetInfo.fetch().then((state) => {
         if (state.isConnected) {
-          fetch(URL + '/get_message_list_by_order_id', {
+          let api = 'get_message_list_by_order_id';
+          let body = 'order_id='+this.props.route.params.order_id;
+          if (this.state.flowDirection === 'previewImage') {
+            api = 'get_all_preview_remarks_by_order_id';
+            body = 'post_job_approved_image_id='+this.props.route.params.preview_image_id;
+          }
+          fetch(URL+'/'+api, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
             method: 'POST',
-            body: 'order_id=' + this.props.route.params.order_id,
+            body: body,
           })
             .then((response) => response.json())
             .then((result) => {
-              console.log(result.message_list);
               if (result.error == false) {
-                this.setState({
-                  message: result.message_list.reverse(),
+                let messageList = result.message_list;
+                if (this.state.flowDirection === 'previewImage') {
+                  messageList = result.remarks_details && 
+                                result.remarks_details
+                                .map(item => {
+                                  return {
+                                    _id: item.id,
+                                    createdAt: item.created_date_time,
+                                    text: item.message,
+                                    user: {
+                                      _id: item.user_id,
+                                      name: item.username
+                                    }
+                                  }
+                                })
+
+                }
+              this.setState({
+                  message: messageList && messageList.reverse() || [],
                   refresh: false,
                 });
               } else {
@@ -101,28 +119,50 @@ export default class Messaging extends Component {
 
   onSend = (messages) => {
     GiftedChat.append(messages,messages)
-    console.log(URL+'/insert_message_order_wise');
     NetInfo.fetch().then((state) => {
       if (state.isConnected) {
+        let api = 'insert_message_order_wise';
+        let body = 'user_id=' +
+                    this.state.user_id +
+                    '&order_id=' +
+                    this.props.route.params.order_id +
+                    '&message=' +
+                    messages[0].text +
+                    '&created_by_ip=' +
+                    this.state.ip_address;
+        if (this.state.flowDirection === 'previewImage') {
+          api = 'send_preview_remarks_by_id';
+          body = 'post_job_order_id='+
+                  this.props.route.params.order_id+
+                  '&post_job_approved_image_id='+
+                  this.props.route.params.preview_image_id+
+                  '&user_id='+
+                  this.state.user_id+
+                  '&message=' +
+                  messages[0].text
+        }
         fetch(
-          URL+'/insert_message_order_wise',
+          URL+'/'+api,
           {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded', 
             },
             method: 'POST',
-            body:
-              'user_id=' +
-              this.state.user_id +
-              '&order_id=' +
-              this.props.route.params.order_id +
-              '&message=' +
-              messages[0].text +
-              '&created_by_ip=' +
-              this.state.ip_address,
+            body: body,
+              // 'user_id=' +
+              // this.state.user_id +
+              // '&order_id=' +
+              // this.props.route.params.order_id +
+              // '&message=' +
+              // messages[0].text +
+              // '&created_by_ip=' +
+              // this.state.ip_address,
           },
         )
-          .then((response) => response.text())
+          .then((response) => {
+            this.getMessage()
+            response.text()
+          })
           .then((result) => {
             if (result.error == false) {
               this.getMessage();
@@ -197,7 +237,9 @@ export default class Messaging extends Component {
             <Icon name="arrow-back" color="#FFF" size={18} style={{ margin:20 }} />
           </TouchableOpacity>
 
-          <Text style={{ textAlign:"center", color:"#FFF", fontSize: 18, margin:20 }} > Job ID: { this.props.route.params.show_id_order }</Text>
+          <Text style={{ textAlign:"center", color:"#FFF", fontSize: 18, margin:20 }} > 
+            {`${this.state.flowDirection === 'previewImage' ? 'Preview Image ID: '+this.props.route.params.preview_image_id : 'Job ID: '+this.props.route.params.show_id_order}`}
+          </Text>
 
           <TouchableOpacity activeOpacity={2} onPress={() => this.getMessage()} >
             <View style={{ height:30, width:20, margin:20 }}>

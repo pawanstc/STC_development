@@ -26,8 +26,11 @@
     import Sound from 'react-native-sound';
     import TrackPlayer from 'react-native-track-player';
     import Textarea from 'react-native-textarea';
+    import { getImagesWithoutSize } from 'react-native-image-view/src/utils';
+    import moment from 'moment';
     let urlsDomain = 'https://stcapp.stcwallpaper.com/';
     let {height, width} = Dimensions.get('screen');
+
     export default class postViewJob extends Component {
     constructor(props) {
     super(props);
@@ -160,6 +163,7 @@
         .then((response) => response.json())
         .then((result) => {
             if (result) {
+                console.log('jobDetails===========>', result)
                 this.setState({
                 distributer_remarks: result.distributor_preview_description,
                 dealer_remarks: result.dealer_preview_description,
@@ -793,7 +797,7 @@
                     Order date:
                     </Text>
                     <Text style={{fontSize: 12, padding: 4}}>
-                    {this.state.jobDetail.date_time}
+                    {moment(this.state.jobDetail.date_time).format('LLL')}
                     </Text>
                 </View>
                 <View style={{flexDirection: 'row'}}>
@@ -1122,7 +1126,9 @@
                                         <ScrollView
                                             horizontal={true}
                                             showsHorizontalScrollIndicator={true}>
-                                            <TouchableOpacity style={{ alignItems: 'center', marginBottom: 10}} onPress={() => {}}>
+                                            <TouchableOpacity style={{ alignItems: 'center', marginBottom: 10}} onPress={() => {
+                                                this.props.navigation.navigate('chatAgainstIndividualPreviews', {item: { ...item, ...this.state.jobDetail, user_type: this.state.user_type, status: this.state.status }});
+                                            }}>
                                                 <Image
                                                 source={{
                                                     uri: imageUrl + '/' + item.upload_image_url,

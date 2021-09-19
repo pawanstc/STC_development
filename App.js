@@ -86,6 +86,7 @@ import UpdatePassword from './screens/changePassword.js';
 import SearchComponent from './screens/searchBarComponent.js';
 import PreviewJobView from './screens/postViewJob.js';
 import fixOppoTextCutOff from './screens/handlecutoff'
+import ChatPreviews from './screens/chatAgainstIndividualPreview';
 export default class App extends Component {
  
     componentDidMount(){
@@ -315,6 +316,9 @@ const config = {
     headerShown:false
   }} />
   <Stack.Screen name="postViewJob" component={PreviewJobView} options={{
+    headerShown:false
+  }} />
+  <Stack.Screen name="chatAgainstIndividualPreviews" component={ChatPreviews} options={{
     headerShown:false
   }} />
         </Stack.Navigator>
