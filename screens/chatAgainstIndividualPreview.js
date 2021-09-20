@@ -380,7 +380,6 @@ export default class chatAgainstIndividualPreviews extends Component {
                                 </Text>
                             </View>
                             <TouchableOpacity onPress={() => {
-                                console.log('hello remark')
                                 this.props.navigation.navigate('messaging',{ 
                                     flowDirection: 'previewImage', 
                                     preview_image_id: this.state.jobDetail.preview_image_id,

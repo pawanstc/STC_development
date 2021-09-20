@@ -1,4 +1,4 @@
-import { Image, PermissionsAndroid, Platform, Linking } from 'react-native'
+import { Image, PermissionsAndroid, Platform, Linking, AsyncStorage } from 'react-native'
 import CameraRoll from '@react-native-community/cameraroll'
 import Toast from 'react-native-simple-toast'
 import RNFetchBlob from 'rn-fetch-blob'
@@ -67,14 +67,11 @@ export const downloadFile = (filePathUrl, cbUrl) => {
         config(options)
           .fetch('GET', uri)
           .then(res => {
-              if (res.data) {
-                if (cbUrl) {
-                    cbUrl(res.data);
-                } else {
-                    showToastMessage(`${res.data}`)
-                }
-              }
+            if (res.data) {
+              showToastMessage(`${res.data}`);
+            }
           })
+          .catch(error => console.log(error))
       }
     } else {
       showToastMessage('no permission')

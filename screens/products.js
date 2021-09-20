@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, FlatList, TextInput, ScrollView, Alert, Share, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, FlatList, TextInput, ScrollView, Alert, Share, ActivityIndicator, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImageBlurLoading from 'react-native-image-blur-loading'
 import Modal from 'react-native-modal';
@@ -44,8 +44,9 @@ export default class ProductImage extends Component {
             data_loader: false,
             pattern_no:"",
             query: '',
-             fullData:[],
-             searchtext:''
+            fullData:[],
+            searchtext:'',
+            isLoading: false
         }
         this.arrayholder =[];
     }
@@ -72,12 +73,16 @@ export default class ProductImage extends Component {
             
         }
         this.getSubCatelog();
-
     }
 
     onPressDownloadBrochure = () => {
         if (this.props.route.params.catalogue_pdf && this.props.route.params.catalogue_pdf !== "0") {
-            downloadFile(imageUrl+this.props.route.params.catalogue_pdf)
+            this.setState({ isLoading: true });
+            downloadFile(imageUrl+this.props.route.params.catalogue_pdf);
+            setTimeout(() => {
+                this.setState({ isLoading: false });
+                Alert.alert('File download successfully.')
+            }, 5000)
         } else {
             showToastMessage('Brochure not available.')
         }
@@ -208,7 +213,7 @@ export default class ProductImage extends Component {
                         placeholderTextColor="#000"
                     />
 
-                    <TouchableOpacity activeOpacity={0.95} onPress={() => this.onPressDownloadBrochure()}
+                    <View
                     style={{ 
                         marginRight: 5, 
                         marginTop: 15, 
@@ -219,12 +224,18 @@ export default class ProductImage extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }} >
-                        <Image source={require("../assets/downloadIcon.png")} style={{
-                            height:36,
-                            width:36,
-                            borderRadius: 12,
-                        }}/>
-                    </TouchableOpacity>
+                        {this.state.isLoading ? (
+                            <ActivityIndicator size={20} color="#62463e" />
+                        ) : (
+                            <TouchableOpacity activeOpacity={0.95} onPress={() => this.onPressDownloadBrochure()}>
+                                <Image source={require("../assets/downloadIcon.png")} style={{
+                                    height:36,
+                                    width:36,
+                                    borderRadius: 12,
+                                }}/>
+                            </TouchableOpacity>
+                        )}
+                    </View>
 
                        <TouchableOpacity onPress={null}>
                     <Icon style={{

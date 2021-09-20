@@ -28,6 +28,8 @@
     import Textarea from 'react-native-textarea';
     import { getImagesWithoutSize } from 'react-native-image-view/src/utils';
     import moment from 'moment';
+    import {Picker} from '@react-native-picker/picker';
+
     let urlsDomain = 'https://stcapp.stcwallpaper.com/';
     let {height, width} = Dimensions.get('screen');
 
@@ -68,7 +70,11 @@
         previewImageApprovedByDelear: {},
         previewImageRejectedByDelear: {},
         previewImageApprovedByDistributor: {},
-        previewImageRejectedByDistributor: {}
+        previewImageRejectedByDistributor: {},
+        paper_list: [],
+        paperType: [],
+        mediaType: '',
+        selectedPaper: ''
     };
     }
 
@@ -153,26 +159,7 @@
             })
             .catch((error) => console.log(error));
 
-        fetch(URL + '/get_job_details_by_order_id', {
-            headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            method: 'POST',
-            body: 'post_job_order_id=' + this.state.order_id,
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            if (result) {
-                console.log('jobDetails===========>', result)
-                this.setState({
-                distributer_remarks: result.distributor_preview_description,
-                dealer_remarks: result.dealer_preview_description,
-                job_id: result.order_id,
-                jobDetail: result,
-                });
-            }
-        })
-        .catch((err) => console.log('error', err));
+        this.getJobDetail()
 
         // get Preview images
         fetch(URL + '/get_all_previews_by_order_id', {
@@ -190,7 +177,6 @@
         .then((result) => {
             if (result) {
                 const { preview_details } = result;
-                console.log('get_all_previews_by_order_id==========>', preview_details);
                 if (preview_details && preview_details.length) {
                     const previewImageApprovedByDelear = preview_details.filter(item => item.approved_by_dealer === 1);
                     const previewImageRejectedByDelear = preview_details.filter(item => item.approved_by_dealer === 2);
@@ -207,6 +193,117 @@
         })
         .catch((err) => console.log('error', err));
     }
+
+    getJobDetail = () => {
+        fetch(URL + '/get_job_details_by_order_id', {
+            headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            method: 'POST',
+            body: 'post_job_order_id=' + this.state.order_id,
+        })
+        .then((response) => response.json())
+        .then((result) => {
+            if (result) {
+                console.log('job Details===========>', result, result.mediaTypeId, result.paperTypeId)
+                this.setState({
+                    distributer_remarks: result.distributor_preview_description,
+                    dealer_remarks: result.dealer_preview_description,
+                    job_id: result.order_id,
+                    jobDetail: result,
+                    mediaType: result.mediaTypeId,
+                    selectedPaper: result.paperTypeId
+                });
+                this.getPaperType(result.mediaTypeId)
+            }
+        })
+        .catch((err) => console.log('error', err));
+    }
+
+    updateMediaType = () => {
+        fetch(URL+"/change_media_by_order_id",{
+			headers:{
+				"Content-Type":"application/x-www-form-urlencoded"
+			},
+			method:"POST",
+			body:"user_id="+
+                this.state.user_id+
+                "&order_id="+
+                this.state.order_id+
+                "&media_type="+
+                this.state.mediaType+
+                "&paper_type="+
+                this.state.selectedPaper
+		}).then(response => response.json())
+		.then(result =>{
+			if(result.error == false){
+                this.setState({ modalvisibale: false })
+				this.getJobDetail();
+                Alert.alert(
+                    "Data updated successfully!"
+                );
+			}
+		}).catch(error =>{
+			console.log(error);
+		})
+    }
+
+    getPaperType = (value) =>{
+		// this.setState({
+		// 	mediaType:value,
+		// 	paperType:[]
+		// })
+		fetch(URL+"/get_paper_details_by_id",{
+			headers:{
+				"Content-Type":"application/x-www-form-urlencoded"
+			},
+			method:"POST",
+			body:"id="+ value
+		}).then(response => response.json())
+		.then(result =>{
+			if(result.error == false){
+				this.setState({
+					paperType:result.paper_list,
+					
+				});
+			}
+		}).catch(error =>{
+			console.log(error);
+		})
+	}
+
+    getSheet = ()=>{
+		NetInfo.fetch().then(state =>{
+			if(state.isConnected){
+				fetch(URL+"/get_sheet_list",{
+					headers:{
+						"Content-Type":"application/x-www-form-urlencoded"
+					},
+					method:"GET",
+
+				}).then(response => response.json())
+				.then(result =>{
+					if(result.error == false){
+						this.setState({
+							paper_list:result.sheet_list
+						})
+					}else{
+						Alert.alert(
+							"No data Found"
+						);
+					}
+				}).catch(error =>{
+					console.log(error);
+				});
+			}else{
+				Alert.alert(
+					"Network Error",
+					"Please check Your Internet connection"
+				)
+			}
+		})
+	}
+
     setOptions = () => {
     if (this.state.status && this.state.user_type) {
         switch (this.state.user_type) {
@@ -345,7 +442,6 @@
     };
 
     get_prevImage = () => {
-    console.log('heloo preview');
     fetch(URL + '/get_approve_image_by_order_id', {
         headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -356,7 +452,6 @@
         .then((response) => response.json())
         .then((result) => {
         if (result) {
-            console.log('get_approve_image_by_order_id==========>', result);
             this.setState({
             prev_img: result.upload_image_url,
             prev_img_desc: result.description,
@@ -370,222 +465,222 @@
         });
     };
 
-    setStatus = () => {
-    console.log('setting status');
-    console.log(this.state.user_type);
-    if (this.state.user_type == 'Dealer') {
-        this.setState({status: 10});
-        console.log(this.state.status);
-    } else if (this.state.user_type == 'Distributor')
-        this.setState({status: 8});
-    };
-    rejectStatus = () => {
-    if (this.state.user_type == 'Dealer') this.setState({status: 11});
-    else if (this.state.user_type == 'Distributor') this.setState({status: 12});
-    };
+    // setStatus = () => {
+    // console.log('setting status');
+    // console.log(this.state.user_type);
+    // if (this.state.user_type == 'Dealer') {
+    //     this.setState({status: 10});
+    //     console.log(this.state.status);
+    // } else if (this.state.user_type == 'Distributor')
+    //     this.setState({status: 8});
+    // };
+    // rejectStatus = () => {
+    // if (this.state.user_type == 'Dealer') this.setState({status: 11});
+    // else if (this.state.user_type == 'Distributor') this.setState({status: 12});
+    // };
 
-    rejectJob = () => {
-    this.rejectStatus();
-    console.log('Rejecting');
-    AsyncStorage.getItem('user_id').then((result) => {
-        if (result) {
-        console.log(result);
+    // rejectJob = () => {
+    // this.rejectStatus();
+    // console.log('Rejecting');
+    // AsyncStorage.getItem('user_id').then((result) => {
+    //     if (result) {
+    //     console.log(result);
 
-        NetInfo.fetch()
-            .then((state) => {
-            if (state.isConnected) {
-                fetch(URL + '/order_accep_reject_by_order_id', {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                method: 'POST',
-                body:
-                    'order_id=' +
-                    this.state.order_id +
-                    '&user_id=' +
-                    result +
-                    '&created_by_ip=' +
-                    this.state.ip_address +
-                    '&status_id=' +
-                    this.state.status +
-                    '&description=' +
-                    this.state.remark,
-                })
-                .then((response) => response.json())
-                .then((result) => {
-                    console.log(result);
-                    if (!result.error) {
-                    Alert.alert(
-                        'Success Message',
-                        'Preview Change/Reject Requested',
-                    );
-                    this.props.navigation.replace('onGoingJob');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    Alert.alert('Error Message', {error});
-                });
-            } else {
-                Alert.alert(
-                'Network Error',
-                'Please check your Internet connection',
-                );
-            }
-            })
-            .catch((err) => console.log(err));
-        }
-    });
-    };
-    levelCheck = () => {
-    let level = false;
-    if (this.state.status == 9 && this.state.user_type == 'Dealer')
-        level = true;
-    if (this.state.status == 10 && this.state.user_type == 'Distributor')
-        level = true;
-    return level;
-    };
+    //     NetInfo.fetch()
+    //         .then((state) => {
+    //         if (state.isConnected) {
+    //             fetch(URL + '/order_accep_reject_by_order_id', {
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //             },
+    //             method: 'POST',
+    //             body:
+    //                 'order_id=' +
+    //                 this.state.order_id +
+    //                 '&user_id=' +
+    //                 result +
+    //                 '&created_by_ip=' +
+    //                 this.state.ip_address +
+    //                 '&status_id=' +
+    //                 this.state.status +
+    //                 '&description=' +
+    //                 this.state.remark,
+    //             })
+    //             .then((response) => response.json())
+    //             .then((result) => {
+    //                 console.log(result);
+    //                 if (!result.error) {
+    //                 Alert.alert(
+    //                     'Success Message',
+    //                     'Preview Change/Reject Requested',
+    //                 );
+    //                 this.props.navigation.replace('onGoingJob');
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //                 Alert.alert('Error Message', {error});
+    //             });
+    //         } else {
+    //             Alert.alert(
+    //             'Network Error',
+    //             'Please check your Internet connection',
+    //             );
+    //         }
+    //         })
+    //         .catch((err) => console.log(err));
+    //     }
+    // });
+    // };
+    // levelCheck = () => {
+    // let level = false;
+    // if (this.state.status == 9 && this.state.user_type == 'Dealer')
+    //     level = true;
+    // if (this.state.status == 10 && this.state.user_type == 'Distributor')
+    //     level = true;
+    // return level;
+    // };
 
-    approveJob = () => {
-    if (!this.levelCheck) {
-        Alert.alert('Error', 'You are not allowed to approve this job yet!');
-        return;
-    } else {
-        this.setStatus();
+    // approveJob = () => {
+    // if (!this.levelCheck) {
+    //     Alert.alert('Error', 'You are not allowed to approve this job yet!');
+    //     return;
+    // } else {
+    //     this.setStatus();
 
-        AsyncStorage.getItem('user_id').then((result) => {
-        if (result) {
-            console.log(result);
-            NetInfo.fetch().then((state) => {
-            if (state.isConnected) {
-                fetch(URL + '/order_accep_reject_by_order_id', {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                method: 'POST',
-                body:
-                    'order_id=' +
-                    this.state.order_id +
-                    '&user_id=' +
-                    result +
-                    '&created_by_ip=' +
-                    this.state.ip_address +
-                    '&status_id=' +
-                    this.state.status +
-                    '&description=' +
-                    this.state.remark,
-                })
-                .then((response) => response.json())
-                .then((result) => {
-                    console.log(this.state.order_id);
-                    console.log('status update result');
-                    console.log(result);
-                    if (!result.error) {
-                    this.setState({
-                        button_show: 'No',
-                    });
+    //     AsyncStorage.getItem('user_id').then((result) => {
+    //     if (result) {
+    //         console.log(result);
+    //         NetInfo.fetch().then((state) => {
+    //         if (state.isConnected) {
+    //             fetch(URL + '/order_accep_reject_by_order_id', {
+    //             headers: {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //             },
+    //             method: 'POST',
+    //             body:
+    //                 'order_id=' +
+    //                 this.state.order_id +
+    //                 '&user_id=' +
+    //                 result +
+    //                 '&created_by_ip=' +
+    //                 this.state.ip_address +
+    //                 '&status_id=' +
+    //                 this.state.status +
+    //                 '&description=' +
+    //                 this.state.remark,
+    //             })
+    //             .then((response) => response.json())
+    //             .then((result) => {
+    //                 console.log(this.state.order_id);
+    //                 console.log('status update result');
+    //                 console.log(result);
+    //                 if (!result.error) {
+    //                 this.setState({
+    //                     button_show: 'No',
+    //                 });
 
-                    Alert.alert(
-                        'Success Message',
-                        'Preview Approved Successfully',
-                    );
-                    this.props.navigation.replace('onGoingJob');
-                    } else {
-                    console.log(result.error);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    Alert.alert('Error Message', {error});
-                });
-            } else {
-                Alert.alert(
-                'Network Error',
-                'Please check your Internet connection',
-                );
-            }
-            });
-        } else {
-        }
-        });
-    }
-    };
+    //                 Alert.alert(
+    //                     'Success Message',
+    //                     'Preview Approved Successfully',
+    //                 );
+    //                 this.props.navigation.replace('onGoingJob');
+    //                 } else {
+    //                 console.log(result.error);
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //                 Alert.alert('Error Message', {error});
+    //             });
+    //         } else {
+    //             Alert.alert(
+    //             'Network Error',
+    //             'Please check your Internet connection',
+    //             );
+    //         }
+    //         });
+    //     } else {
+    //     }
+    //     });
+    // }
+    // };
 
-    rejectJobConf = () => {
-    this.setState({approve_action: false});
-    this.setState({modalvisibale: true});
-    };
+    // rejectJobConf = () => {
+    // this.setState({approve_action: false});
+    // this.setState({modalvisibale: true});
+    // };
 
-    rejectJobAlert = () => {
-    Alert.alert(
-        'Change/Reject Preview',
-        'Are You Sure You Want To Change/Reject This Preview?',
-        [
-        {
-            text: 'Ok',
-            onPress: () => this.rejectJob(),
-        },
-        {
-            text: 'Cancel',
-            onPress: () => null,
-        },
-        ],
-    );
-    };
-    approveJobconf = () => {
-    this.setState({approve_action: true});
+    // rejectJobAlert = () => {
+    // Alert.alert(
+    //     'Change/Reject Preview',
+    //     'Are You Sure You Want To Change/Reject This Preview?',
+    //     [
+    //     {
+    //         text: 'Ok',
+    //         onPress: () => this.rejectJob(),
+    //     },
+    //     {
+    //         text: 'Cancel',
+    //         onPress: () => null,
+    //     },
+    //     ],
+    // );
+    // };
+    // approveJobconf = () => {
+    // this.setState({approve_action: true});
 
-    this.setState({modalvisibale: true});
-    };
-    approveJobAlert = () => {
-    if (this.state.user_type == 'Distributor') {
-        Alert.alert(
-        'Approve Preview',
-        `Are You Sure You Want To Approve This Preview?\n \nNote: Once approved order cannot be cancelled.`,
-        [
-            {
-            text: 'Ok',
-            onPress: () => this.approveJob(),
-            },
-            {
-            text: 'Cancel',
-            onPress: () => null,
-            },
-        ],
-        );
-    } else {
-        Alert.alert(
-        'Approve Preview',
-        'Are You Sure You Want To Approve This Preview?',
-        [
-            {
-            text: 'Ok',
-            onPress: () => this.approveJob(),
-            },
-            {
-            text: 'Cancel',
-            onPress: () => null,
-            },
-        ],
-        );
-    }
-    };
-    checkAction = (flag) => {
-    if (flag) {
-        if (this.state.remark === 'No remarks') {
-        Alert.alert('Note!', 'Please add remarks!');
-        return;
-        }
-    }
+    // this.setState({modalvisibale: true});
+    // };
+    // approveJobAlert = () => {
+    // if (this.state.user_type == 'Distributor') {
+    //     Alert.alert(
+    //     'Approve Preview',
+    //     `Are You Sure You Want To Approve This Preview?\n \nNote: Once approved order cannot be cancelled.`,
+    //     [
+    //         {
+    //         text: 'Ok',
+    //         onPress: () => this.approveJob(),
+    //         },
+    //         {
+    //         text: 'Cancel',
+    //         onPress: () => null,
+    //         },
+    //     ],
+    //     );
+    // } else {
+    //     Alert.alert(
+    //     'Approve Preview',
+    //     'Are You Sure You Want To Approve This Preview?',
+    //     [
+    //         {
+    //         text: 'Ok',
+    //         onPress: () => this.approveJob(),
+    //         },
+    //         {
+    //         text: 'Cancel',
+    //         onPress: () => null,
+    //         },
+    //     ],
+    //     );
+    // }
+    // };
+    // checkAction = (flag) => {
+    // if (flag) {
+    //     if (this.state.remark === 'No remarks') {
+    //     Alert.alert('Note!', 'Please add remarks!');
+    //     return;
+    //     }
+    // }
 
-    this.setState({modalvisibale: false});
+    // this.setState({modalvisibale: false});
 
-    if (this.state.approve_action) {
-        this.approveJobAlert();
-    } else {
-        this.rejectJobAlert();
-    }
-    };
+    // if (this.state.approve_action) {
+    //     this.approveJobAlert();
+    // } else {
+    //     this.rejectJobAlert();
+    // }
+    // };
 
     render() {
     return (
@@ -593,7 +688,7 @@
         style={{
             flex: 1,
         }}>
-        <Modal
+        {/* <Modal
             backdropOpacity={0.3}
             isVisible={this.state.modalvisibale}
             onBackButtonPress={() => {
@@ -691,7 +786,7 @@
                 </TouchableOpacity>
             </View>
             </View>
-        </Modal>
+        </Modal> */}
 
         <View
             style={{
@@ -863,7 +958,7 @@
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     }}>
-                    <View style={{flexDirection: 'row', width: '70%'}}>
+                    <View style={{flexDirection: 'row', width: '68%'}}>
                     <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
                         Media type:
                     </Text>
@@ -872,7 +967,10 @@
                     </Text>
                     </View>
                     <TouchableOpacity
-                    onPress={() => {}}
+                    onPress={() => {
+                        this.getSheet();
+                        this.setState({ modalvisibale: true });
+                    }}
                     style={{
                         width: '20%',
                         marginRight: 8,
@@ -1457,6 +1555,131 @@
             </ScrollView>
             </View>
         </View>
+            <Modal
+                backdropOpacity={0.3}
+                isVisible={this.state.modalvisibale}
+                onBackButtonPress={() => {
+                    this.setState({modalvisibale: false});
+                }}>
+                <View style={{flex: 1}}>
+                    <View
+                        style={{
+                        height: 380,
+                        width: '88%',
+                        marginTop: 200,
+                        alignSelf: 'center',
+                        backgroundColor: 'white',
+                        elevation: 5,
+                        borderRadius: 5,
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({modalvisibale: false});
+                            }}
+                            style={{width: 50, height: 50, alignSelf: 'flex-end'}}>
+                            <Icon
+                                name="x-circle"
+                                size={20}
+                                color="#62463e"
+                                style={{alignSelf: 'flex-end', padding: 10}}
+                            />
+                        </TouchableOpacity>
+                        <Text
+                            style={{
+                                color: '#62463e',
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                paddingHorizontal: 20,
+                                paddingBottom: 20
+
+                            }}>
+                            Change Media Type
+                        </Text>
+                        <View
+                          style={{
+                            height: 35,
+                            width: '90%',
+                            borderRadius: 6,
+                            borderWidth: 0.6,
+                            borderColor: '#62463e',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            alignSelf: 'center',
+                            marginVertical: 10
+                          }}>
+                          <Picker
+                            selectedValue={this.state.mediaType}
+                            style={{height: 50, width: '100%'}}
+                            onValueChange={(value) => {
+                              this.setState({
+                                mediaType: value,
+                              })
+                              this.getPaperType(value)
+                            }}>
+                            {this.state.paper_list.map((value) => (
+                              <Picker.Item
+                                label={value.sheet_name.substring(0, 18)}
+                                value={value.id}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+                        <View
+                          style={{
+                            height: 35,
+                            width: '90%',
+                            borderRadius: 6,
+                            borderWidth: 0.6,
+                            borderColor: '#62463e',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            alignSelf: 'center',
+                            marginVertical: 10
+                          }}>
+                          <Picker
+                            selectedValue={this.state.selectedPaper}
+                            style={{height: 50, width: '100%'}}
+                            onValueChange={(value) =>
+                              this.setState({
+                                selectedPaper: value,
+                              })
+                            }>
+                            {this.state.paperType.map((value) => (
+                              <Picker.Item
+                                label={value.paper_type_name.substring(0, 18)}
+                                value={value.id}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.updateMediaType();
+                            }}
+                            style={{
+                                height: 40,
+                                // width: 80,
+                                backgroundColor: '#62463e',
+                                alignSelf: 'center',
+                                alignContent: 'center',
+                                marginBottom: 10,
+                                marginTop: 50,
+                                paddingHorizontal: 20,
+                                borderRadius: 20
+                            }}>
+                            <Text
+                                style={{
+                                color: 'white',
+                                alignSelf: 'center',
+                                fontWeight: 'bold',
+                                marginTop: 10,
+                                }}>
+                                Update Media Type
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
     }
