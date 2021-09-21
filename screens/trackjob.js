@@ -67,8 +67,8 @@ export default class TrackJob extends Component{
     statusGet = () =>{
         NetInfo.fetch().then(state =>{
             if(state.isConnected){
-                // fetch(URL+"/get_order_status_by_order_id",{
-                fetch(URL+"/get_all_log_by_user_id",{
+                fetch(URL+"/get_order_status_by_order_id",{
+                // fetch(URL+"/get_all_log_by_user_id",{
                     headers:{
                         "Content-Type":"application/x-www-form-urlencoded"
                     },

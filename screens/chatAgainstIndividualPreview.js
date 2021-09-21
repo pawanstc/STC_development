@@ -272,7 +272,7 @@ export default class chatAgainstIndividualPreviews extends Component {
                         <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.goBack(null)}>
                             <Icons name="arrow-back" style={{ margin: 20, }} size={18} color="#FFFF" />
                         </TouchableOpacity>
-                        <Text style={{ textAlign: 'center', fontSize: 18, color: '#FFF', margin: 15, }}>Preview Image</Text>
+                        <Text style={{ textAlign: 'center', fontSize: 18, color: '#FFF', margin: 15, }} selectable={true}>Preview Image</Text>
                         <View style={{ height: 40, width: 60, }} />
                         
                     </View>
@@ -280,10 +280,10 @@ export default class chatAgainstIndividualPreviews extends Component {
                     <View style={{ height: height, width: width - 45, borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: '#fff', alignSelf: 'center', top: -100, paddingTop: 20 }}>
                         <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={{ paddingBottom: 150 }}>
                             <View style={{borderBottomWidth: 0.5, paddingBottom: 10}}>
-                                <Text style={{ textAlign: 'center', fontSize: 18, color: '#62463e', marginTop: 10 }}>
+                                <Text style={{ textAlign: 'center', fontSize: 18, color: '#62463e', marginTop: 10 }} selectable={true}>
                                     Job id: {this.state.jobDetail.order_id}
                                 </Text>
-                                <Text style={{ fontSize: 15, color: '#62463e', marginTop: 10, marginLeft: 10 }}>
+                                <Text style={{ fontSize: 15, color: '#62463e', marginTop: 10, marginLeft: 10 }} selectable={true}>
                                     Status: {this.state.jobDetail.status_name}
                                 </Text>
                             </View>
@@ -336,6 +336,7 @@ export default class chatAgainstIndividualPreviews extends Component {
                             <TouchableOpacity style={{ alignItems: 'center', marginBottom: 10, zIndex:9999}} onPress={() => {
                                 this.props.navigation.navigate('preview', {
                                     uri: imageUrl+this.state.jobDetail.upload_image_url,
+                                    order_id: this.state.jobDetail.order_id
                                 });
                                 }}>
                                 <Image
@@ -356,25 +357,25 @@ export default class chatAgainstIndividualPreviews extends Component {
                             </TouchableOpacity>
                             
                             <View style={{flexDirection: 'row', paddingLeft: 10}}>
-                                <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
+                                <Text style={{fontSize: 12, color: 'grey', padding: 4}} selectable={true}>
                                 Status:
                                 </Text>
-                                <Text style={{fontSize: 12, padding: 4}}>
+                                <Text style={{fontSize: 12, padding: 4}} selectable={true}>
                                     {this.state.jobDetail.status_name}
                                 </Text>
                             </View>
                             <View style={{flexDirection: 'row', paddingLeft: 10}}>
-                                <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
+                                <Text style={{fontSize: 12, color: 'grey', padding: 4}} selectable={true}>
                                 Date Time:
                                 </Text>
-                                <Text style={{fontSize: 12, padding: 4}}>
+                                <Text style={{fontSize: 12, padding: 4}} selectable={true}>
                                     {moment(this.state.jobDetail.date_time).format('LLL')}
                                 </Text>
                             </View>
                             <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
-                                <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
+                                <Text style={{fontSize: 12, color: 'grey', padding: 4}} selectable={true}>
                                 Description:&nbsp;&nbsp;
-                                    <Text style={{fontSize: 12, color: 'black' }}>
+                                    <Text style={{fontSize: 12, color: 'black' }} selectable={true}>
                                         {this.state.jobDetail.description || 'N/A'}
                                     </Text>
                                 </Text>
