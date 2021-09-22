@@ -35,8 +35,7 @@ useEffect(() => {
     
 }, [])
 
-   const {uri,order_id} = route.params
-   console.log(uri,order_id)
+   const {uri,isShowShare = false, isShowDownload = false, message = ''} = route.params
    let ext ='jpg';
    let type = 'image/jpg';
    
@@ -58,7 +57,7 @@ useEffect(() => {
      
     
     let shareOptions = {
-      message:` Hi, Please check the preview of the order id:${order_id}`,
+      message:message,
       url:uri
     }
   
@@ -80,22 +79,24 @@ useEffect(() => {
     return (
        <Modal visible={true} onRequestClose={closeModal} transparent={true}>
             <ImageViewer imageUrls={images}/>
-            {order_id!==0?(
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, backgroundColor: '#000000' }}>
+                {isShowShare ?
                 <TouchableOpacity  onPress={()=>ShareImage()}>
                   <View  style={{height:60,borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
                     <Icon name="share" size={30} color="white" style={{ padding: 8, paddingLeft:8, marginLeft:15 }} />
                     <Text style={{ fontSize: 14, color: "white", padding: 8, marginLeft:8 }} >Share</Text>
                   </View>
                 </TouchableOpacity>
+                : null}
+                {isShowDownload ?
                 <TouchableOpacity  onPress={()=>downloadFile(uri)}>
                   <View  style={{height:60,borderWidth:0.4,alignSelf:'baseline',alignItems:'center',backgroundColor:'#000000',justifyContent:'space-around'}}>
                     <Icon name="download" size={30} color="white" style={{ padding: 8, paddingLeft:8, marginLeft:15 }} />
                     <Text style={{ fontSize: 14, color: "white", padding: 8, marginLeft:8 }} >Download</Text>
                   </View>
               </TouchableOpacity>
+              : null}
             </View>
-           ):null}
        </Modal>
     )
     

@@ -1151,7 +1151,8 @@
                                 <TouchableOpacity onPress={() => {
                                     this.props.navigation.navigate('preview', {
                                         uri: imageUrl+items.item.image_url,
-                                        order_id: this.state.job_id,
+                                        isShowShare: true,
+                                        isShowDownload: true
                                     });
                                     }}>
                                     <Image
@@ -1290,7 +1291,8 @@
                             onPress={() => {
                             this.props.navigation.navigate('preview', {
                                 uri: imageUrl+this.state.previewImageApprovedByDistributor.upload_image_url,
-                                order_id: this.state.job_id,
+                                isShowShare: true,
+                                isShowDownload: true
                             });
                             }}>
                             <Image
@@ -1347,7 +1349,8 @@
                             onPress={() => {
                             this.props.navigation.navigate('preview', {
                                 uri: imageUrl+this.state.previewImageApprovedByDelear.upload_image_url,
-                                order_id: this.state.job_id,
+                                isShowShare: true,
+                                isShowDownload: true
                             });
                             }}>
                             <Image
@@ -1406,7 +1409,8 @@
                         onPress={() => {
                         this.props.navigation.navigate('preview', {
                             uri: imageUrl+this.state.prev_img,
-                            order_id: this.state.job_id,
+                            isShowShare: true,
+                            isShowDownload: true
                         });
                         }}>
                         <Image

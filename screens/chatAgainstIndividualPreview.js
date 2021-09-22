@@ -336,7 +336,9 @@ export default class chatAgainstIndividualPreviews extends Component {
                             <TouchableOpacity style={{ alignItems: 'center', marginBottom: 10, zIndex:9999}} onPress={() => {
                                 this.props.navigation.navigate('preview', {
                                     uri: imageUrl+this.state.jobDetail.upload_image_url,
-                                    order_id: this.state.jobDetail.order_id
+                                    message: `Hi, Please check the preview of the order id:${this.state.jobDetail.order_id}`,
+                                    isShowShare: true,
+                                    isShowDownload: true
                                 });
                                 }}>
                                 <Image
