@@ -37,8 +37,8 @@ useEffect(() => {
 
    const {uri,order_id} = route.params
    console.log(uri,order_id)
-   let ext ='jpg'
-   
+   let ext ='jpg';
+   let type = 'image/jpg';
    
    const images=[{
        url:uri
@@ -46,10 +46,13 @@ useEffect(() => {
    function ShareImage() {
      if(uri.endsWith('png')){
        ext='png'
+       type='image/png'
      }else if(uri.endsWith('jpg')){
-       ext='jpg'
+       ext='jpeg'
+       type='image/jpeg'
      }else if(uri.endsWith('jpeg')){
        ext='jpeg'
+       type='image/jpeg'
      }
      
      
@@ -63,19 +66,13 @@ useEffect(() => {
     RNFetchBlob.config({ fileCache: false })
     .fetch('GET', uri)
     .then(resp => {
-        shareOptions.url='data:image/'+ext+';base64,'+resp.data
-      
-      if(ext=='jpg'){const type='image/jpeg'
-    shareOptions={...shareOptions,type}}
-    console.log(shareOptions)
+        shareOptions.url='data:image/'+ext+';base64,'+resp.data;
+        shareOptions={...shareOptions,type}
     })
-    
     .then(()=>
-     
-       Share.open(shareOptions)
+      Share.open(shareOptions)
     )
-    .catch(err => {
-      
+    .catch(err => { 
       console.log(err);
     })
   }
