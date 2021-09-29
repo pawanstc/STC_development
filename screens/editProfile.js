@@ -17,6 +17,7 @@ import {
   ImageComponent,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MIIcon from 'react-native-vector-icons/MaterialIcons';
 import TabContainer from '../screens/TabnarComponent';
 import ImgToBase64 from 'react-native-image-base64';
 import ImagePicker from 'react-native-image-picker';
@@ -24,7 +25,7 @@ import {NetworkInfo} from 'react-native-network-info';
 import NetInfo from '@react-native-community/netinfo';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Picker} from '@react-native-picker/picker';
-import {imageUrl, URL} from '../api.js';
+import {imageUrl, URL, FileUploadURL} from '../api.js';
 import emailValidator from '../screens/Validator';
 
 import * as Progress from 'react-native-progress';
@@ -197,7 +198,7 @@ export default class EditProfile extends Component {
         });
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://stcapp.stcwallpaper.com/backend/uploads.php');
+        xhr.open('POST', FileUploadURL+'/uploads.php');
         xhr.setRequestHeader('Contnet-Type', 'multipart/form-data');
         xhr.send(form);
 
@@ -313,7 +314,7 @@ export default class EditProfile extends Component {
 
       const xhr = new XMLHttpRequest();
 
-      xhr.open('POST', 'https://stcapp.stcwallpaper.com/backend/uploads.php');
+      xhr.open('POST', FileUploadURL+'/uploads.php');
       xhr.setRequestHeader('Content-Type', 'multipart/form-data');
       xhr.send(form);
       console.log(xhr.responseText);
@@ -735,31 +736,23 @@ export default class EditProfile extends Component {
                       </View>
                     )}
                     <TouchableOpacity
-                      onPress={() => this.openCamera()}
+                      onPress={() => {
+                        this.openCamera()
+                      }}
                       style={{
-                        position: 'absolute',
-                        top: 120,
-                        left: 80,
-                        right: 0,
-                      }}>
-                      <View
-                        style={{
-                          height: 30,
-                          width: 30,
-                          borderRadius: 10,
-                          borderWidth: 0.3,
-                          borderRadiusColor: 'black',
+                          width: '20%',
+                          marginRight: 8,
+                          height: 25,
+                          width: 25,
+                          borderRadius: 15,
+                          backgroundColor: '#62463e',
                           justifyContent: 'center',
                           alignItems: 'center',
-                        }}>
-                        <Image
-                          source={require('../assets/edit3.png')}
-                          style={{
-                            height: 20,
-                            width: 20,
-                          }}
-                        />
-                      </View>
+                          position: 'absolute',
+                          top: 120,
+                          left: 95
+                      }}>
+                      <MIIcon name="edit" color="white" size={15} />
                     </TouchableOpacity>
 
                     <View
@@ -998,6 +991,8 @@ export default class EditProfile extends Component {
 
                       {this.state.office_address ? (
                         <TextInput
+                          multiline={true}
+                          numberOfLines={3}
                           defaultValue={this.state.office_address.toString()}
                           onChangeText={(value) =>
                             this.setState({
@@ -1006,11 +1001,10 @@ export default class EditProfile extends Component {
                           }
                           placeholder="Enter Office Address"
                           style={{
-                            height: 45,
+                            maxHeight: 80,
                             width: '90%',
                             borderRadius: 6,
                             borderWidth: 0.6,
-                            //marginTop: 20,
                             borderColor: '#62463e',
                             padding: 12,
                           }}
@@ -1287,7 +1281,7 @@ export default class EditProfile extends Component {
                           }}
                         />
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                           onPress={() => this.openCamera2()}
                           style={{
                             position: 'absolute',
@@ -1313,6 +1307,25 @@ export default class EditProfile extends Component {
                               }}
                             />
                           </View>
+                        </TouchableOpacity> */}
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.openCamera2()
+                          }}
+                          style={{
+                              width: '20%',
+                              marginRight: 8,
+                              height: 25,
+                              width: 25,
+                              borderRadius: 15,
+                              backgroundColor: '#62463e',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              position: 'absolute',
+                              top: 50,
+                              left: 80
+                          }}>
+                          <MIIcon name="edit" color="white" size={15} />
                         </TouchableOpacity>
                       </View>
                     ) : (
@@ -1344,31 +1357,23 @@ export default class EditProfile extends Component {
                         )}
 
                         <TouchableOpacity
-                          onPress={() => this.openCamera2()}
+                          onPress={() => {
+                            this.openCamera2()
+                          }}
                           style={{
-                            position: 'absolute',
-                            top: 40,
-                            left: 60,
-                            right: 0,
-                          }}>
-                          <View
-                            style={{
-                              height: 30,
-                              width: 30,
-                              borderRadius: 10,
-                              borderWidth: 0.3,
-                              borderRadiusColor: 'black',
+                              width: '20%',
+                              marginRight: 8,
+                              height: 25,
+                              width: 25,
+                              borderRadius: 15,
+                              backgroundColor: '#62463e',
                               justifyContent: 'center',
                               alignItems: 'center',
-                            }}>
-                            <Image
-                              source={require('../assets/edit3.png')}
-                              style={{
-                                height: 20,
-                                width: 20,
-                              }}
-                            />
-                          </View>
+                              position: 'absolute',
+                              top: 50,
+                              left: 80
+                          }}>
+                          <MIIcon name="edit" color="white" size={15} />
                         </TouchableOpacity>
                       </View>
                     )}

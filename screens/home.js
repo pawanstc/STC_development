@@ -224,11 +224,8 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                 }).then(response => response.json())
                 .then(result =>{
                     
-                   console.log(result);
+                //    console.log('result=========================>', result);
                     if(result.error == false){
-                        
-                       
-
                         if(result.profilePicture == null  && result.profilePicture == ""){
                             this.setState({
                                 user_name:result.first_name,
@@ -250,7 +247,6 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                         }
                         else if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")||result.profilePicture.includes(".jpeg")){
                             AsyncStorage.setItem("profilePicture", result.profilePicture);
-                            console.log(result.profilePicture);
                             this.setState({
                                 user_name:result.first_name,
                                 profile_image:result.profilePicture,
@@ -297,173 +293,70 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
       })
    }
     render(){
-        
-    console.log("company_logo"+this.state.company_logo);
+        const profileImage = this.state.company_logo || this.state.profile_image
+        // console.log("profileImage ============>"+imageUrl+"/"+profileImage);
         return(
-        
-            <View style={{
-                flex:1,
-              justifyContent:"center"
-            }} >
-           
-                <View style={{
-               flex:1,
-               height:height,
-              
-                alignItems:"center",
-    
-             
-             }} >
-             <StatusBar barStyle="light-content" backgroundColor="#62463e" />
- 
-             <View style={ styles.headerBar } >
-
-
-
-
-             <View style={{
-                 width:width*0.75
-             }}  >
-                {
-                    this.state.user_name !="" || this.state.user_name != null ? (
-                     <Text numberOfLines={1} style={{
-                         color:"#FFF",
-                         margin:11,
-                         fontSize:18,
-                         fontFamily:'Roboto-Bold',
-                         marginTop:23,
-                         
-                     }} > {this.state.timeFormate}, {this.state.user_name}! </Text>
-                    ) :(
-                       <View style={{
-                           height:40,
-                           width:width -85
-                       }} >
-                           </View>
-                    )
-                }
-             
-             {/* <Text style={{
-                 fontWeight:"bold",
-                 textAlign:"center",
-                 fontSize:17,
-                 color:"#FFF"
-             }} >{this.state.loginTime}</Text> */}
-             </View>
-              {/* <View>
-              <Moment>{this.state.time}</Moment>
-              </View> */}
-            {
-                 this.state.company_logo === ""    ? (
-                  <View style={styles.logo}>
-                  
-                      {
-                            this.state.profile_image!="" ? (
-                             
-                                <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                                <Image source={{uri:imageUrl+"/"+this.state.profile_image}}
-                                
-                         style={{
-                             height:50,
-                             width:50,
-                             borderRadius:40,
-                             
-                            
-                         }}
-                         isVisable={true}
-                         loadingStyle={{ size: 'large', color: '#62463e' }}
-                         borderRadius={40}
-                         />
-                        </TouchableOpacity>
-
-
-                          ) :(
-                            <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                            {/* <Image source={{uri:imageUrl+"/"+this.state.profile_image}}
-                            style={{
-                            height:50,
-                            width:50,
-                            borderRadius:50/2,
-                            margin:10,
-                            
-                            }}
-                            /> */}
-                             <Image source={require("../assets/userProfile.png")}
-                                    style={{
-                                        height:50,
-                                        width:50,
-                                        borderRadius:40,
-                                        
-                                        
-                                        }}
-                                    loadingStyle={{ size: 'large', color: '#62463e' }}
-                                    borderRadius={40}
+            <View style={{ flex:1, justifyContent:"center"}} >
+                <View style={{ flex:1, height:height, alignItems:"center" }} >
+                    <StatusBar barStyle="light-content" backgroundColor="#62463e" />
+                    <View style={ styles.headerBar }>
+                        <View style={{ paddingLeft: 20 }}>
+                            {this.state.user_name !="" || this.state.user_name != null ? (
+                                <Text numberOfLines={1} style={{
+                                    color:"#FFF",
+                                    margin:11,
+                                    fontSize:18,
+                                    fontFamily:'Roboto-Bold',
+                                    marginTop:23,
                                     
-                                />
-                            </TouchableOpacity>
-                          )
-                      }
-                      </View>
-                ) :(
-                    <View style={styles.logo}>
-                    <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                    {/* <Image source={{uri:imageUrl+"/"+this.state.company_logo}}
-             style={{
-                 height:50,
-                 width:50,
-                 borderRadius:50/2,
-                 margin:10,
-                
-             }}
-             /> */}
-             <Image
-                                    isShowActivity={false}
-                                    style={{
-                                        height:50,
-                                        width:50,
-                                        borderRadius:25,
-                                       
-                                       
-                                    }}
-                                    loadingStyle={{ size: 'large', color: '#62463e' }}
-                                    borderRadius={40}
-                                    source={{uri:imageUrl+"/"+this.state.company_logo}}
-                                />
-            </TouchableOpacity>
+                                }}> 
+                                    {this.state.timeFormate}, {this.state.user_name}!
+                                </Text>
+                            ) : (
+                                <View style={{ height:40, width:width -85 }}></View>
+                            )}
+                        </View>
+                        <TouchableOpacity style={styles.logo} activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
+                            <Image source={profileImage ? {uri:imageUrl+"/"+profileImage} : require("../assets/userProfile.png")}    
+                                style={{
+                                    height:50,
+                                    width:50,
+                                    borderRadius:40, 
+                                }}
+                                isVisable={true}
+                                loadingStyle={{ size: 'large', color: '#62463e' }}
+                                borderRadius={40}
+                            />
+                        </TouchableOpacity>
                     </View>
-                )
-            }
-
-        
-                 </View>
- 
-            <View style={{
-                height:height * 0.178,
-                width:width -40,
-                backgroundColor:"#FFF",
-                borderRadius:8,
-                backgroundColor:"#FFF",
-                position:"absolute",
-                top:83,
-                left:22,
-                right:22,
-                justifyContent:"center",
-                alignItems:"center",
-                elevation:10
-            }} >
-               <Text style={{
-                       textAlign:"left",
-                      
-                       fontSize:16,
-                    
-                       fontWeight:"normal",
-                       padding:15, 
-                       lineHeight:20,
-                      
-                       fontFamily:"OpenSans-Italic - Copy"
-                   }} >Welcome to STC Wallpaper Mobile App. Now you can check stock, order custom design and do lot more with your finger tips.
-                   </Text>
-            </View>
+                    <View style={{
+                        height:height * 0.178,
+                        width:width -40,
+                        backgroundColor:"#FFF",
+                        borderRadius:8,
+                        backgroundColor:"#FFF",
+                        position:"absolute",
+                        top:83,
+                        left:22,
+                        right:22,
+                        justifyContent:"center",
+                        alignItems:"center",
+                        elevation:10
+                        }}>
+                        <Text style={{
+                            textAlign:"left",
+                            
+                            fontSize:16,
+                            
+                            fontWeight:"normal",
+                            padding:15, 
+                            lineHeight:20,
+                            
+                            fontFamily:"OpenSans-Italic - Copy"
+                        }} >
+                            Welcome to STC Wallpaper Mobile App. Now you can check stock, order custom design and do lot more with your finger tips.
+                        </Text>
+                    </View>
               <View style={{
                 flex:4,
                 justifyContent:"center",
@@ -648,8 +541,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
         flexDirection:"row",
-        
-
+        justifyContent: 'space-between',
     },
     buttonTabView:{
         height:height,
@@ -695,6 +587,6 @@ const styles = StyleSheet.create({
     },
     logo:{
         marginTop:10,
-        marginLeft:'12%'
+        paddingHorizontal: 20
     }
 })

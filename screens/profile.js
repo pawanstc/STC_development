@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image,TouchableOpacity, Text, Dimensions, PermissionsAndroid, AsyncStorage, Alert, StatusBar, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image,TouchableOpacity, Text, Dimensions, PermissionsAndroid, AsyncStorage, Alert, StatusBar, ScrollView, ActivityIndicator, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {URL, imageUrl} from '../api.js';
 import TabContainer from '../screens/TabnarComponent';
@@ -69,18 +69,17 @@ export default class Profile extends Component{
                   }).then(response => response.json())
                   .then(result =>{
                       if(result){
-                          console.log(result);
+                        // console.log("Profile details=====================>", result);
                           
-
-                        if(result.profilePicture == null && result.profilePicture == ""){
+                        if(result.profilePicture === null && result.profilePicture === ""){
                           this.setState({
                             profile_image:""
                           })
-                        }else if(result.profilePicture == ""){
+                        }else if(result.profilePicture === ""){
                             this.setState({
                                 profile_image:""
                               })
-                        }else if(result.profilePicture == null){
+                        }else if(result.profilePicture === null){
                             this.setState({
                                 profile_image:""
                               })
@@ -90,18 +89,18 @@ export default class Profile extends Component{
                                 this.setState({
                                   profile_image:result.profilePicture
                                 })}else this.setState({profile_image:""})
-                              }
+                        }
                          
 
-                      if(result.company_logo == null &&  result.company_logo ==""){
+                      if(result.company_logo === null &&  result.company_logo ===""){
                         this.setState({
                           companyLogo:""
                         })
-                      }else if(result.company_logo == ""){
+                      }else if(result.company_logo === ""){
                         this.setState({
                             companyLogo:""
                           })
-                      }else if(result.company_logo == null){
+                      }else if(result.company_logo === null){
                         this.setState({
                             companyLogo:""
                           })
@@ -211,7 +210,7 @@ export default class Profile extends Component{
                                         }).then(response => response.json())
                                         .then(async result =>{ 
                                             
-                                            if(result.error == false){
+                                            if(result.error === false){
                                                 await AsyncStorage.removeItem("user_id");
                                                 await AsyncStorage.removeItem("device_id");
                                                 this.props.navigation.reset({
@@ -305,7 +304,7 @@ export default class Profile extends Component{
                                !this.state.companyLogo   ?(
                                    <View>
                                        {
-                                           this.state.profile_image == "" ? (
+                                           this.state.profile_image === "" ? (
                                             <Image source={require("../assets/userProfile.png")} style={{
                                                 height:60,
                                                 width:60,
@@ -640,7 +639,7 @@ export default class Profile extends Component{
                                     </View>
                                   
                                   <View style={{
-                                      height:45,
+                                    //   height:45,
                                       width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
@@ -648,11 +647,13 @@ export default class Profile extends Component{
                                       justifyContent:'center',
                                       alignSelf:"flex-start"
                                   }} >
-                                      <Text style={{
-                                          textAlign:"left",
-                                          padding:12,
-                                          fontWeight:"bold"
-                                      }} >{ this.state.office_address }</Text>
+                                      <TextInput
+                                        multiline={true}
+                                        editable={false}
+                                        numberOfLines={2}
+                                        onChangeText={() => {}}
+                                        value={this.state.office_address}
+                                        style={{ color: 'black' }} />
                                     
                                   </View>
                                      </View>

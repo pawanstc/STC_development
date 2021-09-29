@@ -20,6 +20,7 @@ import {
     UIActivityIndicator,
     WaveIndicator,
   } from 'react-native-indicators';
+import index from 'uuid-random';
 
   let {height,width} = Dimensions.get('screen')
  
@@ -68,31 +69,26 @@ export default class Notification extends Component{
    
     }
     getNotifications=()=>{
-        
         NetInfo.fetch().then(state=>{
             if(state.isConnected){
-                this.setState({refreshing:true})
-     
-        fetch(URL + "/get_notification_details_by_user_id",{
-            
-                headers:{
-                    "Content-Type":"application/x-www-form-urlencoded"
-                },
-                method:"POST",
-                body:"user_id="+this.state.userid
-        }).then(response=>response.json())
-        .then(result=>{
-            this.setState({
-                notifications:result.notification_details
-            })
-            console.log(this.state.notifications)
-        }
-            
-            
-        ).catch(err=>console.log(err))
-    }
-    this.setState({refreshing:false})
-    })
+                AsyncStorage.getItem('role').then(role=>{
+                    fetch(URL + "/get_all_notification_details",{
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+                        method:"POST",
+                        body:"user_id="+this.state.userid+"&role="+role
+                    }).then(response=>response.json())
+                    .then(result=>{
+                        this.setState({
+                            notifications:result.notification_details
+                        })
+                        console.log(this.state.notifications)
+                    }).catch(err=>console.log(err))
+                })
+            }
+            this.setState({refreshing:false})
+        })
     }
     
 
@@ -203,46 +199,30 @@ export default class Notification extends Component{
                     
                     data={this.state.notifications}
                     renderItem={(items) => {
-                        return(
+                        console.log('items==================>', items.item)
+                        return (
                             <View style={{paddingLeft:20,paddingRight:20,paddingBottom:10}}>
-                            <View style={{height:65,width:width-80,flexDirection:'row'}}>
-                                
-                                      
-                               
-                            <View style={{flex:1,backgroundColor:'#FFFFFF',flexDirection:'column'}}>
-                                
-                            <TouchableOpacity  onPress={()=>this.Click(items.item)}>
-                                <View style={{ flexDirection: 'row'}}>
-                                    <Text style={{fontSize:14}}>{items.item.notification_title}</Text>
-                                    <Text style={{fontSize:14}}> (#{items.item.post_job_order_id})</Text>
+                                <View style={{height:65,width:width-80,flexDirection:'row'}}>
+                                    <View style={{flex:1,backgroundColor:'#FFFFFF',flexDirection:'column'}}>
+                                        <TouchableOpacity  onPress={()=>this.Click(items.item)}>
+                                            <View style={{ flexDirection: 'row'}}>
+                                                <Text style={{fontSize:14}}>{items.item.notification_title}</Text>
+                                                <Text style={{fontSize:14}}>Order id: (#{items.item.order_id})</Text>
+                                            </View>
+                                            <Text style={{fontSize:12}}>{items.item.notification_body}</Text>
+                                            <Text style={{fontSize:10}}>{items.item.date_time}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {/* {items.item.notification_type=="Job_Details"?( */}
+                                        <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
+                                    {/* ):(
+                                        <Image source={require('../assets/pdflogo.jpg')} style={{height:50,width:50, borderRadius: 25}}/>
+                                    )} */}
                                 </View>
-                               <Text style={{fontSize:12}}>{items.item.notification_body}</Text>
-                               <Text style={{fontSize:10}}>{items.item.date_time}</Text>
-                               </TouchableOpacity>
-                               
-                               </View>
-                               {items.item.notification_type=="Job_Details"?(
-                               <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
-                               ):(<Image source={require('../assets/pdflogo.jpg')} style={{height:50,width:50, borderRadius: 25}}/>)
-                               }
-                              
-                                   
-                                   
-                              
-                               </View>
-                               
-                                  </View>
-                            
-                            
-                            
-                          
-
-                         
-                         
-                          
-                        )}
-                }
-                    keyExtractor={(item) => item.date_time}
+                            </View>
+                        )
+                    }}
+                    keyExtractor={(_index) => index.toString()}
                     refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getNotifications}/>}
                     scrollToOverflowEnabled={true}              
                     ListFooterComponent={<View style={{marginBottom:150,marginTop:10}}></View>}

@@ -194,6 +194,24 @@
         .catch((err) => console.log('error', err));
     }
 
+    isEditableMediaType = (order_status_id) => {
+        switch(order_status_id && order_status_id.toString()) {
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '6':
+            case '8':
+            case '9':
+            case '10':
+            case '11':
+            case '12':
+                return true;
+            default: 
+                return false;
+        }
+    }
+
     getJobDetail = () => {
         fetch(URL + '/get_job_details_by_order_id', {
             headers: {
@@ -205,7 +223,7 @@
         .then((response) => response.json())
         .then((result) => {
             if (result) {
-                console.log('job Details===========>', result, result.mediaTypeId, result.paperTypeId)
+                console.log('job Details===========>', result)
                 this.setState({
                     distributer_remarks: result.distributor_preview_description,
                     dealer_remarks: result.dealer_preview_description,
@@ -878,7 +896,7 @@
                     {`Pattern: ` + this.state.jobDetail.pattern_no}
                 </Text>
                 </View>
-                <View style={{borderBottomWidth: 0.5, paddingVertical: 10}}>
+                <View style={{borderBottomWidth: 0.5, paddingVertical: 10, paddingHorizontal: 5}}>
                 <View style={{flexDirection: 'row'}}>
                     <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
                     Status:
@@ -908,7 +926,7 @@
                     Distributor:
                     </Text>
                     <Text style={{fontSize: 12, padding: 4}}>
-                    {this.state.jobDetail.user_role_id === '2'
+                    {this.state.jobDetail.user_role_id && this.state.jobDetail.user_role_id.toString() === '2'
                         ? this.state.jobDetail.first_name +
                         ' ' +
                         this.state.jobDetail.last_name
@@ -922,7 +940,7 @@
                     Dealer:
                     </Text>
                     <Text style={{fontSize: 12, padding: 4}}>
-                    {this.state.jobDetail.user_role_id === '3'
+                    {this.state.jobDetail.user_role_id && this.state.jobDetail.user_role_id.toString() === '3'
                         ? this.state.jobDetail.first_name +
                         ' ' +
                         this.state.jobDetail.last_name
@@ -966,23 +984,25 @@
                         {this.state.jobDetail.media}
                     </Text>
                     </View>
-                    <TouchableOpacity
-                    onPress={() => {
-                        this.getSheet();
-                        this.setState({ modalvisibale: true });
-                    }}
-                    style={{
-                        width: '20%',
-                        marginRight: 8,
-                        height: 25,
-                        width: 25,
-                        borderRadius: 15,
-                        backgroundColor: '#62463e',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    <MIIcon name="edit" color="white" size={15} />
-                    </TouchableOpacity>
+                    {this.isEditableMediaType(this.state.jobDetail.order_status_id) ?
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.getSheet();
+                                this.setState({ modalvisibale: true });
+                            }}
+                            style={{
+                                width: '20%',
+                                marginRight: 8,
+                                height: 25,
+                                width: 25,
+                                borderRadius: 15,
+                                backgroundColor: '#62463e',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <MIIcon name="edit" color="white" size={15} />
+                        </TouchableOpacity>
+                    : null}
                 </View>
                 </View>
                 <View style={{elevation: 2, marginBottom: 4}}>

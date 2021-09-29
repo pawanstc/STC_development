@@ -16,16 +16,21 @@ export default class chatAgainstIndividualPreviews extends Component {
     constructor(props) {
         super(props);
 
+        console.log('this.props.route.params.status==============>', this.props.route.params.item.status);
+
         this.state = {
             modalVisible: false,
             isDisabled: false,
+            isApproveDisabled: false,
+            isRejectDisabled: false,
             jobDetail: this.props.route.params.item,
             approve_action: false,
             modalvisibale: false,
             remark: 'No remarks',
             ip_address: '',
             user_type: 'unknown',
-            status: this.props.route.params.status
+            status: this.props.route.params.item.status,
+            role: ''
         };
     }
 
@@ -35,24 +40,17 @@ export default class chatAgainstIndividualPreviews extends Component {
             ip_address: ipv4Address,
             });
         });
+        AsyncStorage.getItem('role').then(role=>{
+            this.setState({ role });
+        });
         console.log('jobDetails==============>', this.state.jobDetail)
-    };
-
-    rejectJobConf = () => {
-        this.setState({approve_action: false});
-        this.setState({modalvisibale: true});
-    };
-
-    approveJobconf = () => {
-        this.setState({approve_action: true});
-        this.setState({modalvisibale: true});
     };
 
     levelCheck = () => {
         let level = false;
-        if (this.state.status == 9 && this.state.user_type == 'Dealer')
+        if (this.state.status === 9 && this.state.user_type == 'Dealer')
             level = true;
-        if (this.state.status == 10 && this.state.user_type == 'Distributor')
+        if (this.state.status === 10 && this.state.user_type == 'Distributor')
             level = true;
         return level;
     };
@@ -80,7 +78,7 @@ export default class chatAgainstIndividualPreviews extends Component {
             NetInfo.fetch()
                 .then((state) => {
                 if (state.isConnected) {
-                    fetch(URL + '/order_accep_reject_by_order_id', {
+                    fetch(URL + '/reject_preview_image_by_id', {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
@@ -90,12 +88,10 @@ export default class chatAgainstIndividualPreviews extends Component {
                         this.state.jobDetail.order_id +
                         '&user_id=' +
                         result +
-                        '&created_by_ip=' +
-                        this.state.ip_address +
-                        '&status_id=' +
-                        this.state.status +
-                        '&description=' +
-                        this.state.remark,
+                        '&role=' +
+                        this.state.role +
+                        '&post_job_approved_image_id=' +
+                        this.state.jobDetail.preview_image_id,
                     })
                     .then((response) => response.json())
                     .then((result) => {
@@ -105,7 +101,7 @@ export default class chatAgainstIndividualPreviews extends Component {
                             'Success Message',
                             'Preview Change/Reject Requested',
                         );
-                        this.props.navigation.replace('onGoingJob');
+                        this.props.navigation.navigate('onGoingJob', { isRefresh: true });
                         }
                     })
                     .catch((error) => {
@@ -136,7 +132,7 @@ export default class chatAgainstIndividualPreviews extends Component {
                 console.log(result);
                 NetInfo.fetch().then((state) => {
                 if (state.isConnected) {
-                    fetch(URL + '/order_accep_reject_by_order_id', {
+                    fetch(URL+'/approve_preview_image_by_id', {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
@@ -146,17 +142,15 @@ export default class chatAgainstIndividualPreviews extends Component {
                         this.state.jobDetail.order_id +
                         '&user_id=' +
                         result +
-                        '&created_by_ip=' +
-                        this.state.ip_address +
-                        '&status_id=' +
-                        this.state.status +
-                        '&description=' +
-                        this.state.remark,
+                        '&role=' +
+                        this.state.role +
+                        '&post_job_approved_image_id=' +
+                        this.state.jobDetail.preview_image_id,
                     })
                     .then((response) => response.json())
                     .then((result) => {
-                        console.log(this.state.jobDetail.order_id);
-                        console.log('status update result');
+                        // console.log(this.state.jobDetail.order_id);
+                        // console.log('status update result');
                         console.log(result);
                         if (!result.error) {
                         this.setState({
@@ -167,7 +161,7 @@ export default class chatAgainstIndividualPreviews extends Component {
                             'Success Message',
                             'Preview Approved Successfully',
                         );
-                        this.props.navigation.replace('onGoingJob');
+                        this.props.navigation.navigate('onGoingJob', { isRefresh: true });
                         } else {
                         console.log(result.error);
                         }
@@ -240,24 +234,28 @@ export default class chatAgainstIndividualPreviews extends Component {
         );
     };
 
-    checkAction = (flag) => {
-        if (flag) {
-            if (this.state.remark === 'No remarks') {
-            Alert.alert('Note!', 'Please add remarks!');
-            return;
+    render() {
+        if (this.state.jobDetail.user_role_name === 'Dealer') {
+            if (this.state.jobDetail.approved_by_dealer === 1) {
+                this.state.isApproveDisabled = true;
+            } else if (this.state.jobDetail.approved_by_dealer === 2) {
+                this.state.isRejectDisabled = true;
+            } else {
+                this.state.isApproveDisabled = false;
+                this.state.isRejectDisabled = false;
             }
         }
-    
-        this.setState({modalvisibale: false});
-    
-        if (this.state.approve_action) {
-            this.approveJobAlert();
-        } else {
-            this.rejectJobAlert();
+        if (this.state.jobDetail.user_role_name === 'Distributor') {
+            if (this.state.jobDetail.approved_by_distributer === 1) {
+                this.state.isApproveDisabled = true;
+            } else if (this.state.jobDetail.approved_by_distributer === 2) {
+                this.state.isRejectDisabled = true;
+            } else {
+                this.state.isApproveDisabled = false;
+                this.state.isRejectDisabled = false;
+            }
         }
-    };
-
-    render() {
+        // const approved_by_dealer = this.state.jobDetail.approved_by_dealer
         return (
             <View>
                 <StatusBar barStyle="default" backgroundColor="#62463e" />
@@ -297,16 +295,16 @@ export default class chatAgainstIndividualPreviews extends Component {
                                 padding: 10
                                 }}>
                                 <TouchableOpacity
-                                disabled={this.state.isDisabled}
-                                onPress={() => this.rejectJobConf()}
+                                disabled={this.state.isRejectDisabled}
+                                onPress={() => this.rejectJobAlert()}
                                     style={
-                                    this.state.isDisabled
+                                    this.state.isRejectDisabled
                                         ? styles.rejectbutton_disabled
                                         : styles.rejectbutton_enabled
                                     }>
                                     <Text
                                     style={
-                                        this.state.isDisabled
+                                        this.state.isRejectDisabled
                                         ? styles.rejecttext_disabled
                                         : styles.rejecttext_enabled
                                     }>
@@ -315,16 +313,16 @@ export default class chatAgainstIndividualPreviews extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                disabled={this.state.isDisabled}
-                                onPress={() => this.approveJobconf()}
+                                disabled={this.state.isApproveDisabled}
+                                onPress={() => this.approveJobAlert()}
                                  style={
-                                    this.state.isDisabled
+                                    this.state.isApproveDisabled
                                         ? styles.approvebutton_disabled
                                         : styles.approvebutton_enabled
                                     }>
                                     <Text
                                     style={
-                                        this.state.isDisabled
+                                        this.state.isApproveDisabled
                                         ? styles.approvetext_disabled
                                         : styles.approvetext_enabled
                                     }>
@@ -405,107 +403,6 @@ export default class chatAgainstIndividualPreviews extends Component {
                         </ScrollView>
                     </View>
                 </View>
-
-                <Modal
-                    backdropOpacity={0.3}
-                    isVisible={this.state.modalvisibale}
-                    onBackButtonPress={() => {
-                    Alert.alert('No update performed');
-                    this.setState({modalvisibale: false});
-                    }}>
-                    <View style={{flex: 1}}>
-                    <View
-                        style={{
-                        height: 380,
-                        width: '88%',
-                        marginTop: 200,
-                        alignSelf: 'center',
-                        backgroundColor: 'white',
-                        elevation: 5,
-                        borderRadius: 5,
-                        }}>
-                        <TouchableOpacity
-                        onPress={() => {
-                            this.setState({modalvisibale: false});
-                        }}
-                        style={{width: 50, height: 50, alignSelf: 'flex-end'}}>
-                        <Icon
-                            name="x-circle"
-                            size={20}
-                            color="#62463e"
-                            style={{alignSelf: 'flex-end', padding: 10}}
-                        />
-                        </TouchableOpacity>
-                        <Text
-                        style={{
-                            color: '#62463e',
-                            fontSize: 18,
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-
-                        }}>
-                        Please enter your remarks below:-
-                        </Text>
-                        <Textarea
-                        maxLength={1000}
-                        onChangeText={(value) => this.setState({remark: value})}
-                        containerStyle={{
-                            height: 150,
-                            width: '88%',
-                            borderWidth: 0.3,
-                            margin: 20,
-                        }}
-                        maxLength={80}
-                        placeholder={'Add a remark for the following action! '}
-                        placeholderTextColor={'#c7c7c7'}
-                        underlineColorAndroid={'transparent'}
-                        />
-                        <TouchableOpacity
-                        onPress={() => {
-                            this.checkAction(true);
-                        }}
-                        style={{
-                            height: 40,
-                            width: 80,
-                            backgroundColor: '#62463e',
-                            alignSelf: 'center',
-                            alignContent: 'center',
-                            marginBottom: 10,
-                        }}>
-                        <Text
-                            style={{
-                            color: 'white',
-                            alignSelf: 'center',
-                            fontWeight: 'bold',
-                            marginTop: 10,
-                            }}>
-                            NEXT
-                        </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                        onPress={() => {
-                            this.checkAction(false);
-                        }}
-                        style={{
-                            height: 40,
-                            width: 200,
-                            alignSelf: 'center',
-                            backgroundColor: 'white',
-                            alignContent: 'center',
-                        }}>
-                        <Text
-                            style={{
-                            color: '#62463e',
-                            alignSelf: 'center',
-                            marginTop: 10,
-                            }}>
-                            Skip without remarks
-                        </Text>
-                        </TouchableOpacity>
-                    </View>
-                    </View>
-                </Modal>
             </View>
         );
     };

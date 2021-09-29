@@ -43,24 +43,22 @@ export default class TabComponnet extends Component{
         }
     }
 
-    getNotifications=(userId)=>{
+    getNotifications=(userId, role)=>{
         NetInfo.fetch().then(state=>{
             if(state.isConnected){
-                fetch(URL + "/get_notification_details_by_user_id",{
-                    
+                AsyncStorage.setItem("role", role);
+                fetch(URL + "/get_all_notification_details",{
                         headers:{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"user_id="+userId
+                        body:"user_id="+userId+"&role="+role
                 }).then(response=>response.json())
                 .then(result=>{
                     this.setState({
                         notifications:result.notification_details
                     })
-                }
-                    
-                    
+                }  
                 ).catch(err=>console.log(err))
             }
         })
@@ -92,9 +90,22 @@ export default class TabComponnet extends Component{
         }
         AsyncStorage.getItem('user_id').then(result=>{
             if(result){
-                this.getNotifications(result);
+                fetch(URL+"/get_user_details_by_user_id", {
+                    headers:{
+                        "Content-Type":"application/x-www-form-urlencoded"
+                    },
+                    method:"POST",
+                    body:"user_id=" +result
+                }).then(response => response.json())
+                .then(res =>{
+                    if (res) {
+                        this.getNotifications(result, res.user_role_name);
 
-                this.setState({uid:result})
+                        this.setState({uid:result})
+                    }
+                }).catch(error =>{
+                    console.log(error);
+                })
             }
         })
 
@@ -223,7 +234,7 @@ export default class TabComponnet extends Component{
                             top: -5
                             }}>
                             <Text style={{ fontSize: 7, fontWeight: 'bold', color: 'white'}}>
-                                {this.state.notifications.length || 0} 
+                                {this.state.notifications.length > 99 ? '99+' : this.state.notifications.length} 
                             </Text>
                         </View>
                     : null}

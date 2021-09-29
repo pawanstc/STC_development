@@ -12,6 +12,7 @@ import {
   FlatList,
   Alert,
   AsyncStorage,
+  RefreshControl
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Transition, Transitioning} from 'react-native-reanimated';
@@ -85,6 +86,7 @@ export default class onGoingJobList extends Component {
         },
       ],
       deletedJob: [],
+      refreshing: (this.props.route.params && this.props.route.params.isRefresh) || false,
     };
   }
 
@@ -130,6 +132,8 @@ export default class onGoingJobList extends Component {
                     jobList: result.order_details,
                     deletedJob: [...this.state.deletedJob, ...jobId],
                   });
+
+                  this.setState({refreshing:false})
                 }
               })
               .catch((error) => {
@@ -569,11 +573,12 @@ export default class onGoingJobList extends Component {
                           backgroundColor: '#62463e',
                           borderRadius: 20,
                           alignSelf: 'center',
+                          justifyContent: 'center'
                         }}>
                         <TouchableOpacity onPress={() => this.getMore()}>
                           <Text
                             style={{
-                              fontSize: 22,
+                              fontSize: 15,
                               color: 'white',
                               fontWeight: 'bold',
                               alignSelf: 'center',
@@ -610,29 +615,42 @@ export default class onGoingJobList extends Component {
                                 borderBottomWidth: 0.5,
                               }}>
 								<View style={{ flexDirection: 'row',  justifyContent: 'space-between', alignItems: 'center' }}>
-									<Text
-										style={{
-										fontSize: 14,
-										fontWeight: 'normal',
-										padding: 4,
-										}}>
-										{' '}
-										Job id: {items.item.order_id}
-									</Text>
+                  <View style={{width: width*0.5}}>
+                    <Text
+                      style={{
+                      fontSize: 14,
+                      fontWeight: 'normal',
+                      paddingVertical: 4,
+                      }}>
+                      {' '}
+                      Job id: {items.item.order_id}
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#ff9800',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        padding: 2,
+                      }}>
+                      {moment(items.item.date_time).format(
+                        'MMMM Do YYYY, h:mm:ss a',
+                      )}
+                    </Text>
+                  </View>
 
 									<Image
 										source={{
 										uri: imageUrl + items.item.pattern_image_url,
 										}}
 										style={{
-										height: 50,
-										width: 50,
+										height: 70,
+										width: 70,
 										borderRadius: 10,
 										}}
 									/>
 								</View>
 
-                              <Text
+                              {/* <Text
                                 style={{
                                   color: '#ff9800',
                                   fontSize: 14,
@@ -642,7 +660,7 @@ export default class onGoingJobList extends Component {
                                 {moment(items.item.date_time).format(
                                   'MMMM Do YYYY, h:mm:ss a',
                                 )}
-                              </Text>
+                              </Text> */}
 
                               <View
                                 style={{
@@ -891,6 +909,7 @@ export default class onGoingJobList extends Component {
                                             items.item.order_by_user_id,
                                           audio: items.item.audio_url,
                                           user_type: items.item.user_role_name,
+                                          user_role_id: items.item.user_role_id
                                         },
                                       )
                                     }>
@@ -1029,6 +1048,7 @@ export default class onGoingJobList extends Component {
                       );
                     }}
                     keyExtractor={(item) => item.id}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getJobList}/>}
                   />
                   <View
                     style={{
