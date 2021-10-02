@@ -21,7 +21,6 @@ export default class chatAgainstIndividualPreviews extends Component {
         this.state = {
             modalVisible: false,
             isDisabled: false,
-            isApproveDisabled: false,
             isRejectDisabled: false,
             jobDetail: this.props.route.params.item,
             approve_action: false,
@@ -236,26 +235,20 @@ export default class chatAgainstIndividualPreviews extends Component {
 
     render() {
         if (this.state.jobDetail.user_role_name === 'Dealer') {
-            if (this.state.jobDetail.approved_by_dealer === 1) {
-                this.state.isApproveDisabled = true;
-            } else if (this.state.jobDetail.approved_by_dealer === 2) {
+            if (this.state.jobDetail.approved_by_dealer === 2) {
                 this.state.isRejectDisabled = true;
             } else {
-                this.state.isApproveDisabled = false;
                 this.state.isRejectDisabled = false;
             }
         }
         if (this.state.jobDetail.user_role_name === 'Distributor') {
-            if (this.state.jobDetail.approved_by_distributer === 1) {
-                this.state.isApproveDisabled = true;
-            } else if (this.state.jobDetail.approved_by_distributer === 2) {
+            if (this.state.jobDetail.approved_by_distributer === 2) {
                 this.state.isRejectDisabled = true;
             } else {
-                this.state.isApproveDisabled = false;
                 this.state.isRejectDisabled = false;
             }
         }
-        // const approved_by_dealer = this.state.jobDetail.approved_by_dealer
+
         return (
             <View>
                 <StatusBar barStyle="default" backgroundColor="#62463e" />
@@ -313,16 +306,16 @@ export default class chatAgainstIndividualPreviews extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                disabled={this.state.isApproveDisabled}
+                                disabled={this.state.jobDetail.isApproveDisabled}
                                 onPress={() => this.approveJobAlert()}
                                  style={
-                                    this.state.isApproveDisabled
+                                    this.state.jobDetail.isApproveDisabled
                                         ? styles.approvebutton_disabled
                                         : styles.approvebutton_enabled
                                     }>
                                     <Text
                                     style={
-                                        this.state.isApproveDisabled
+                                        this.state.jobDetail.isApproveDisabled
                                         ? styles.approvetext_disabled
                                         : styles.approvetext_enabled
                                     }>

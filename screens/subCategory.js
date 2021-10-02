@@ -220,7 +220,6 @@ searchBarAppear = () =>{
                     method:"GET"
                 }).then(response => response.json())
                 .then(result =>{
-                    console.log(result)
                     if(result.error == false){
                         this.setState({
                             cate_log_list:result.stock_catlog_list,

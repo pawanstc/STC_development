@@ -17,7 +17,7 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TabComponnet from '../screens/TabnarComponent.js';
-import {URL, imageUrl} from '../api.js';
+import {URL, imageUrl, FileUploadURL} from '../api.js';
 
 import TaqbContainer from '../screens/TabnarComponent.js';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -177,7 +177,7 @@ export default class customiseComponent extends Component {
 
         var xhr = new XMLHttpRequest();
 
-        xhr.open('POST', 'https://stcapp.stcwallpaper.com/backend/postjob.php');
+        xhr.open('POST', FileUploadURL+'/postjob.php');
         xhr.setRequestHeader('Content-Type', 'multipart/form-data');
         xhr.send(form);
 
@@ -329,7 +329,7 @@ export default class customiseComponent extends Component {
 
     var xhr = new XMLHttpRequest();
 
-    xhr.open('POST', 'https://stcapp.stcwallpaper.com/backend/postjob.php');
+    xhr.open('POST', FileUploadURL+'/postjob.php');
     xhr.setRequestHeader('Content-Type', 'multipart/form-data');
     xhr.send(form);
 
@@ -392,7 +392,7 @@ export default class customiseComponent extends Component {
 
         var xhr = new XMLHttpRequest();
 
-        xhr.open('POST', 'https://stcapp.stcwallpaper.com/backend/postjob.php');
+        xhr.open('POST', FileUploadURL+'/postjob.php');
         xhr.setRequestHeader('Content-Type', 'multipart/form-data');
         xhr.send(form);
 
@@ -530,7 +530,7 @@ export default class customiseComponent extends Component {
         var xhr = new XMLHttpRequest();
         xhr.open(
           'POST',
-          'https://stcapp.stcwallpaper.com/backend/edit_pattern.php',
+          FileUploadURL+'/edit_pattern.php',
         );
         xhr.setRequestHeader('Content-Type', 'multipart/form-data');
         xhr.send(form);

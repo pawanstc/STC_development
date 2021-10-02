@@ -176,8 +176,10 @@
         .then((response) => response.json())
         .then((result) => {
             if (result) {
+                console.log('result============>', result)
                 const { preview_details } = result;
                 if (preview_details && preview_details.length) {
+                    let isApproveDisabled = false;
                     const previewImageApprovedByDelear = preview_details.filter(item => item.approved_by_dealer === 1);
                     const previewImageRejectedByDelear = preview_details.filter(item => item.approved_by_dealer === 2);
                     const previewImageApprovedByDistributor = preview_details.filter(item => item.approved_by_distributer === 1);
@@ -483,329 +485,13 @@
         });
     };
 
-    // setStatus = () => {
-    // console.log('setting status');
-    // console.log(this.state.user_type);
-    // if (this.state.user_type == 'Dealer') {
-    //     this.setState({status: 10});
-    //     console.log(this.state.status);
-    // } else if (this.state.user_type == 'Distributor')
-    //     this.setState({status: 8});
-    // };
-    // rejectStatus = () => {
-    // if (this.state.user_type == 'Dealer') this.setState({status: 11});
-    // else if (this.state.user_type == 'Distributor') this.setState({status: 12});
-    // };
-
-    // rejectJob = () => {
-    // this.rejectStatus();
-    // console.log('Rejecting');
-    // AsyncStorage.getItem('user_id').then((result) => {
-    //     if (result) {
-    //     console.log(result);
-
-    //     NetInfo.fetch()
-    //         .then((state) => {
-    //         if (state.isConnected) {
-    //             fetch(URL + '/order_accep_reject_by_order_id', {
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //             },
-    //             method: 'POST',
-    //             body:
-    //                 'order_id=' +
-    //                 this.state.order_id +
-    //                 '&user_id=' +
-    //                 result +
-    //                 '&created_by_ip=' +
-    //                 this.state.ip_address +
-    //                 '&status_id=' +
-    //                 this.state.status +
-    //                 '&description=' +
-    //                 this.state.remark,
-    //             })
-    //             .then((response) => response.json())
-    //             .then((result) => {
-    //                 console.log(result);
-    //                 if (!result.error) {
-    //                 Alert.alert(
-    //                     'Success Message',
-    //                     'Preview Change/Reject Requested',
-    //                 );
-    //                 this.props.navigation.replace('onGoingJob');
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //                 Alert.alert('Error Message', {error});
-    //             });
-    //         } else {
-    //             Alert.alert(
-    //             'Network Error',
-    //             'Please check your Internet connection',
-    //             );
-    //         }
-    //         })
-    //         .catch((err) => console.log(err));
-    //     }
-    // });
-    // };
-    // levelCheck = () => {
-    // let level = false;
-    // if (this.state.status == 9 && this.state.user_type == 'Dealer')
-    //     level = true;
-    // if (this.state.status == 10 && this.state.user_type == 'Distributor')
-    //     level = true;
-    // return level;
-    // };
-
-    // approveJob = () => {
-    // if (!this.levelCheck) {
-    //     Alert.alert('Error', 'You are not allowed to approve this job yet!');
-    //     return;
-    // } else {
-    //     this.setStatus();
-
-    //     AsyncStorage.getItem('user_id').then((result) => {
-    //     if (result) {
-    //         console.log(result);
-    //         NetInfo.fetch().then((state) => {
-    //         if (state.isConnected) {
-    //             fetch(URL + '/order_accep_reject_by_order_id', {
-    //             headers: {
-    //                 'Content-Type': 'application/x-www-form-urlencoded',
-    //             },
-    //             method: 'POST',
-    //             body:
-    //                 'order_id=' +
-    //                 this.state.order_id +
-    //                 '&user_id=' +
-    //                 result +
-    //                 '&created_by_ip=' +
-    //                 this.state.ip_address +
-    //                 '&status_id=' +
-    //                 this.state.status +
-    //                 '&description=' +
-    //                 this.state.remark,
-    //             })
-    //             .then((response) => response.json())
-    //             .then((result) => {
-    //                 console.log(this.state.order_id);
-    //                 console.log('status update result');
-    //                 console.log(result);
-    //                 if (!result.error) {
-    //                 this.setState({
-    //                     button_show: 'No',
-    //                 });
-
-    //                 Alert.alert(
-    //                     'Success Message',
-    //                     'Preview Approved Successfully',
-    //                 );
-    //                 this.props.navigation.replace('onGoingJob');
-    //                 } else {
-    //                 console.log(result.error);
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //                 Alert.alert('Error Message', {error});
-    //             });
-    //         } else {
-    //             Alert.alert(
-    //             'Network Error',
-    //             'Please check your Internet connection',
-    //             );
-    //         }
-    //         });
-    //     } else {
-    //     }
-    //     });
-    // }
-    // };
-
-    // rejectJobConf = () => {
-    // this.setState({approve_action: false});
-    // this.setState({modalvisibale: true});
-    // };
-
-    // rejectJobAlert = () => {
-    // Alert.alert(
-    //     'Change/Reject Preview',
-    //     'Are You Sure You Want To Change/Reject This Preview?',
-    //     [
-    //     {
-    //         text: 'Ok',
-    //         onPress: () => this.rejectJob(),
-    //     },
-    //     {
-    //         text: 'Cancel',
-    //         onPress: () => null,
-    //     },
-    //     ],
-    // );
-    // };
-    // approveJobconf = () => {
-    // this.setState({approve_action: true});
-
-    // this.setState({modalvisibale: true});
-    // };
-    // approveJobAlert = () => {
-    // if (this.state.user_type == 'Distributor') {
-    //     Alert.alert(
-    //     'Approve Preview',
-    //     `Are You Sure You Want To Approve This Preview?\n \nNote: Once approved order cannot be cancelled.`,
-    //     [
-    //         {
-    //         text: 'Ok',
-    //         onPress: () => this.approveJob(),
-    //         },
-    //         {
-    //         text: 'Cancel',
-    //         onPress: () => null,
-    //         },
-    //     ],
-    //     );
-    // } else {
-    //     Alert.alert(
-    //     'Approve Preview',
-    //     'Are You Sure You Want To Approve This Preview?',
-    //     [
-    //         {
-    //         text: 'Ok',
-    //         onPress: () => this.approveJob(),
-    //         },
-    //         {
-    //         text: 'Cancel',
-    //         onPress: () => null,
-    //         },
-    //     ],
-    //     );
-    // }
-    // };
-    // checkAction = (flag) => {
-    // if (flag) {
-    //     if (this.state.remark === 'No remarks') {
-    //     Alert.alert('Note!', 'Please add remarks!');
-    //     return;
-    //     }
-    // }
-
-    // this.setState({modalvisibale: false});
-
-    // if (this.state.approve_action) {
-    //     this.approveJobAlert();
-    // } else {
-    //     this.rejectJobAlert();
-    // }
-    // };
-
     render() {
     return (
         <View
         style={{
             flex: 1,
         }}>
-        {/* <Modal
-            backdropOpacity={0.3}
-            isVisible={this.state.modalvisibale}
-            onBackButtonPress={() => {
-            Alert.alert('No update performed');
-            this.setState({modalvisibale: false});
-            }}>
-            <View style={{flex: 1}}>
-            <View
-                style={{
-                height: 380,
-                width: '88%',
-                marginTop: 200,
-                alignSelf: 'center',
-                backgroundColor: 'white',
-                elevation: 5,
-                borderRadius: 5,
-                }}>
-                <TouchableOpacity
-                onPress={() => {
-                    this.setState({modalvisibale: false});
-                }}
-                style={{width: 50, height: 50, alignSelf: 'flex-end'}}>
-                <Icon
-                    name="x-circle"
-                    size={20}
-                    color="#62463e"
-                    style={{alignSelf: 'flex-end', padding: 10}}
-                />
-                </TouchableOpacity>
-                <Text
-                style={{
-                    color: '#62463e',
-                    fontSize: 18,
-                    alignSelf: 'center',
-                    fontWeight: 'bold',
-                }}>
-                Please enter your remarks below:-
-                </Text>
-                <Textarea
-                maxLength={1000}
-                onChangeText={(value) => this.setState({remark: value})}
-                containerStyle={{
-                    height: 150,
-                    width: '88%',
-                    borderWidth: 0.3,
-                    margin: 20,
-                }}
-                maxLength={80}
-                placeholder={'Add a remark for the following action! '}
-                placeholderTextColor={'#c7c7c7'}
-                underlineColorAndroid={'transparent'}
-                />
-                <TouchableOpacity
-                onPress={() => {
-                    this.checkAction(true);
-                }}
-                style={{
-                    height: 40,
-                    width: 80,
-                    backgroundColor: '#62463e',
-                    alignSelf: 'center',
-                    alignContent: 'center',
-                    marginBottom: 10,
-                }}>
-                <Text
-                    style={{
-                    color: 'white',
-                    alignSelf: 'center',
-                    fontWeight: 'bold',
-                    marginTop: 10,
-                    }}>
-                    NEXT
-                </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                onPress={() => {
-                    this.checkAction(false);
-                }}
-                style={{
-                    height: 40,
-                    width: 200,
-                    alignSelf: 'center',
-                    backgroundColor: 'white',
-                    alignContent: 'center',
-                }}>
-                <Text
-                    style={{
-                    color: '#62463e',
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    }}>
-                    Skip without remarks
-                </Text>
-                </TouchableOpacity>
-            </View>
-            </View>
-        </Modal> */}
-
+        
         <View
             style={{
             flex: 1,
@@ -1246,7 +932,13 @@
                                             horizontal={true}
                                             showsHorizontalScrollIndicator={true}>
                                             <TouchableOpacity style={{ alignItems: 'center', marginBottom: 10}} onPress={() => {
-                                                this.props.navigation.navigate('chatAgainstIndividualPreviews', {item: { ...item, ...this.state.jobDetail, user_type: this.state.user_type, status: this.state.status }});
+                                                let isApproveDisabled
+                                                if (this.state.user_type === 'Dealer') {
+                                                    isApproveDisabled = this.state.previewImageApprovedByDelear && Object.keys(this.state.previewImageApprovedByDelear) && Object.keys(this.state.previewImageApprovedByDelear).length > 0
+                                                } else if (this.state.user_type === 'Distributor') {
+                                                    isApproveDisabled = this.state.previewImageApprovedByDistributor && Object.keys(this.state.previewImageApprovedByDistributor) && Object.keys(this.state.previewImageApprovedByDistributor).length > 0
+                                                }
+                                                this.props.navigation.navigate('chatAgainstIndividualPreviews', {item: { ...item, ...this.state.jobDetail, user_type: this.state.user_type, status: this.state.status, isApproveDisabled }});
                                             }}>
                                                 <Image
                                                 source={{
