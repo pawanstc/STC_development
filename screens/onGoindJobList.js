@@ -252,6 +252,7 @@ export default class onGoingJobList extends Component {
                 is_model_view: false,
               });
 
+              this.setStatus('Cancel')
               Alert.alert('Success', 'Order Cancled succesfully');
               setTimeout(() => {
                 this.setState({

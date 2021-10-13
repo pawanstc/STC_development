@@ -519,7 +519,7 @@ searchBarAppear = () =>{
                            <ImageLoad
                                      isShowActivity={true}
         style={{  height:120,
-            width:width*0.35, marginHorizontal:20,marginTop:15 }}
+            width:width*0.35, marginHorizontal:8,marginTop:15 }}
         loadingStyle={{ size: 'large', color: '#62463e' }}
         borderRadius={6}
         source={{ uri:imageUrl+"/"+items.item.catlog_image}}
@@ -540,7 +540,6 @@ searchBarAppear = () =>{
            <View style={{
               
                width:120,
-               marginLeft:10,
               
            }} >
                          <Button
@@ -603,7 +602,6 @@ const styles = StyleSheet.create({
 
     },
     formContainer:{
-
         position:"absolute",
         top:60,
         left:0,
@@ -613,7 +611,7 @@ const styles = StyleSheet.create({
         width:width -50,
         marginHorizontal:25,
         borderRadius:20,
-    
+
         alignItems:"center",
         flex:1
     },

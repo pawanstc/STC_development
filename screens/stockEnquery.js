@@ -85,7 +85,7 @@ export default class HomeComponent extends Component{
             }).then(response => response.json())
             .then(result =>{
                 
-                console.log(result);
+                console.log('stock city list===============>', result);
                 if(result.error ==false){
                     this.setState({
                         cityList:result.stock_city_list

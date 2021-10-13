@@ -29,6 +29,7 @@
     import { getImagesWithoutSize } from 'react-native-image-view/src/utils';
     import moment from 'moment';
     import {Picker} from '@react-native-picker/picker';
+    import { getDayDateFormat } from './helper/utility';
 
     let urlsDomain = 'https://stcapp.stcwallpaper.com/';
     let {height, width} = Dimensions.get('screen');
@@ -1020,7 +1021,7 @@
                                 borderColor: '#eeee',
                             }}
                             />
-                            <Text style={{ paddingTop: 10, textAlign: 'center' }}>id: {this.state.previewImageApprovedByDistributor.preview_image_id}</Text>
+                            <Text style={{ paddingTop: 10, textAlign: 'center' }}>Id: {this.state.previewImageApprovedByDistributor.preview_image_id} ({getDayDateFormat(this.state.previewImageApprovedByDistributor.modified_by_date_time)})</Text>
                         </TouchableOpacity>
                     ) : (
                         <View
@@ -1078,7 +1079,7 @@
                                 borderColor: '#eeee',
                             }}
                             />
-                            <Text style={{ paddingTop: 10, textAlign: 'center' }}>id: {this.state.previewImageApprovedByDelear.preview_image_id}</Text>
+                            <Text style={{ paddingTop: 10, textAlign: 'center' }}>Id: {this.state.previewImageApprovedByDelear.preview_image_id} ({getDayDateFormat(this.state.previewImageApprovedByDelear.modified_by_date_time)})</Text>
                         </TouchableOpacity>
                     ) : (
                         <View

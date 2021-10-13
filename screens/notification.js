@@ -7,7 +7,7 @@ import NetInfo from "@react-native-community/netinfo";
 import TabBarContainer from './TabnarComponent.js';
 import {route_notificationTojob,route_notificationToNotice} from '../screens/notification_route'
 // import AnimatedLoader from "react-native-animated-loader";
-import {URL,imageUrl} from '../api'
+import {URL,imageUrl} from '../api';
 
 import {
     BallIndicator,
@@ -200,6 +200,7 @@ export default class Notification extends Component{
                     data={this.state.notifications}
                     renderItem={(items) => {
                         console.log('items==================>', items.item)
+                        
                         return (
                             <View style={{paddingLeft:20,paddingRight:20,paddingBottom:10}}>
                                 <View style={{height:65,width:width-80,flexDirection:'row'}}>
@@ -213,11 +214,11 @@ export default class Notification extends Component{
                                             <Text style={{fontSize:10}}>{items.item.date_time}</Text>
                                         </TouchableOpacity>
                                     </View>
-                                    {/* {items.item.notification_type=="Job_Details"?( */}
+                                    {items.item.notification_doc_url?(
                                         <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
-                                    {/* ):(
-                                        <Image source={require('../assets/pdflogo.jpg')} style={{height:50,width:50, borderRadius: 25}}/>
-                                    )} */}
+                                    ):(
+                                        <Image source={require('../assets/logo45454.png')} style={{height:50,width:50, borderRadius: 25}}/>
+                                    )}
                                 </View>
                             </View>
                         )

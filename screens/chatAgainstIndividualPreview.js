@@ -16,7 +16,7 @@ export default class chatAgainstIndividualPreviews extends Component {
     constructor(props) {
         super(props);
 
-        console.log('this.props.route.params.status==============>', this.props.route.params.item.status);
+        console.log('jobDetail==============>', this.props.route.params.item);
 
         this.state = {
             modalVisible: false,

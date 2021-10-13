@@ -1,7 +1,8 @@
 import { Image, PermissionsAndroid, Platform, Linking, AsyncStorage } from 'react-native'
 import CameraRoll from '@react-native-community/cameraroll'
 import Toast from 'react-native-simple-toast'
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob' 
+import moment from 'moment'
 
 const { config, fs } = RNFetchBlob
 const isIOS = Platform.OS === 'ios'
@@ -80,3 +81,5 @@ export const downloadFile = (filePathUrl, cbUrl) => {
 
   getPermissionAndDownload()
 }
+
+export const getDayDateFormat = (myDate) => (myDate?moment(myDate).format('DD-MM-YYYY'):'');
