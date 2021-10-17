@@ -39,7 +39,9 @@ export default class TabComponnet extends Component{
             ],
             tabLabel: "Home",
             uid:'',
-            notifications: []
+            notifications_count: 0,
+            pageIndex: 0,
+            pageSize: 20
         }
     }
 
@@ -52,11 +54,20 @@ export default class TabComponnet extends Component{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"user_id="+userId+"&role="+role
+                        body:
+                            "user_id="+
+                            userId+
+                            "&role="+
+                            role+
+                            "&page_index="+
+                            this.state.pageIndex+
+                            "&page_size="+
+                            this.state.pageSize
                 }).then(response=>response.json())
                 .then(result=>{
+                    console.log('notification result=================>', result);
                     this.setState({
-                        notifications:result.notification_details
+                        notifications_count: result.total_size,
                     })
                 }  
                 ).catch(err=>console.log(err))
@@ -221,7 +232,7 @@ export default class TabComponnet extends Component{
               
                         marginLeft:15
                     }} color="#ffcc80"  />
-                    {this.state.notifications && this.state.notifications.length > 1 ?
+                    {this.state.notifications_count ?
                         <View style={{
                             position:'absolute', 
                             height: 15, 
@@ -234,7 +245,7 @@ export default class TabComponnet extends Component{
                             top: -5
                             }}>
                             <Text style={{ fontSize: 7, fontWeight: 'bold', color: 'white'}}>
-                                {this.state.notifications.length > 99 ? '99+' : this.state.notifications.length} 
+                                {this.state.notifications_count > 99 ? '99+' : this.state.notifications_count} 
                             </Text>
                         </View>
                     : null}

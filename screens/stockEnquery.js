@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView,TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView,TextInput, Alert, AsyncStorage } from 'react-native';
 
 import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
@@ -66,16 +66,19 @@ export default class HomeComponent extends Component{
         
     }
     
-    this.getCityList();
+    AsyncStorage.getItem('role').then(result=>{
+        this.getCityList(result);
+    });
    
  }
 
- getCityList = () =>{
+ getCityList = (role) =>{
     NetInfo.fetch().then(state =>{
         if(state.isConnected){
 
             var form = new FormData();
             form.append('user_id',this.state.user_id)
+            form.append('user_role',role)
 
             fetch(URL+"/get_stock_city_list",{
                 method:'POST',
@@ -84,8 +87,6 @@ export default class HomeComponent extends Component{
                 
             }).then(response => response.json())
             .then(result =>{
-                
-                console.log('stock city list===============>', result);
                 if(result.error ==false){
                     this.setState({
                         cityList:result.stock_city_list

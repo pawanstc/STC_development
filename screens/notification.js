@@ -35,7 +35,10 @@ export default class Notification extends Component{
         this.state={
             notifications:[],
             userid:'',
-            refreshing:false
+            refreshing:false,
+            totalRecord: 0,
+            pageIndex: 0,
+            pageSize: 20
         }
     }
 
@@ -52,14 +55,9 @@ export default class Notification extends Component{
         .then(result =>{this.setState({
             userid:result
         })
-        this.getNotifications();
-    
-    })
+            this.getNotifications();
+        })
        
-      
-
-       
-        
     }
 
     componentDidUpdate(){
@@ -77,11 +75,20 @@ export default class Notification extends Component{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"user_id="+this.state.userid+"&role="+role
+                        body:
+                            "user_id="+
+                            this.state.userid+
+                            "&role="+
+                            role+
+                            "&page_index="+
+                            this.state.pageIndex+
+                            "&page_size="+
+                            this.state.pageSize
                     }).then(response=>response.json())
                     .then(result=>{
                         this.setState({
-                            notifications:result.notification_details
+                            notifications: this.state.pageIndex === 0 ? result.notification_details : [...this.state.notifications, ...result.notification_details],
+                            totalRecord: result.total_size
                         })
                         console.log(this.state.notifications)
                     }).catch(err=>console.log(err))
@@ -133,9 +140,9 @@ export default class Notification extends Component{
                 if(res=="jpg")this.props.navigation.navigate("preview",{uri:imageUrl+item.notification_doc_url})
             }
     }
-    
+
     render(){
-        console.log('this.state.notifications=============>', this.state.notifications)
+        // console.log('this.state.notifications=============>', this.state.notifications)
         return(
            <View style={{
                flex:1
@@ -153,28 +160,6 @@ export default class Notification extends Component{
                     margin:20
                 }}  color="#FFF" />
             </TouchableOpacity>
-             {/* <View>
-             <Moment>{this.state.time}</Moment>
-             </View> */}
-           {/* <Text style={{
-               fontSize:18,
-               fontWeight:"bold",
-               color:"#FFF",
-            margin:20,
-            
-            
-           }} >Post Job</Text> */}
-            {/* <Image source={{uri:'https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg'}} 
-    style={{
-        height:40,
-        width:40,
-        borderRadius:20,
-        marginLeft:230,
-        marginTop:10
-    }}
-    /> */}
-
-
     
                 </View>
 
@@ -199,7 +184,7 @@ export default class Notification extends Component{
                     
                     data={this.state.notifications}
                     renderItem={(items) => {
-                        console.log('items==================>', items.item)
+                        // console.log('items==================>', items.item)
                         
                         return (
                             <View style={{paddingLeft:20,paddingRight:20,paddingBottom:10}}>
@@ -224,9 +209,19 @@ export default class Notification extends Component{
                         )
                     }}
                     keyExtractor={(_index) => index.toString()}
-                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getNotifications}/>}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => {
+                        this.setState({pageIndex: 0})
+                        this.getNotifications();
+                    }}/>}
                     scrollToOverflowEnabled={true}              
                     ListFooterComponent={<View style={{marginBottom:150,marginTop:10}}></View>}
+                    onEndReached={() => {
+                        if (this.state.pageIndex < this.state.totalRecord / this.state.pageSize) {
+                            this.setState({pageIndex: this.state.pageIndex + 1}) 
+                            this.getNotifications();
+                        }
+                    }}
+                    onEndReachedThreshold={0.1}
                  />
          
        
