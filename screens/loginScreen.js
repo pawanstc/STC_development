@@ -8,7 +8,10 @@ import NetInfo from "@react-native-community/netinfo";
 import { URL } from '../api.js';
 import DeviceInfo from 'react-native-device-info';
 import messaging from '@react-native-firebase/messaging';
-let {height,width} = Dimensions.get('screen')
+import { deviceWidth, deviceHeight } from './helper/utility';
+
+let width = deviceWidth();
+let height = deviceHeight();
 export default class LoginComponent extends  Component{
 
 constructor(props){
@@ -17,10 +20,10 @@ constructor(props){
     this.animatedValue = new Animated.Value(0);
 
     this.state = {
-       mobile_number:"",
-            password:"",
-            device_id:"",
-            fcmToken:""
+        mobile_number:"",
+        password:"",
+        device_id:"",
+        fcmToken:""
     }
 }
 
@@ -29,13 +32,12 @@ componentDidMount(){
         let temp = width;
         width= height;
         height=temp;
-       
-        
     }
     this.animation();
     console.log(messaging().isDeviceRegisteredForRemoteMessages)
     console.log(messaging().registerDeviceForRemoteMessages());
     messaging().getToken().then(token=>this.setState({fcmToken:token})).catch(error=>Alert.alert('Error',error.toString()))
+    console.log('device===========width', width)
 }
 
 // button animation
@@ -315,11 +317,10 @@ const styles = StyleSheet.create({
         right:0,
         backgroundColor:"#FFF",
         height:height,
-        width:width -50,
-        marginHorizontal:30,
+        width:width * 0.84,
+        marginHorizontal: width * 0.08,
         borderRadius:20,
         flex:1,
-        // justifyContent:"center",
         alignItems:"center",
         color:'grey'
     },

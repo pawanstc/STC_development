@@ -1,4 +1,4 @@
-import { Image, PermissionsAndroid, Platform, Linking, AsyncStorage } from 'react-native'
+import { Image, PermissionsAndroid, Platform, Linking, AsyncStorage, Dimensions } from 'react-native'
 import CameraRoll from '@react-native-community/cameraroll'
 import Toast from 'react-native-simple-toast'
 import RNFetchBlob from 'rn-fetch-blob' 
@@ -83,3 +83,13 @@ export const downloadFile = (filePathUrl, cbUrl) => {
 }
 
 export const getDayDateFormat = (myDate) => (myDate?moment(myDate).format('DD-MM-YYYY'):'');
+
+export const deviceWidth = () => {
+  const dim = Dimensions.get('window');
+  return dim.width;
+};
+
+export const deviceHeight = () => {
+  const dim = Dimensions.get('window');
+  return dim.height;
+};
