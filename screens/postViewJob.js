@@ -177,7 +177,7 @@
         .then((response) => response.json())
         .then((result) => {
             if (result) {
-                console.log('result============>', result)
+                console.log('result============>', result, this.state.order_id, this.state.user_type)
                 const { preview_details } = result;
                 if (preview_details && preview_details.length) {
                     let isApproveDisabled = false;
@@ -192,6 +192,7 @@
                     previewImageRejectedByDistributor && previewImageRejectedByDistributor.length && this.setState({ previewImageRejectedByDistributor: previewImageRejectedByDistributor[0] })
                 }
                 this.setState({ preview_images: preview_details });
+
             }
         })
         .catch((err) => console.log('error', err));
@@ -233,7 +234,7 @@
                     job_id: result.order_id,
                     jobDetail: result,
                     mediaType: result.mediaTypeId,
-                    selectedPaper: result.paperTypeId
+                    selectedPaper: result.paperTypeId || ''
                 });
                 this.getPaperType(result.mediaTypeId)
             }
@@ -242,38 +243,47 @@
     }
 
     updateMediaType = () => {
-        fetch(URL+"/change_media_by_order_id",{
-			headers:{
-				"Content-Type":"application/x-www-form-urlencoded"
-			},
-			method:"POST",
-			body:"user_id="+
-                this.state.user_id+
-                "&order_id="+
-                this.state.order_id+
-                "&media_type="+
-                this.state.mediaType+
-                "&paper_type="+
-                this.state.selectedPaper
-		}).then(response => response.json())
-		.then(result =>{
-			if(result.error == false){
-                this.setState({ modalvisibale: false })
-				this.getJobDetail();
+        if (this.state.mediaType !== "" && this.state.selectedPaper !== "") {
+            fetch(URL+"/change_media_by_order_id",{
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+                method:"POST",
+                body:"user_id="+
+                    this.state.user_id+
+                    "&order_id="+
+                    this.state.order_id+
+                    "&media_type="+
+                    this.state.mediaType+
+                    "&paper_type="+
+                    this.state.selectedPaper
+            }).then(response => response.json())
+            .then(result =>{
+                if(result.error == false){
+                    this.setState({ modalvisibale: false })
+                    this.getJobDetail();
+                    Alert.alert(
+                        "Data updated successfully!"
+                    );
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+        } else {
+            if (this.state.mediaType === "") {
                 Alert.alert(
-                    "Data updated successfully!"
+                    "Media type is required"
                 );
-			}
-		}).catch(error =>{
-			console.log(error);
-		})
+            }
+            if (this.state.selectedPaper === "") {
+                Alert.alert(
+                    "Paper type is required"
+                );
+            }
+        }
     }
 
     getPaperType = (value) =>{
-		// this.setState({
-		// 	mediaType:value,
-		// 	paperType:[]
-		// })
 		fetch(URL+"/get_paper_details_by_id",{
 			headers:{
 				"Content-Type":"application/x-www-form-urlencoded"
@@ -283,8 +293,9 @@
 		}).then(response => response.json())
 		.then(result =>{
 			if(result.error == false){
+                const list = [ {id: '', paper_type_name: 'Select' }, ...result.paper_list];
 				this.setState({
-					paperType:result.paper_list,
+					paperType: list,
 					
 				});
 			}
@@ -939,7 +950,7 @@
                                                 } else if (this.state.user_type === 'Distributor') {
                                                     isApproveDisabled = this.state.previewImageApprovedByDistributor && Object.keys(this.state.previewImageApprovedByDistributor) && Object.keys(this.state.previewImageApprovedByDistributor).length > 0
                                                 }
-                                                this.props.navigation.navigate('chatAgainstIndividualPreviews', {item: { ...item, ...this.state.jobDetail, user_type: this.state.user_type, status: this.state.status, isApproveDisabled }});
+                                                this.props.navigation.navigate('chatAgainstIndividualPreviews', {item: { ...this.state.jobDetail, ...item, user_type: this.state.user_type, status: this.state.status, isApproveDisabled }});
                                             }}>
                                                 <Image
                                                 source={{
@@ -1330,6 +1341,7 @@
                             onValueChange={(value) => {
                               this.setState({
                                 mediaType: value,
+                                selectedPaper: ''
                               })
                               this.getPaperType(value)
                             }}>

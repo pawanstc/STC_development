@@ -154,9 +154,10 @@ searchBarAppear = () =>{
    
  }
 
- subCatelogById = (id, catalogue_pdf) =>{
+ subCatelogById = (id, catalogue_pdf, cat_name) =>{
     this.props.navigation.navigate("products",{
-        id:id,
+        id,
+        cat_name,
         catalogue_pdf
     })
  }
@@ -500,7 +501,7 @@ searchBarAppear = () =>{
                     data={this.state.cate_log_list}
                     showsVerticalScrollIndicator={false}
                     renderItem={(items) =>{
-                        console.log(items.item.catlog_image)
+                        // console.log('name===================>', items.item)
                     return(
          
                         <View style={{
@@ -515,7 +516,7 @@ searchBarAppear = () =>{
                                 alignItems:'center',
                               
                             }} >
-                           <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf)} >
+                           <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf, this.state.cat_name)} >
                            <ImageLoad
                                      isShowActivity={true}
         style={{  height:120,
@@ -543,7 +544,7 @@ searchBarAppear = () =>{
               
            }} >
                          <Button
-                        onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf)}
+                        onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf, this.state.cat_name)}
     touchSoundDisabled ={false}
       title="Explore"
       color="#62463e"

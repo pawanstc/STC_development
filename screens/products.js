@@ -90,8 +90,9 @@ export default class ProductImage extends Component {
 
     getSubCatelog = () => {
         let id = this.props.route.params.id;
+        let cat_name = this.props.route.params.cat_name;
 
-        console.log('"catlog_master_id=" + id=====================>', id)
+        console.log('"catlog_master_id=" + id=====================>', id, cat_name)
 
         NetInfo.fetch().then(state => {
             if (state.isConnected) {

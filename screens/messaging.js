@@ -101,6 +101,8 @@ export default class Messaging extends Component {
                                 })
 
                 }
+
+                console.log('messageLIst-=================>', messageList);
               this.setState({
                   message: messageList && messageList.reverse() || [],
                   refresh: false,

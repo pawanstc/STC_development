@@ -49,6 +49,7 @@ export default class TabComponnet extends Component{
         NetInfo.fetch().then(state=>{
             if(state.isConnected){
                 AsyncStorage.setItem("role", role);
+                console.log('notification result=================>', userId, role, this.state.pageIndex, this.state.pageSize);
                 fetch(URL + "/get_all_notification_details",{
                         headers:{
                             "Content-Type":"application/x-www-form-urlencoded"
@@ -65,7 +66,6 @@ export default class TabComponnet extends Component{
                             this.state.pageSize
                 }).then(response=>response.json())
                 .then(result=>{
-                    console.log('notification result=================>', result);
                     this.setState({
                         notifications_count: result.total_size,
                     })

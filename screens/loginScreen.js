@@ -98,7 +98,6 @@ login = async () =>{
              
                 AsyncStorage.setItem("device_id", result.devices_id.toString());}
                 AsyncStorage.setItem("user_id", result.id.toString());
-                console.log(result.id.toString())
                 fetch(URL+"/get_user_details_by_user_id",{
                     method:'POST',
                     headers:{

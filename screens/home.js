@@ -224,7 +224,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                 }).then(response => response.json())
                 .then(result =>{
                     
-                //    console.log('result=========================>', result);
+                   console.log('result=========================>', result);
                     if(result.error == false){
                         if(result.profilePicture == null  && result.profilePicture == ""){
                             this.setState({
@@ -252,7 +252,6 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                 profile_image:result.profilePicture,
                                 
                             });
-                            console.log("profile details================>", result)
                             console.log(this.state.profile_image)
                         }else{this.setState({profile_image:"",user_name:result.first_name})}
 

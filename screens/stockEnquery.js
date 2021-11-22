@@ -78,9 +78,9 @@ export default class HomeComponent extends Component{
 
             var form = new FormData();
             form.append('user_id',this.state.user_id)
-            form.append('user_role',role)
+            form.append('user_role',role === 'Dealer' ? 3 : 2)
 
-            fetch(URL+"/get_stock_city_list",{
+            fetch(URL+"/get_stock_city_list_new",{
                 method:'POST',
                 
                 body:form
