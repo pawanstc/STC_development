@@ -5,7 +5,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/Feather';
 import ImgToBase64 from 'react-native-image-base64'
 import AudioRecord from 'react-native-audio-record';
-
+import {readFile} from 'react-native-fs';
 
 
 
@@ -33,9 +33,11 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
 import { PickerItem } from 'react-native/Libraries/Components/Picker/Picker';
+import { ThemeConsumer } from 'styled-components';
+import { duration } from 'moment';
 
 
-
+let {height,width} = Dimensions.get('screen')
 export default class Recorder extends Component {
 	sound = null;
 
@@ -51,24 +53,37 @@ export default class Recorder extends Component {
 			loaded: false,
 			pause:false,
 			visible:false,
-			papper_list:[],
+			papper_list:[],	
 			mediaType:"",
 			paperType:[],
 			selectPaper:"",
-			desc:"",
+			desc:" ",
 			user_id:"",
-			filename:""
-
+			filename:"",
+			pattern_url:"",
+			data:"",
+			duration:"",
+			disabled:false
 		}
 
 
 	}
 
 	componentDidMount() {
+
+		if(width>height){
+			let temp = width;
+			width= height;
+			height=temp;
+		   
+			
+		}
 		this.getSheet();
-
-	
-
+		console.log("audioo")
+		console.log(this.state.data)
+		
+		this.state.pattern_url= this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]/,'/b');
+console.log(this.state.pattern_url);
 		
 		
 
@@ -157,6 +172,7 @@ export default class Recorder extends Component {
 					wavFile: 'voice1.wav' // default 'audio.wav'
 				};
 				AudioRecord.init(options);
+				
 		 	 	AudioRecord.start();
 			} else {
 				alert("sorry");
@@ -192,14 +208,63 @@ export default class Recorder extends Component {
 
 	}
 
-	
+	uploadNew= async (value)=>{
+		console.log(value)
+		this.setState({data:""})
+		const path = 'file://'+ value;
+		const apiUrl="https://stcapp.stcwallpaper.com/backend/audio1.php"
+		/*const formData = new FormData();
+        formData.append('file', {
+            uri: path,
+			type:'audio/wav',
+            name: 'test.wav',
+            
+        })
+		var xhr = new XMLHttpRequest();
+    xhr.open("POST","https://stcapp.stcwallpaper.com/backend/audio1.php");
+    xhr.setRequestHeader("Content-Type","multipart/form-data");
+    xhr.send(formData);
+    console.log(xhr);
+	console.log(xhr.response)*/
+	let body = new FormData();
+                            //Appending file to body
+                            body.append('file', {
+                                uri: path,
+                                type: 'audio/wav', //This is the file type .. you can define according to your requirement
+                                name: 'audio.wav', //File name you want to pass
+                            });
+                            //Service call
+                            await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: new Headers({
+                                    'Content-Type': 'multipart/form-data',
+                                }),
+                                body: body,
+                            })
+                                .then((res) => res.json())
+                                .then((responseJson) => {
+                                    //GET RESPONSE SUCCESS OF FAILURE
+                                    console.log(responseJson);
+									console.log(responseJson.url.replace('https://stcapp.stcwallpaper.com/',''));
+									this.setState({data:responseJson.url.replace('https://stcapp.stcwallpaper.com/','')})
+									console.log(this.state.data)
+                                })
+                                .catch((error) => {
+                                    //ERROR
+                                    console.log(error);
+                                });
+        
+	}
 	playSound =  () => {
+		  
+		
+		
 		this.setState({
 			playButtonStat: true
 		});
 	
-		if (this.sound == null) {
-			alert("Please Recorde Your message first");
+		if (this.sound == null ) {
+			alert("Please record first");
 			this.setState({
 				playButtonStat:false
 			})
@@ -209,6 +274,7 @@ export default class Recorder extends Component {
 					console.log(success);
 					console.log("audio play success");
 					this.sound.getCurrentTime((seconds) => {
+						console.log(seconds)
 						if (seconds ) {
 							console.log("recorde has finished");
 
@@ -259,65 +325,84 @@ export default class Recorder extends Component {
 		})
 	}
 
-	submit = () =>{
+	 checkSound  = async ()=>{
+		 this.setState({data:""})
+		if(this.sound){
+			 
+			await readFile(this.sound._filename,'base64').then(result=>{
+				this.setState({
+					data:"data:audio/wav;base64,"+result.toString()
+				})
+				//console.log(this.state.data)
+			  
+			})
+			  
+		}
+	}
+
+	submit = async() =>{
+		
+		
+			
+		
 	
-
-
-	if(this.state.desc =="" || this.state.selectPaper == "" || this.state.mediaType ==""){
+		 if(this.state.mediaType ==""){
 		Alert.alert(
 			"Validation Error",
-			"Please Check your input Field"
-		);
-
-		return;
-
-	}else if(this.state.desc ==""){
-		Alert.alert(
-			"Validation Error",
-			"Please Fill Description Fields"
+			"Please Select Media Type Paper"
 		);
 
 		return;
 	}else if(this.state.selectPaper ==""){
 		Alert.alert(
 			"Validation Error",
-			"Please Select Paper type"
+			"Please Select Print type"
 		);
 
 		return;
-	}else if(this.state.mediaType ==""){
-		Alert.alert(
-			"Validation Error",
-			"Please Select media type"
-		);
-
-		return;
-	}else if(this.state.desc.length < 10){
-		Alert.alert(
-			"Validation Error",
-			"Minimum 10 characters required in the description."
-		);
-
-		return;
-	}else{
-
-  
+	
+	}
+		
+	
 	if(this.props.route.params.imge_flag == 1){
 
-	// console.log(this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''));
+		this.setState({disabled:true})
+		if(this.sound){
+			console.log("audio detected")
+			await this.uploadNew(this.sound._filename)};
+	//console.log("pateern url")
+	//console.log(this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''));
 	// return;
+
+		/*var form = new URLSearchParams();
+		form.append('catlog_sub_category_id',this.props.route.params.image_id)
+		form.append('width',this.props.route.params.width)
+		form.append('height',this.props.route.params.height)
+		form.append('quantity',this.props.route.params.quantity)
+		form.append('description',this.state.desc)
+		form.append('media_sheet_type_id',this.state.mediaType)
+		form.append('paper_type_id',this.state.selectPaper)
+		form.append('order_by_user_id',this.state.user_id)
+		form.append('support_image_list',JSON.stringify(this.props.route.params.supportImages))
+		form.append('pattern_image_url',this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, ''))
+		form.append('img_flag',this.props.route.params.imge_flag)
+		//console.log(JSON.stringify(form))*/
 		
+		console.log("inside function ")
+		console.log(this.state.data)
 		fetch(URL+"/insert_post_job_order",{
 			headers:{
 				"Content-Type":"application/x-www-form-urlencoded"
 			},
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
-			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.patternUrl.replace(/^.*\/\/[^\/]+/, '')+"&img_flag="+ this.props.route.params.imge_flag
+			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.state.pattern_url+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+ this.state.data
+			
 		}).then(response => response.json())
 		.then(result =>{
-			console.log(result);
-			if(result.error == false){
+			console.log("result is here")
+			console.log(result)
+			if(result.error==false){
 			
 				Alert.alert(
 					"Success Message",
@@ -329,12 +414,23 @@ export default class Recorder extends Component {
 						{name:"home"}
 					]
 				});
-			}
+			}else{Alert.alert(
+				"Error",
+				"Server Error"
+
+			)
+			this.setState({disabled:false})}
 		}).catch(error =>{
+			console.log("error is here")
 			console.log(error)
+			this.setState({disabled:false})
 		});
 	}else if(this.props.route.params.imge_flag == 2){
+		this.setState({disabled:true})
+		if(this.sound)await this.uploadNew(this.sound._filename);
 	
+		console.log("inside function ")
+		console.log(this.state.data)
 	console.log(this.props.route.params.fileObj.path);
 
 		fetch(URL+"/insert_post_job_order",{
@@ -344,7 +440,7 @@ export default class Recorder extends Component {
 			method:"POST",
 			body:"catlog_sub_category_id="+this.props.route.params.image_id+ "&width="+ this.props.route.params.width+"&height="+ this.props.route.params.height+ "&quantity="+ this.props.route.params.quantity+ "&description="+ this.state.desc+ "&media_sheet_type_id="+
 			this.state.mediaType+ "&paper_type_id="+ this.state.selectPaper+ "&order_by_user_id="+ this.state.user_id+ "&support_image_list="+
-			JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.fileObj.path+"&img_flag="+ this.props.route.params.imge_flag
+			JSON.stringify(this.props.route.params.supportImages)+"&pattern_image_url="+ this.props.route.params.fileObj.path+"&img_flag="+ this.props.route.params.imge_flag+"&audio_url="+ this.state.data
 		}).then(response => response.json())
 		.then(result =>{
 			console.log(result);
@@ -361,14 +457,23 @@ export default class Recorder extends Component {
 						{name:"home"}
 					]
 				});
-			}
+			}else{Alert.alert(
+				"Error",
+				"Server Error"
+			)
+			this.setState({disabled:false})}
 		}).catch(error =>{
 			console.log(error)
+			Alert.alert(
+				"Error",
+				error.message
+			)
+			this.setState({disabled:false})
 		});
 	}
 		
 	}
-	}
+	
 
 
 	render(){
@@ -383,7 +488,7 @@ export default class Recorder extends Component {
 				<StatusBar barStyle="light-content" backgroundColor="#62463e" />
 				<View style={{
 					height: 170,
-					width: Dimensions.get("screen").width,
+					width:width,
 					backgroundColor: "#62463e",
 					borderBottomLeftRadius: 18,
 					borderBottomRightRadius: 18,
@@ -407,8 +512,8 @@ export default class Recorder extends Component {
 				</View>
 
 				<View style={{
-					height: Dimensions.get("screen").height +500,
-					width: Dimensions.get("screen").width - 45,
+					height: height +500,
+					width: width - 45,
 					position: "absolute",
 					top: 75,
 					left: 24,
@@ -542,18 +647,18 @@ export default class Recorder extends Component {
 						}} >
 							<Icon name="x" onPress={() => {
 								if(this.sound == null){
-									alert("Please Recorde First")
+									alert("Please record first")
 								}else{
 
 								Alert.alert(
 									"Confirmation Alert",
-									"Are you sure to delete audio record? ?",
+									"Do you really want to delete your recorded audio?",
 									[
 										{
 											text:"Ok",
-											onPress: async () => {
-												await this.sound.release()
-												alert("Recorde Successfully")
+											onPress:  () => {
+												 this.sound = null;
+												alert("Deleted successfully")
 											},
 											style:"default"
 										},
@@ -578,7 +683,8 @@ export default class Recorder extends Component {
 						flexDirection: "row",
 						justifyContent: 'space-between',
 						marginTop: 10,
-						marginHorizontal:3
+						marginHorizontal:26
+						
 				}} >
 					<Text style={{
 						fontSize: 14,
@@ -606,7 +712,7 @@ export default class Recorder extends Component {
 	
 }} >
 	<Picker 
-	style={{height:50,width:180}}
+	style={{height:50,width:180,alignSelf:'flex-end'}}
 	selectedValue={this.state.mediaType}
 	onValueChange={(value) => this.selectPaperType(value)}
 	>
@@ -626,7 +732,7 @@ export default class Recorder extends Component {
 						flexDirection: "row",
 						justifyContent: 'space-between',
 						marginTop: 10,
-						marginHorizontal:2
+						marginHorizontal:26
 				}} >
 					<Text style={{
 						fontSize: 14,
@@ -651,13 +757,13 @@ export default class Recorder extends Component {
 			height:50,
 			width:180,
 			justifyContent:"center",
-			alignItems:"center",
+			alignItems:"flex-end",
 			borderWidth:0.5,
 			
 			
 		}} >
 			<Picker 
-			style={{height:50,width:180}}
+			style={{height:50,width:180,alignSelf:'flex-end'}}
 			selectedValue={this.state.selectPaper}
 			onValueChange={(value) => this.setState({
 				selectPaper:value
@@ -666,7 +772,7 @@ export default class Recorder extends Component {
 				<Picker.Item label="Select Paper type" value=""  />
 				{
 					this.state.paperType.map(value =>(
-						<Picker.Item label={value.paper_type_name.substring(0, 18)} value={value.id}  />
+						<Picker.Item label={value.paper_type_name} value={value.id}  />
 					))
 				}
 		
@@ -684,7 +790,7 @@ export default class Recorder extends Component {
 			
 		}} >
 			<Picker 
-			style={{height:50,width:180}}
+			style={{height:50,width:180,alignSelf:'flex-end'}}
 			
 			onValueChange={(value) => this.setState({
 				selectPaper:value
@@ -755,10 +861,10 @@ export default class Recorder extends Component {
 
 			</View>
 
-				<TouchableOpacity activeOpacity={0.9} onPress={() => this.submit()} >
+				<TouchableOpacity activeOpacity={0.9} disabled={this.state.disabled} onPress={() => this.submit()} >
 					<View style={{
 						height:50,
-						width:Dimensions.get("screen").width,
+						width:width,
 						backgroundColor:"#62463e",
 						justifyContent:"center",
 						alignItems:'center'

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component,useEffect } from 'react';
 import Orientation from 'react-native-orientation-locker';
-import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView, AsyncStorage, Alert,ImageBackground, BackHandler } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView, AsyncStorage, Alert,ImageBackground, BackHandler, Linking } from 'react-native';
 
 import TabBarContainer from './TabnarComponent';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -9,6 +9,8 @@ import NetInfo from "@react-native-community/netinfo";
 import {imageUrl, URL} from '../api.js';
 import * as Animatable from 'react-native-animatable';
 import ImageLoad from 'react-native-image-placeholder';
+import messaging from '@react-native-firebase/messaging'
+
 import {
     BallIndicator,
     BarIndicator,
@@ -21,9 +23,10 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
 import WebView from 'react-native-webview';
-
+let {height,width} = Dimensions.get('screen')
 export default class HomeComponent extends Component{
-
+   
+   
  constructor(props){
      super(props)
 
@@ -39,7 +42,14 @@ export default class HomeComponent extends Component{
         company_logo:""
 
      }
+
+
  }
+
+ 
+   
+
+
  backAction = () =>{
  
     if(this.props.navigation.isFocused()){
@@ -54,7 +64,7 @@ export default class HomeComponent extends Component{
                     onPress:() => BackHandler.exitApp()
                 },
                 {
-                    text:"Cancle",
+                    text:"Cancel",
                     onPress:() => null
                 }
             ]
@@ -76,46 +86,96 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
     );
 });
  componentDidMount(){
+    console.log()
+    
+    if(width>height){
+       let temp = width;
+       width= height;
+       height=temp;
+    }
    
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
- this._unsubscribe = this.props.navigation.addListener("focus", () =>{
-    this.getUsers();
-    AsyncStorage.getItem("user_name")
-     .then(result =>{
-         console.log(result);
-         this.setState({
-             user_name:result
-         })
-     })
-     this.timeFormateMessage();
+    this._unsubscribe = this.props.navigation.addListener("focus", () =>{
+        this.getUsers();
+        AsyncStorage.getItem("user_name")
+        .then(result =>{
+            console.log(result);
+            this.setState({
+                user_name:result
+            })
+        })
+        this.timeFormateMessage();
+        this.setState({
+            loginTime:moment().calendar()
+        });
+    });
 
-     this.setState({
-         loginTime:moment().calendar()
-     });
- });
-
-
-
-     setTimeout(() => {
+    setTimeout(() => {
         this.setState({
             isVisable:true
         })
-     },1000)
-     Orientation.lockToPortrait()
- }
+    },1000)
+    Orientation.lockToPortrait()
+    console.log("mounted home")
+
+    messaging().onNotificationOpenedApp(remoteMessage => {
+         if(remoteMessage){
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage, this.state.user_id)
+            
+          this.props.navigation.navigate("notification"
+            )
+          
+        }
+    })
+
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        
+      if(remoteMessage!=null){
+            
+          console.log(
+            'Notification caused app to open from quit state:',
+            
+            remoteMessage,
+            this.state.user_id
+            
+          )
+
+          this.props.navigation.navigate("notification"
+            )
+      }
+    }).catch(error=>console.log(error))
+}
+  
 
  componentWillUnmount(){
-
-    
     this._unsubscribe();
     this._unsubscribeSiFocus();
     this._unsubscribeSiBlur();
-   
  }
+
+ checkAppUpdate = (releaseApkUpload) => {
+    if (releaseApkUpload === 0) {
+        Alert.alert(
+            "Notice",
+            "Please update the app.",
+            [
+                {
+                    cancelable: false,
+                    text:"Update",
+                    onPress:() => Linking.openURL('https://play.google.com/store/apps/details?id=com.stcwallpaper')
+                }
+            ]
+        )
+    }
+}
 
  // time formate message
 
- timeFormateMessage = () =>{
+timeFormateMessage = () =>{
     var time = new Date().toLocaleString( { hour: 'numeric', minute: 'numeric', hour12: true })
     this.setState({
         time:time
@@ -143,14 +203,13 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
             timeFormate:"Good Evening"
         });
      }
- }
+}
 
-   getUsers =  async ()=>{
-    
-     await AsyncStorage.getItem("user_id")
+getUsers =  async ()=>{
+    await AsyncStorage.getItem("user_id")
       .then(result =>{
       console.log("user_id"+result);
-          
+          this.setState({user_id:result})
           NetInfo.fetch().then(state =>{
               if(state.isConnected){
                 fetch(URL+"/get_user_details_by_user_id", {
@@ -161,11 +220,10 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                     body:"user_id=" +result
                 }).then(response => response.json())
                 .then(result =>{
-                   console.log(result);
+                    
+                   console.log('result=========================>', result);
+                    this.checkAppUpdate(result.release_apk_upload);
                     if(result.error == false){
-                        
-                       
-
                         if(result.profilePicture == null  && result.profilePicture == ""){
                             this.setState({
                                 user_name:result.first_name,
@@ -185,14 +243,15 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                                
                             });
                         }
-                        else{
-                            console.log(result.profilePicture);
+                        else if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")||result.profilePicture.includes(".jpeg")){
+                            AsyncStorage.setItem("profilePicture", result.profilePicture);
                             this.setState({
                                 user_name:result.first_name,
                                 profile_image:result.profilePicture,
                                 
                             });
-                        }
+                            console.log(this.state.profile_image)
+                        }else{this.setState({profile_image:"",user_name:result.first_name})}
 
                         if(result.company_logo == null && result.company_logo ==""){
                             this.setState({
@@ -208,9 +267,12 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                             })
                         }
                         else{
+                            if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")||result.company_logo.includes(".jpeg")){
                             this.setState({
                                 company_logo:result.company_logo
                             })
+                            console.log("logo of company")
+                            console.log(this.state.company_logo)}else this.setState({company_logo:""})
                         }
                     }else{
                         this.props.navigation.navigate("login");
@@ -228,145 +290,70 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
       })
    }
     render(){
-        
-    console.log("company_logo"+this.state.company_logo);
+        const profileImage = this.state.company_logo || this.state.profile_image
+        // console.log("profileImage ============>"+imageUrl+"/"+profileImage);
         return(
-        
-            <View style={{
-                flex:1,
-              justifyContent:"center"
-            }} >
-           
-                <View style={{
-               flex:1,
-               height:"100%",
-              
-                alignItems:"center",
-    
-             
-             }} >
-             <StatusBar barStyle="light-content" backgroundColor="#62463e" />
- 
-             <View style={ styles.headerBar } >
-
-
-
-
-             <View style={{
-                 width:"75%"
-             }}  >
-                {
-                    this.state.user_name !="" || this.state.user_name != null ? (
-                     <Text style={{
-                         color:"#FFF",
-                         margin:11,
-                         fontSize:18,
-                         fontFamily:'Roboto-Bold',
-                         marginTop:23,
-                         
-                     }} > {this.state.timeFormate}, {this.state.user_name}! </Text>
-                    ) :(
-                       <View style={{
-                           height:40,
-                           width:Dimensions.get("screen").width -85
-                       }} >
-                           </View>
-                    )
-                }
-             
-             {/* <Text style={{
-                 fontWeight:"bold",
-                 textAlign:"center",
-                 fontSize:17,
-                 color:"#FFF"
-             }} >{this.state.loginTime}</Text> */}
-             </View>
-              {/* <View>
-              <Moment>{this.state.time}</Moment>
-              </View> */}
-            {
-                 this.state.company_logo === ""    ? (
-                  <View>
-                  
-                      {
-                            this.state.profile_image === "" ? (
-                             
-                                <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                                
-                                <Image source={require("../assets/userProfile.png")}
-                         style={{
-                             height:50,
-                             width:50,
-                             borderRadius:50/2,
-                             margin:10,
-                            
-                         }}
-                         />
-                        </TouchableOpacity>
-
-
-                          ) :(
-                            <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                            <Image source={{uri:imageUrl+"/"+this.state.profile_image}}
-                            style={{
-                            height:50,
-                            width:50,
-                            borderRadius:50/2,
-                            margin:10,
-                            
-                            }}
+            <View style={{ flex:1, justifyContent:"center"}} >
+                <View style={{ flex:1, height:height, alignItems:"center" }} >
+                    <StatusBar barStyle="light-content" backgroundColor="#62463e" />
+                    <View style={ styles.headerBar }>
+                        <View style={{ paddingLeft: 20 }}>
+                            {this.state.user_name !="" || this.state.user_name != null ? (
+                                <Text numberOfLines={1} style={{
+                                    color:"#FFF",
+                                    margin:11,
+                                    fontSize:18,
+                                    fontFamily:'Roboto-Bold',
+                                    marginTop:23,
+                                    
+                                }}> 
+                                    {this.state.timeFormate}, {this.state.user_name}!
+                                </Text>
+                            ) : (
+                                <View style={{ height:40, width:width -85 }}></View>
+                            )}
+                        </View>
+                        <TouchableOpacity style={styles.logo} activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
+                            <Image source={profileImage ? {uri:imageUrl+"/"+profileImage} : require("../assets/userProfile.png")}    
+                                style={{
+                                    height:50,
+                                    width:50,
+                                    borderRadius:40, 
+                                }}
+                                isVisable={true}
+                                loadingStyle={{ size: 'large', color: '#62463e' }}
+                                borderRadius={40}
                             />
-                            </TouchableOpacity>
-                          )
-                      }
-                      </View>
-                ) :(
-                    <View>
-                    <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                    <Image source={{uri:imageUrl+"/"+this.state.company_logo}}
-             style={{
-                 height:50,
-                 width:50,
-                 borderRadius:50/2,
-                 margin:10,
-                
-             }}
-             />
-            </TouchableOpacity>
+                        </TouchableOpacity>
                     </View>
-                )
-            }
-
-        
-                 </View>
- 
-            <View style={{
-                height:Dimensions.get("screen").height * 0.178,
-                width:Dimensions.get("screen").width -40,
-                backgroundColor:"#FFF",
-                borderRadius:8,
-                backgroundColor:"#FFF",
-                position:"absolute",
-                top:83,
-                left:22,
-                right:22,
-                justifyContent:"center",
-                alignItems:"center",
-                elevation:10
-            }} >
-               <Text style={{
-                       textAlign:"left",
-                      
-                       fontSize:16,
-                    
-                       fontWeight:"normal",
-                       padding:15, 
-                       lineHeight:20,
-                      
-                       fontFamily:"OpenSans-Italic - Copy"
-                   }} >Welcome to STC Wallpaper Mobile App. Now you can check stock, order custom design and do lot more with your finger tips.
-                   </Text>
-            </View>
+                    <View style={{
+                        height:height * 0.178,
+                        width:width -40,
+                        backgroundColor:"#FFF",
+                        borderRadius:8,
+                        backgroundColor:"#FFF",
+                        position:"absolute",
+                        top:83,
+                        left:22,
+                        right:22,
+                        justifyContent:"center",
+                        alignItems:"center",
+                        elevation:10
+                        }}>
+                        <Text style={{
+                            textAlign:"left",
+                            
+                            fontSize:16,
+                            
+                            fontWeight:"normal",
+                            padding:15, 
+                            lineHeight:20,
+                            
+                            fontFamily:"OpenSans-Italic - Copy"
+                        }} >
+                            Welcome to STC Wallpaper Mobile App. Now you can check stock, order custom design and do lot more with your finger tips.
+                        </Text>
+                    </View>
               <View style={{
                 flex:4,
                 justifyContent:"center",
@@ -382,11 +369,11 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                    }} > 
 
                   <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.navigate("stockEnquery",{
-                      value:""
+                      value:"",user_id:this.state.user_id
                   })} >
                   <View style={{
                        height:135,
-                       width:Dimensions.get("screen").width *0.44,
+                       width:width *0.44,
                        backgroundColor:"#FFF",
                        borderRadius:8,
                        marginTop:20,
@@ -395,7 +382,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                        alignItems:'center',
                        elevation:6
                    }} >
-                        <Icon name="document-outline" color="#1c54b2" size={34} />
+                        <Icon name="document-outline" color="#1c54b2" size={44} />
                <Text style={{
                    textAlign:"center",
                    fontSize:14,
@@ -422,7 +409,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                    })} >
                    <View style={{
                        height:135,
-                       width:Dimensions.get("screen").width *0.44,
+                       width:width *0.44,
                        backgroundColor:"#FFF",
                        borderRadius:8,
                        marginTop:20,
@@ -431,7 +418,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                        alignItems:"center",
                        elevation:6
                    }} >
-                      <Icon name="copy-outline" color="#4caf50" size={34} />
+                      <Icon name="copy-outline" color="#4caf50" size={44} />
                
                <Text style={{
                   textAlign:"center",
@@ -466,7 +453,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                <TouchableOpacity activeOpacity={2}onPress={() => this.props.navigation.navigate("onGoingJob")} >
                <View style={{
                         height:135,
-                        width:Dimensions.get("screen").width *0.44,
+                        width:width *0.44,
                         backgroundColor:"#FFF",
                         borderRadius:8,
                         marginTop:20,
@@ -476,7 +463,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                         elevation:6,
                         
                    }} >
-                       <Icon  name="cube-outline" color="#673ab7" size={34} />
+                       <Icon  name="cube-outline" color="#673ab7" size={44} />
                <Text style={{
                    textAlign:"center",
                    fontSize:14,
@@ -501,7 +488,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
               <TouchableOpacity activeOpacity={2 } onPress={() => this.props.navigation.navigate("seeOnYourWall")} >
               <View style={{
                          height:135,
-                         width:Dimensions.get("screen").width *0.44,
+                         width:width *0.44,
                          backgroundColor:"#FFF",
                          borderRadius:8,
                          marginTop:20,
@@ -510,7 +497,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
                          alignItems:'center',
                          elevation:6
                    }} >
-                       <Icon name="flash-outline" color="#cddc39" size={34} />
+                       <Icon name="flash-outline" color="#cddc39" size={44} />
            
            <Text style={{
                textAlign:"center",
@@ -546,17 +533,16 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
 const styles = StyleSheet.create({
     headerBar:{
         height:175,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
         flexDirection:"row",
-        
-
+        justifyContent: 'space-between',
     },
     buttonTabView:{
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -45,
+        height:height,
+        width:width -45,
         position:"absolute",
         top:75,
         left:25,
@@ -580,7 +566,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,
@@ -595,5 +581,9 @@ const styles = StyleSheet.create({
         alignItems:"center",
         flexDirection:"row",
         
+    },
+    logo:{
+        marginTop:10,
+        paddingHorizontal: 20
     }
 })

@@ -11,7 +11,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'uuid-random';
 import * as Progress from 'react-native-progress';
 
-import Modal from 'react-native-modal';
+let {height,width} =Dimensions.get('screen')
 let imagesGrid = []
 export default class customiseComponent extends Component{
     constructor(props){
@@ -39,6 +39,14 @@ export default class customiseComponent extends Component{
     }
 
     componentDidMount(){
+      if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
+console.log("catlog pattenr_id"+ this.props.route.params.image_id,);
 
     console.log("flag"+this.props.route.params.flag);
         if(this.props.route.params.image){
@@ -46,8 +54,10 @@ export default class customiseComponent extends Component{
                 photo:this.props.route.params.image,
                 imageObj2:this.props.route.params.imageObj,
                 height:this.props.route.params.height,
-                width:this.props.route.params.width
+                width:this.props.route.params.width,
+                image_flag:this.props.route.params.imge_flag
             });
+            
         }
     }
 
@@ -166,7 +176,7 @@ launchCamera2 = async () =>{
 
   var xhr = new XMLHttpRequest();
 
-    xhr.open("POST","http://phpstack-525410-1692898.cloudwaysapps.com/backend/postjob.php");
+    xhr.open("POST","https://stcapp.stcwallpaper.com/backend/postjob.php");
     xhr.setRequestHeader("Content-Type","multipart/form-data");
     xhr.send(form);
 
@@ -212,7 +222,7 @@ launchCamera2 = async () =>{
 
     orderSubmit =  ()=>{
   
-    console.log(this.state.fileObj);
+    console.log(this.props.route.params.flag);
       if(this.state.height == "" && this.state.width == "" && this.state.photo == ""){
         Alert.alert(
           "Validation Error",
@@ -221,43 +231,52 @@ launchCamera2 = async () =>{
         return;
       }else if(this.state.photo == "" || this.state.uploadFile == ""){
         Alert.alert(
-          "Validation Error",
+          "Validation Error Image",
           "Please Add Image File Or Select Pattern"
         );
+        return;
+        }else if(this.state.height=='' && this.state.width==''){
+          Alert.alert(
+            "Validation Error",
+            "Please enter width and height"
+          )
         return;
       }else if(this.state.height == undefined){
         Alert.alert(
           "Validation Error",
-          "Please Enter Height"
+          "Please enter height"
         );
 
         return;
       }else if(this.state.width ==  undefined){
         Alert.alert(
           "Validation Error",
-          "Please Enter Width"
+          "Please enter width"
         );
 
         return;
       }else if(this.state.height ==""){
         Alert.alert(
           "Validation Error",
-          "Please Enter Height"
+          "Please enter height"
         );
 
         return;
       }else if(this.state.width ==""){
         Alert.alert(
           "Validation Error",
-          "Please Enter Width"
+          "Please Enter width"
         );
 
         return;
       }
+      
 
       if(this.props.route.params.flag == null){
+   
         
-        if(this.state.fileObj == null){
+        if(JSON.stringify(this.state.fileObj) != null){
+        console.log("file object is not null ");
           this.props.navigation.navigate("description",{
             supportImages: this.state.photo2Arr,
             imageObj:this.props.route.params.imageObj,
@@ -286,6 +305,20 @@ launchCamera2 = async () =>{
     
           });
         }
+      }else if(this.props.route.params.flag == undefined){
+        this.props.navigation.navigate("description",{
+          supportImages: this.state.photo2Arr,
+          imageObj:this.props.route.params.imageObj,
+          fileObj:this.state.fileObj,
+          image_id:this.props.route.params.image_id,
+          height:this.state.height,
+          width:this.state.width,
+          fileupload:this.state.uploadFile,
+          quantity:this.state.Quantity,
+          patternUrl:this.props.route.params.image,
+          imge_flag:this.props.route.params.flag
+  
+        });
       }else{
         this.props.navigation.navigate("description",{
           supportImages: this.state.photo2Arr,
@@ -319,7 +352,7 @@ launchCamera2 = async () =>{
 
       var xhr = new XMLHttpRequest();
 
-        xhr.open("POST","http://phpstack-525410-1692898.cloudwaysapps.com/backend/postjob.php");
+        xhr.open("POST","https://stcapp.stcwallpaper.com/backend/postjob.php");
         xhr.setRequestHeader("Content-Type","multipart/form-data");
         xhr.send(form);
 
@@ -383,7 +416,7 @@ launchCamera2 = async () =>{
 
     var xhr = new XMLHttpRequest();
 
-      xhr.open("POST","http://phpstack-525410-1692898.cloudwaysapps.com/backend/postjob.php");
+      xhr.open("POST","https://stcapp.stcwallpaper.com/backend/postjob.php");
       xhr.setRequestHeader("Content-Type","multipart/form-data");
       xhr.send(form);
 
@@ -455,7 +488,7 @@ launchCamera2 = async () =>{
   
       Alert.alert(
         "STC alert",
-        "Are you sure to Delete custom image ??",
+        "Are you sure to delete custom image ??",
         [
           {text:"yes", onPress: async() =>{
              let newArray = [];
@@ -471,10 +504,10 @@ launchCamera2 = async () =>{
           });
        }
      }},
-     {text:"No", onPress:() => Alert.alert("Continue Process"), style:"cancel"}
+     {text:"No", onPress:() => null }
         ],
         {
-          cancelable:true
+          cancelable:false
         }
         )
      
@@ -484,8 +517,9 @@ launchCamera2 = async () =>{
         console.log(this.state.photo2Arr);
   }
   uploadFile = async () => {
+    console.log("yes");
     this.setState({
-      image_flag:"2"
+      image_flag:""
     })
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -506,40 +540,49 @@ launchCamera2 = async () =>{
   this.setState({
     photo: image.path,
     uploadFile:image,
-    fileObj:image
+    fileObj:image,
+    image_flag:"2"
   });
 
-      if(image){
-        var form = new FormData();
+  var form = new FormData();
 
-        var filename = image.path.replace(/^.*[\\\/]/, '');
+  var filename = image.path.replace(/^.*[\\\/]/, '');
+
+
+    form.append('image',{
+      uri:image.path,
+      type:image.mime,
+      name:filename
+    });
+    console.log({
+      uri:image.path,
+      type:image.mime,
+      name:filename
+    });
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST","https://stcapp.stcwallpaper.com/backend/edit_pattern.php");
+    xhr.setRequestHeader("Content-Type","multipart/form-data");
+    xhr.send(form);
+    console.log(xhr);
+
+    if(xhr.upload){
       
-
-          form.append({
-            uri:image.path,
-            type:image.mime,
-            name:filename
-          });
-
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST","http://phpstack-525410-1692898.cloudwaysapps.com/backend/edit_pattern.php");
-          xhr.send(form);
-
-          if(xhr.upload){
-            xhr.upload.onprogress = ({total, loaded}) =>{
-              this.setState({
-                progress:loaded/total,
-                progressStat:true
-              })
-            }
-          }
-
-          setTimeout(() =>{
-            this.setState({
-              progressStat:false
-            })
-          }, 1100);
+      xhr.upload.onprogress = ({total, loaded}) =>{
+        this.setState({
+          progress:loaded/total,
+          progressStat:true
+        })
       }
+    }else{
+      alert("Image not uplaoded")
+    }
+
+    setTimeout(() =>{
+      this.setState({
+        progressStat:false
+      })
+    }, 1100);
 });
     }else{
       alert("Please try again latter");
@@ -563,7 +606,7 @@ launchCamera2 = async () =>{
                 
                 <View style={{
     height:170,
-    width:Dimensions.get("screen").width,
+    width:width,
     backgroundColor:'#62463e',
     borderBottomLeftRadius:20,
     borderBottomRightRadius:20,
@@ -590,20 +633,20 @@ launchCamera2 = async () =>{
 </View>
 
 <View style={{
-   height:Dimensions.get("screen").height,
-   width:Dimensions.get("screen").width -38,
+   height:height,
+   width:width*0.94,
    position:"absolute",
    top:78,
-   left:20,
-   right:0,
+   //left:20,
+   //right:10,
    alignItems:"center",
-   justifyContent:"center",
-   flex:0.6,
+   justifyContent:'space-around',
+   alignSelf:'center',
 
    backgroundColor:"#FFF",
    borderTopRightRadius:18,
    borderTopLeftRadius:18,
-   flex:1
+  
 
 }} >
     <ScrollView 
@@ -613,59 +656,70 @@ launchCamera2 = async () =>{
         showsVerticalScrollIndicator={false}
     >
     <View style={{
-                    justifyContent: 'center',
+                    
       flex:1,
-      width:"100%"
+     
 
     }} >
        <Text style={{
         fontSize:16,
         margin:13,
-        color:"#404040"
+        
+        color:"#404040",
+        alignSelf:'flex-start'
         
     }} >Select Image </Text>
 
         <View style={{
+            flex:1,
             flexDirection:"row",
-            alignItems:'center'
+            alignItems:'flex-start',
+            //justifyContent:'space-around',
+            marginLeft:width*0.1,
+            
+            
+            
 
         }} >
             {
                 this.state.photo ? (
                     <View style={{
-                      height:110,
-                      width:120,
-
+                     
+                        flex:1,
+                        
                         backgroundColor:"#fafafa",
                             elevation: 5,
-                        marginHorizontal:10
+                        marginLeft:10
                     }} >
                         <Image source={{uri:this.state.photo}} style={{
-                                height:110,
-                                width:120,
-                                marginBottom:40
+                                height:'100%',
+                                width:'100%',
+         
+                                
                             }} />
         
                     </View>
                 ) :(
                     <View style={{
-                      height:110,
-                      width:120,
+                      flex:1,
+                      //justifyContent:'space-around',
                         elevation:5,
-                        marginHorizontal:10
+                        //marginLeft:10
                     }} >
                       {
                         this.props.route.params.image =="" ? (
                           <Image source={require("../assets/uload3.jpg")} style={{
-                            height:110,
-                            width:120,
-                            marginLeft:6
+                            height:'100%',
+                            width:width*0.30,
+      
+                            //marginLeft:6
                            }} /> 
                         ) :(
                           <Image source={require("../assets/uload3.jpg")} style={{
-                            height:110,
-                            width:120,
-                            marginLeft:6
+                            height:120,
+                            width:180,
+      
+                            //marginLeft:6
                            }} /> 
                         )
                       }
@@ -675,12 +729,19 @@ launchCamera2 = async () =>{
             }
             
            <View style={{
-               flexDirection:"column"
+               flexDirection:"column",
+               width:width*0.5,
+              
            }} >
 
 
                 <View style={{
-                flexDirection:'row'
+                flexDirection:'row',
+                flex:1,
+                alignSelf:'flex-start'
+                //marginLeft:Dimensions.get('screen').width*0.1
+                
+               
             }} >
                 <View style={{
                     backgroundColor:'#62463e',
@@ -690,7 +751,7 @@ launchCamera2 = async () =>{
                     marginTop:5,
                     justifyContent:'center',
                     alignItems:'center',
-                    marginLeft:10
+                    //marginLeft:10
                 }} >
                    <TouchableOpacity
                    activeOpacity={2} 
@@ -706,13 +767,14 @@ launchCamera2 = async () =>{
               <TouchableOpacity  activeOpacity={2} onPress={() => this.props.navigation.navigate("customCatelog")} >
                 <Text style={{
                     textAlign:"center",
-                  
+                    alignSelf:'flex-end',
                     margin:12,
+                    
                     fontSize:16,
                   color:"#404040"
 
                 }} >
-                    Select A Pattern
+                    Select A Pattern  
                 </Text>
               </TouchableOpacity>
 
@@ -722,12 +784,13 @@ launchCamera2 = async () =>{
                     
                     fontSize:16,
                     color:'grey',
-                    marginLeft:80,
+                    marginLeft:width*0.1,
                     fontSize:14
                 }} >------ Or ------</Text>
 
 <View style={{
-                flexDirection:'row'
+                flexDirection:'row',
+                //marginLeft:Dimensions.get('screen').width*0.1
             }} >
                 <View style={{
                     backgroundColor:'#62463e',
@@ -737,7 +800,7 @@ launchCamera2 = async () =>{
                     marginTop:5,
                     justifyContent:'center',
                     alignItems:'center',
-                    marginLeft:10
+                    //marginLeft:10
                 }} >
                   <TouchableOpacity activeOpacity={2} onPress={() => this.uploadFile()} >
                   <Icon name="cloud-upload-outline" size={18} color="#FFF" />
@@ -764,17 +827,18 @@ launchCamera2 = async () =>{
     
 
      <View style={{
-      justifyContent:'center',
+      
       alignItems:"center",
-
+      padding:10,
+      
      }} >
         <Image source={require("../assets/desc_01.jpg")} style={{
-            height:145,
-            width:235,
+            height:width*0.36,
+            width:width*0.6,
             
-            marginTop:10,
-            marginBottom:20,
-            marginRight:6
+            //marginTop:10,
+            marginBottom:10,
+            
      
 
            }} />
@@ -782,7 +846,8 @@ launchCamera2 = async () =>{
 
      
        <View style={{
-           flexDirection:'row'
+           flexDirection:'row',
+           alignSelf:'center'
        }} >
           <View style={{
               flexDirection:'column'
@@ -817,7 +882,7 @@ launchCamera2 = async () =>{
               width:value
             })}
             style={{
-                width:60,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -834,7 +899,7 @@ launchCamera2 = async () =>{
               width:value
             })}
             style={{
-                width:60,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -865,7 +930,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:60,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -883,7 +948,7 @@ launchCamera2 = async () =>{
                   height:value
                 })}
             style={{
-                width:60,
+                width:width*0.2,
                 height:40,
                 borderWidth:0.2,
                 borderRadius:5,
@@ -902,7 +967,9 @@ launchCamera2 = async () =>{
 
        <View style={{
            flexDirection:"row",
-           alignItems:"center"
+           //alignItems:"center",
+           alignSelf:'center',
+
        }} >
             <Text style={{
             fontFamily:'Roboto-Bold',
@@ -938,7 +1005,7 @@ launchCamera2 = async () =>{
                     </View>
                     </TouchableOpacity>
                   <View style={{
-                      width:100,
+                      width:width*0.2,
                       height:30,
                       borderRadius:13,
                       borderColor:'black',
@@ -978,7 +1045,7 @@ launchCamera2 = async () =>{
        </View>
       
    <View style={{
-    justifyContent:'center',
+    alignSelf:'center',
     alignItems:"center"
    }} >
     <Text numberOfLines={2} style={{
@@ -996,7 +1063,8 @@ launchCamera2 = async () =>{
     borderBottomWidth:0.6,
     borderBottomColor:'black',
     marginTop:40,
-                        alignItems: 'center',
+    width:width,
+    alignItems: 'center',
     justifyContent:"center"
 }} />
 
@@ -1171,7 +1239,7 @@ marginHorizontal:10
 
   alignItems:'center',
   height:45,
-width:Dimensions.get("screen").width,
+width:width,
 
 backgroundColor:"#62463e",
 justifyContent:"center"
@@ -1188,20 +1256,9 @@ justifyContent:"center"
  </View>
    </TouchableOpacity>
 
-  <Modal isVisible={this.state.progressStat}>
-  <View style={{
-		flex:1,
-		  alignItems:"center",
-          justifyContent:"center"
-	  }} >
-		 <Progress.Bar progress={this.state.progress} width={240} />
 
-         <Text style={{
-             textAlign:"center",
-             color:"grey"
-         }} >Uploading....</Text>
-		  </View>
-        </Modal>
+   
+  
             </View>
         );
     }

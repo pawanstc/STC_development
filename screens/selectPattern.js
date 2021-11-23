@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { StyleSheet, View, TouchableOpacity, Image, FlatList, Text, Dimensions, ImageBackground } from 'react-native';
 import Icon from  'react-native-vector-icons/Ionicons';
-
+let {height,width} = Dimensions.get('screen')
 export default class SelectPatterns extends Component{
 
 constructor(props){
@@ -95,6 +95,16 @@ constructor(props){
         ],
     }
 }
+
+componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
+}
     render(){
         return(
             <View style={{
@@ -103,7 +113,7 @@ constructor(props){
             }} >
                 <View style={{
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:'#62463e',
                     borderBottomLeftRadius:18,
                     borderBottomRightRadius:18,
@@ -130,9 +140,9 @@ constructor(props){
                     top:70,
                     left:24,
                     right:0,
-                    width:Dimensions.get("screen").width -45,
+                    width:width -45,
                     backgroundColor:"#FFF",
-                    height:Dimensions.get("screen").height,
+                    height:height,
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
                     justifyContent:"center"

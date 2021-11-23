@@ -22,6 +22,7 @@ import {
   } from 'react-native-indicators';
   import NetInfo from "@react-native-community/netinfo";
   import ImageLoad from 'react-native-image-placeholder';
+  let {height,width} = Dimensions.get('screen')
 export default class StackNavigation extends Component{
 
     constructor(props){
@@ -60,6 +61,13 @@ export default class StackNavigation extends Component{
 
 componentDidMount(){
    
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
 this.getCatlog();
     setTimeout(() =>{
         this.setState({
@@ -523,7 +531,7 @@ searchBarAppear = () =>{
 const styles = StyleSheet.create({
     headerBar:{
         height:170,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -538,8 +546,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
     
@@ -548,7 +556,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

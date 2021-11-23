@@ -3,7 +3,17 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Icon from 'react-native-vector-icons/Ionicons';
+let {height,width} = Dimensions.get('screen')
 export default class ShowOnYourWall extends Component{
+    componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
+    }
     render(){
         return(
             <View style={{
@@ -12,7 +22,7 @@ export default class ShowOnYourWall extends Component{
             }} >
                 <View style={{
                     height:60,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:"#62463e",
                     flexDirection:"row",
                     justifyContent:'space-between'

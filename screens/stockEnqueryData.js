@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Dimensions , Image, ScrollVie
 import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL, imageUrl} from '../api.js';
-
+let {height,width} = Dimensions.get('screen')
 export default class StockEnqueryDetails extends Component{
     constructor(props){
         super(props);
@@ -17,6 +17,13 @@ export default class StockEnqueryDetails extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this.getStockDetails();
     }
 
@@ -86,7 +93,7 @@ export default class StockEnqueryDetails extends Component{
 
                 <View style={{
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     borderBottomLeftRadius:18,
                     borderBottomRightRadius:18,
                     backgroundColor:"#62463e",
@@ -124,8 +131,8 @@ export default class StockEnqueryDetails extends Component{
                     top:70,
                     left:24,
                     right:24,
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width -45,
+                    height:height,
+                    width:width -45,
                     backgroundColor:'#FFF',
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
@@ -174,7 +181,7 @@ export default class StockEnqueryDetails extends Component{
                                           }} >
                                                <Image style={{
                                                height:250,
-                                               width:Dimensions.get("window").width -45,
+                                               width:width -45,
                                                borderRadius:6,
                                                borderTopLeftRadius:20,
                                                borderTopRightRadius:20,
@@ -282,8 +289,8 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:100
-                       }} >1</Text>
+                           paddingLeft:88
+                       }} >{this.state.stockDetails.latest_qty}</Text>
 
                    </View>
 
@@ -303,31 +310,12 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:50
+                           paddingLeft:53
                        }} >{ this.state.stockDetails.catalog_name}</Text>
 
                    </View>
 
-                   <View style={{
-                       flexDirection:"row",
-                       padding:20,
-                       borderBottomColor:"#eeee",
-                       borderBottomWidth:0.6
-                   }} >
-                       <Text style={{
-                           textAlign:"right",
-                           fontSize:16
-                       }} >Paper Type</Text>
-
-                       <Text style={{
-                           textAlign:"left",
-                           fontSize:16,
-                           color:"grey",
-                           paddingLeft:54
-                           
-                       }} >{ this.state.stockDetails.paper_type_name}</Text>
-
-                   </View>
+                   
 
                       <View style={{
                        flexDirection:"row",
@@ -344,7 +332,7 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                           paddingLeft:62
+                           paddingLeft:80
                        }} >{ this.state.stockDetails.roll_size}</Text>
 
                    </View>
@@ -366,7 +354,7 @@ export default class StockEnqueryDetails extends Component{
                            textAlign:"left",
                            fontSize:16,
                            color:"grey",
-                       paddingLeft:50
+                       paddingLeft:48
                        }} >{ this.state.stockDetails.total_sq_ft}</Text>
 
                    </View>
@@ -387,9 +375,9 @@ export default class StockEnqueryDetails extends Component{
                            fontSize:16,
                            color:"grey",
                        
-                           width:212,
+                           
                            textAlign:"center",
-                           paddingLeft:45
+                           paddingLeft:100
                        }} >{ this.state.stockDetails.color}</Text>
 
                    </View>
@@ -416,7 +404,7 @@ export default class StockEnqueryDetails extends Component{
                                 color:"grey",
                           
                                 width:200,
-                                paddingLeft:80
+                                paddingLeft:85
                              }} >
 
 
@@ -444,8 +432,14 @@ export default class StockEnqueryDetails extends Component{
                          ):(
                             <View style={{
                                 flexDirection:"row",
-                                marginLeft:120,
-                                marginTop:6
+                                fontSize:14,
+                                fontWeight:"normal",
+                         
+                               textAlign:"center",
+                                color:"grey",
+                          
+                                width:200,
+                                paddingLeft:80
                              }} >
 
 

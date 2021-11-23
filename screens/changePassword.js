@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
 import { NetworkInfo } from "react-native-network-info";
+import DeviceInfo from 'react-native-device-info';
+let {height,width} = Dimensions.get('screen')
 export default class UpdatePassword extends Component{
 
     constructor(props){
@@ -19,9 +21,16 @@ export default class UpdatePassword extends Component{
     }
 
     componentDidMount(){
-  
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         
         this.getIpAddress();
+        
 
     }
 
@@ -34,19 +43,50 @@ export default class UpdatePassword extends Component{
     }
 
     ChangePassword = () =>{
-      
+         
+        if(this.state.oldPassword==''){
+            Alert.alert(
+                "Validation",
+                "Please enter Old Password"
+                )
+                return;
+        }else if(this.state.newPassword==''){
+            Alert.alert(
+                "Validation",
+                "Please enter New password"
+            )
+        return;}else if(this.state.reEnterPassword==''){
+                Alert.alert(
+                    "Validation",
+                "You can't leave re-enter new password field blank."
+                )
+                return;
+            }else if(this.state.oldPassword==this.state.newPassword){
+                Alert.alert(
+                    "Error",
+                    "New password cannot be same as old password."
+                )
+                return;
+            }else if(this.state.newPassword!=this.state.reEnterPassword){
+                Alert.alert(
+                    "Validation",
+                    "New password and re-enter new password do not match"
+                )
+                return;
+            }
       
        AsyncStorage.getItem("device_id")
        .then(result =>{
         console.log(result);
-           if(result){
+                
                
                this.setState({
                    device_id:result
                })
+               this.state.device_id= DeviceInfo.getUniqueId();
             AsyncStorage.getItem("user_id")
             .then(user_id =>{
-               
+               console.log(this.state.device_id)
                 NetInfo.fetch().then(state =>{
                     if(state.isConnected){
                         fetch(URL+"/update_password_by_user_id",{
@@ -59,14 +99,14 @@ export default class UpdatePassword extends Component{
                         }).then(response => response.json())
                         .then(result =>{
                        
-                           
+                           console.log(result);
                             if(result.error == false){
                             AsyncStorage.removeItem("user_id");
                                 this.props.navigation.replace("login");
                             }else{
                                 Alert.alert(
                                     "Error",
-                                    "Password update not successfully"
+                                    result.msg
                                 )
                             }
                         }).catch(error =>{
@@ -80,9 +120,7 @@ export default class UpdatePassword extends Component{
                     }
                 })
             })
-           }else{
-
-           }
+        
        })
     }
     render(){
@@ -94,7 +132,7 @@ export default class UpdatePassword extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -123,8 +161,8 @@ export default class UpdatePassword extends Component{
                    flex:1,
                    justifyContent:'center',
                    alignItems:"center",
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    borderTopLeftRadius:20,
                    borderTopRightRadius:20,
                    position:"absolute",
@@ -135,7 +173,11 @@ export default class UpdatePassword extends Component{
            
                }} >
                    <View style={{
-                       flex:0.7
+                       flex:0.7,
+                       width:'100%',
+                       marginLeft:20,
+                       paddingLeft:20
+                       
                    }} >
                        
                   
@@ -147,7 +189,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:'90%',
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -161,7 +203,8 @@ export default class UpdatePassword extends Component{
                        fontSize:15,
                        color:"#62463e",
                        backgroundColor:"#FFF",
-                       position:"absolute",
+                       marginLeft:25,
+                       position:'absolute',
                        top:-8,
                    }} >Enter Old Password</Text>
 <TextInput 
@@ -172,7 +215,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:'90%',
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -186,6 +229,7 @@ export default class UpdatePassword extends Component{
                        fontSize:15,
                        color:"#62463e",
                        backgroundColor:"#FFF",
+                       marginLeft:25,
                        position:"absolute",
                        top:64,
                    }} >Enter New Password</Text>
@@ -199,7 +243,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:'90%',
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -213,6 +257,7 @@ export default class UpdatePassword extends Component{
                        fontSize:15,
                        color:"#62463e",
                        backgroundColor:"#FFF",
+                       marginLeft:25,
                        position:"absolute",
                        top:140,
                    }} >Re-enter New Password</Text>
@@ -220,12 +265,14 @@ export default class UpdatePassword extends Component{
                 <TouchableOpacity onPress={() => this.ChangePassword()} activeOpacity={2} >
                     <View style={{
                         height:45,
-                        width:300,
+                        width:'80%',
                         backgroundColor:"#62463e",
                         marginTop:45,
+                        marginLeft:'5%',
                         borderRadius:6,
                         justifyContent:'center',
-                        alignItems:'center'
+                        alignItems:'center',
+                        
                     }} >
                         <Text style={{
                             color:"#FFF",

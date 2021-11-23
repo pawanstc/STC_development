@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text, TextInput, StatusBar,FlatList, Dimension  } from 'react-native';
+import { StyleSheet, ScrollView, View, Image, TouchableOpacity, Dimensions, Text, TextInput, StatusBar,FlatList, Dimension, AsyncStorage, RefreshControl  } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Modal, { ModalContent,SlideAnimation } from 'react-native-modals';
-
+import NetInfo from "@react-native-community/netinfo";
 import TabBarContainer from './TabnarComponent.js';
-
+import {route_notificationTojob,route_notificationToNotice} from '../screens/notification_route'
 // import AnimatedLoader from "react-native-animated-loader";
-
+import {URL,imageUrl} from '../api';
 
 import {
     BallIndicator,
@@ -20,144 +20,80 @@ import {
     UIActivityIndicator,
     WaveIndicator,
   } from 'react-native-indicators';
+import index from 'uuid-random';
 
- 
-  const resources = {
-    file: Platform.OS === 'ios' ? 'test-pdf.pdf' : '/sdcard/Download/test-pdf.pdf',
-    url: 'https://www.ets.org/Media/Tests/TOEFL/pdf/SampleQuestions.pdf',
-  };
+let {height,width} = Dimensions.get('screen')
+  
 export default class Notification extends Component{
-
-    
-
     constructor(props){
         super(props)
 
-        this.state = {
-            cateLogImage:[
-                {
-                    "id":"1",
-                    "image":"http://www.africau.edu/images/default/sample.pdf",
-                    "name":"Panache",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"2",
-                   "image":"https://cdn.decorilla.com/online-decorating/wp-content/uploads/2020/03/2020-interior-design-trends-feature.jpg",
-                   "name":"Hexagon",
-                   "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"3",
-                    "image":"https://images.adsttc.com/media/images/5f2c/8545/b357/65db/c000/008c/large_jpg/FEAT_ID.jpg?1596753213",
-                    "name":"Asahfoard",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                   
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"4",
-                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkaNzDtaS-YvNVH5qi61JDVA0VgQiaSer90Q&usqp=CAU",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"5",
-                    "image":"https://www.thespruce.com/thmb/psh2haBAUlmntkQ3VLxDyehi5lo=/2119x1414/filters:fill(auto,1)/GettyImages-1161177015-f1de4ba58a6c4f50969d9119d80405a6.jpg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                },
-                {
-                    "id":"6",
-                    "image":"https://www.stcwallpaper.com/admin/upload/original/1579589811_3ceee580b34b478b3bf9673908a786f4.jpeg",
-                    "name":"Vermeil",
-                    "des":"This should not be the accepted answer as placeholderStyle doesn't work at least in RN 0.59. Jon Wyatt 's method of conditional styling worked for me"
-                }
-            ],
-            isVisiable:false,
-            messageData:{},
-            modelShow:false
+        this.state={
+            notifications:[],
+            userid:'',
+            refreshing:false,
+            totalRecord: 0,
+            pageIndex: 0,
+            pageSize: 20,
+            isLoading: false
         }
     }
 
     componentDidMount(){
-        setTimeout(() =>{
-            this.setState({
-                isVisiable:true
-            })
-        },2000)
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+        }
+
+        AsyncStorage.getItem("user_id")
+        .then(result =>{this.setState({
+            userid:result
+        })
+            this.getNotifications();
+        })
+       
     }
+
+    componentDidUpdate(){
+        console.log(this.state.userid)
+    }
+    getNotifications=()=>{
+        NetInfo.fetch().then(state=>{
+            if(state.isConnected){
+                AsyncStorage.getItem('role').then(role=>{
+                    fetch(URL + "/get_all_notification_details",{
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+                        method:"POST",
+                        body:
+                            "user_id="+
+                            this.state.userid+
+                            "&role="+
+                            role+
+                            "&page_index="+
+                            this.state.pageIndex+
+                            "&page_size="+
+                            this.state.pageSize
+                    }).then(response=>response.json())
+                    .then(result=>{
+                        this.setState({isLoading: false});
+                        if (result.error === false) {
+                            this.setState({
+                                notifications: this.state.pageIndex === 0 ? result.notification_details : [...this.state.notifications, ...result.notification_details],
+                                totalRecord: result.total_size
+                            })
+                        } else {
+                            this.setState({notification: []})
+                        }
+                    }).catch(err=>console.log(err))
+                })
+            }
+            this.setState({refreshing:false})
+        })
+    }
+    
 
     modelPop = (data) =>{
         this.setState({
@@ -166,190 +102,122 @@ export default class Notification extends Component{
         });
     }
 
-    checkFileExt = (url) => {
-        let ext = url.split('.').pop();
-        if(ext === "pdf"){
-            return true
-        }else{
-            return false;
-        }
+
+    Click=(item)=>{
+            if(item.notification_type=="Job_Details"){
+                var jd=[]
+                route_notificationTojob(item.post_job_order_id).then(res=>{jd=res
+                
+                    console.log("jobdetails",jd)
+                    if(jd!=undefined){
+                        this.props.navigation.navigate("postViewJob",{
+                            pattern_number:jd.pattern_no,
+                            order_image:jd.pattern_image_url,
+                            supportive_image:jd.support_image.image_details,
+                            button_show:jd.button_show,
+                            order_id:jd.id,
+                            job_description:jd.description,
+                            ordered_by:jd.order_by_user_id,
+                            audio:jd.audio_url,
+                        user_type:jd.user_role_name})}
+                    }
+                    ).catch(err=>console.log(err))
+            }else{
+                
+                var res=route_notificationToNotice(item.notification_doc_url)
+                if(res=="pdf")this.props.navigation.navigate("showsPdf",{url:imageUrl+item.notification_doc_url})
+                if(res=="jpg")this.props.navigation.navigate("preview",{uri:imageUrl+item.notification_doc_url})
+            }
     }
 
-    
     render(){
-       
         return(
            <View style={{
                flex:1
            }} >
- <View style={{
-               flex:1,
-              
-               alignItems:"center"
-            }} >
-            <StatusBar barStyle="light-content" backgroundColor="#62463e" />
-
-            <View style={ styles.headerBar } >
-            <TouchableOpacity onPress={() => this.props.navigation.goBack(null)} >
-            <Icon name="arrow-back" size={20} style={{
-                    margin:20
-                }}  color="#FFF" />
-            </TouchableOpacity>
-             {/* <View>
-             <Moment>{this.state.time}</Moment>
-             </View> */}
-           {/* <Text style={{
-               fontSize:18,
-               fontWeight:"bold",
-               color:"#FFF",
-            margin:20,
-            
-            
-           }} >Post Job</Text> */}
-            {/* <Image source={{uri:'https://cdn1.vectorstock.com/i/1000x1000/31/95/user-sign-icon-person-symbol-human-avatar-vector-12693195.jpg'}} 
-    style={{
-        height:40,
-        width:40,
-        borderRadius:20,
-        marginLeft:230,
-        marginTop:10
-    }}
-    /> */}
-
-
-    
+                <View style={{
+                flex:1,
+                
+                alignItems:"center"
+                }} >
+                <StatusBar barStyle="light-content" backgroundColor="#62463e" />
+                <View style={ styles.headerBar } >
+                    <TouchableOpacity onPress={() => this.props.navigation.goBack(null)} >
+                    <Icon name="arrow-back" size={20} style={{
+                            margin:20
+                        }}  color="#FFF" />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={ styles.formContainer } >
-           
-                 <Text style={{
-                     textAlign:'center',
-                     fontFamily:"Roboto-Bold",
-                     fontSize:20,
-                     marginTop:14
-                 }} >Notification</Text>
-               
-                 <FlatList
-                 
-                    showsVerticalScrollIndicator={false}
-                    data={this.state.cateLogImage}
-                    renderItem={(items) => {
-                        return(
+            
+                    <Text style={{
+                        textAlign:'center',
+                        fontFamily:"Roboto-Bold",
+                        fontSize:20,
+                        marginTop:14
+                    }} >Notification</Text>
+
+                    {this.state.notifications && this.state.notifications.length ? (
+                        <>
                             <View style={{
-                               
-                               marginTop:40
-                              
-                            }} >
-                                {
-                                    this.checkFileExt(items.item.image) ? (
-                                        <View style={{
-                                            flexDirection:"row",
-                                            justifyContent:"space-between"
-                                        }} >
-                                            <TouchableOpacity style={{
-                                                flexDirection:"row"
-                                            }} onPress={() => this.props.navigation.navigate("showsPdf")} >
-                                            <Text numberOfLines={2} style={{
-                                    fontSize:14,
-                                    lineHeight:25,
-                                    marginRight:25,
-                                    width:200,
-                                    marginTop:20, 
-                                    marginLeft:10
-                                 
-                                }} >{items.item.des}</Text>
-                                {
-                                    this.checkFileExt(items.item.image) ? (
-                                        <Image style={{
-                                            height:80,
-                                            width:60
-                                        }} source={{uri:"https://media5.picsearch.com/is?ju5YxQahdWq4u0cgCHT_yRe_6cKTWcvnkiNFj5vNCY8&height=320"}} />
-                                    ) :(
-                                        <Image source={{uri:items.item.image}} style={{
-                                            height:80,
-                                            width:60
-                                        }} />
-                                    )
-                                }
-                                        </TouchableOpacity>
+                                padding:15,
+                                borderBottomWidth:0.5,
+                                flex:1
+                            }}></View>
+                            <FlatList style={{}}
+                                scrollEnabled={true}
+                                showsVerticalScrollIndicator={true}
+                                data={this.state.notifications}
+                                renderItem={(items) => {
+                                    return (
+                                        <View style={{paddingLeft:20,paddingRight:20,paddingBottom:10}}>
+                                            <View style={{height:65,width:width-80,flexDirection:'row'}}>
+                                                <View style={{flex:1,backgroundColor:'#FFFFFF',flexDirection:'column'}}>
+                                                    <TouchableOpacity  onPress={()=>this.Click(items.item)}>
+                                                        <View style={{ flexDirection: 'row'}}>
+                                                            <Text style={{fontSize:14}}>{items.item.notification_title}</Text>
+                                                            <Text style={{fontSize:14}}>Order id: (#{items.item.order_id})</Text>
+                                                        </View>
+                                                        <Text style={{fontSize:12}}>{items.item.notification_body}</Text>
+                                                        <Text style={{fontSize:10}}>{items.item.date_time}</Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                {items.item.notification_doc_url?(
+                                                    <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
+                                                ):(
+                                                    <Image source={require('../assets/logo45454.png')} style={{height:50,width:50, borderRadius: 25}}/>
+                                                )}
                                             </View>
-                                    ) :(
-                                        <View style={{
-                                            flexDirection:"row",
-                                            justifyContent:"space-between"
-                                        }} >
-                                            <TouchableOpacity onPress={() => this.props.navigation.navigate("content",{
-                                                content:items.item
-                                            })} style={{
-                                                flexDirection:"row"
-                                            }} >
-                                           <Text numberOfLines={2} style={{
-                                    fontSize:14,
-                                    lineHeight:25,
-                                    marginRight:25,
-                                    width:200,
-                                    marginTop:20, 
-                                    marginLeft:10
-                                }} >{items.item.des}</Text>
-                                {
-                                    this.checkFileExt(items.item.image) ? (
-                                        <Image style={{
-                                            height:80,
-                                            width:60
-                                        }} source={{uri:"https://media5.picsearch.com/is?ju5YxQahdWq4u0cgCHT_yRe_6cKTWcvnkiNFj5vNCY8&height=320"}} />
-                                    ) :(
-                                        <Image source={{uri:items.item.image}} style={{
-                                            height:60,
-                                            width:60
-                                        }} />
+                                        </View>
                                     )
-                                }
-                                        </TouchableOpacity>
-                                            </View>
-                                    )
-                                }
-
-                                </View>
-                        )
-                    }}
-                    keyExtractor={(item) => item.id}
-                 />
-
-       
-      </View>
-      
+                                }}
+                                keyExtractor={(_,index) => index.toString()}
+                                refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => {
+                                    this.setState({pageIndex: 0})
+                                    this.getNotifications();
+                                }}/>}
+                                scrollToOverflowEnabled={true}              
+                                ListFooterComponent={<View style={{marginBottom:130,marginTop:10}}>
+                                    {this.state.isLoading ? <Text style={{ textAlign: 'center'}}>Loading...</Text> : null}
+                                </View>}
+                                onEndReached={() => {
+                                    if (this.state.pageIndex < this.state.totalRecord / this.state.pageSize) {
+                                        this.setState({pageIndex: this.state.pageIndex + 1, isLoading: true}) 
+                                        this.getNotifications();
+                                    }
+                                }}
+                                onEndReachedThreshold={0.1}
+                            />
+                        </>
+                    ) : (
+                        <View style={{ justifyContent: 'center', height: height - 120}}>
+                            <Text style={{ textAlign:'center', fontFamily:"Roboto-Regular", fontSize:15, justifyContent: 'center' }}>No Data Found</Text>
+                        </View>
+                    )}           
+                </View>
             </View>
-            {/* <TabBarContainer navigate={this.props.navigation} /> */}
-
-            {/* <Modal style={{
-                height:240
-            }} useNativeDriver={true}  isVisible={this.state.modelShow}>
-          <View style={{ flex: 0.5,backgroundColor:"#FFF", height:240 }}>
-            <View style={{
-                flex:1,
-                // justifyContent:"center",
-                alignItems:"center"
-            }} >
-            <Text style={{
-                textAlign:"center",
-                fontFamily:'Roboto-Bold',
-                fontSize:18,
-            }} >{this.state.messageData.name}</Text>
-            <View style={{
-                flexDirection:"row",
-            }} >
-                <Text style={{
-                    fontSize:14,
-                    color:"grey",
-                  
-                }} >{this.state.messageData.des}</Text>
-
-            </View>
-
-            </View>
-          </View>
-        </Modal> */}
-           </View>
+        </View>
             
         )
     }
@@ -358,7 +226,7 @@ export default class Notification extends Component{
 const styles = StyleSheet.create({
     headerBar:{
         height:170,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -373,8 +241,8 @@ const styles = StyleSheet.create({
         left:25,
         right:25,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -45,
+        height:height,
+        width:width -45,
   
         borderRadius:20,
         flex:1,
@@ -384,7 +252,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

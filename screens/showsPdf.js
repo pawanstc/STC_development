@@ -4,16 +4,37 @@ import { Stylesheet, View, Text, TouchableOpacity, Image,Dimensions,
     
    } from 'react-native';
 import Pdf from 'react-native-pdf';
+let {height,width} = Dimensions.get('screen')
 export  default class WebViewComponent extends Component{
+
+        
+    constructor(props){
+        super(props)
+
+        this.state={
+            url:this.props.route.params.url
+        }
+    }
+    componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
+    }
+    
     render(){
         const resourceType = 'url';
+        
         return(
             <View style={{
                 flex:1,
                 alignItems:'center'
             }} >
                 <View style={{
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     height:170,
                     backgroundColor:"#62463e",
                     borderBottomRightRadius:20,
@@ -45,8 +66,8 @@ export  default class WebViewComponent extends Component{
                       left:0,
                       right:0,
                       backgroundColor:"#FFF",
-                      height:Dimensions.get("screen").height,
-                      width:Dimensions.get("screen").width -50,
+                      height:height,
+                      width:width -50,
                       marginHorizontal:25,
                       borderRadius:20,
                       flex:1,
@@ -54,7 +75,7 @@ export  default class WebViewComponent extends Component{
                       alignItems:"center"
                 }} >
                     <Pdf
-source={{uri:"http://www.africau.edu/images/default/sample.pdf"}}
+source={{uri:this.state.url}}
 onLoadComplete={(numberOfPages,filePath)=>{
     console.log(`number of pages: ${numberOfPages}`);
 }}
@@ -68,8 +89,8 @@ onPressLink={(uri)=>{
     console.log(`Link presse: ${uri}`)
 }}
 style={{
-    height:Dimensions.get("screen").height,
-    width:Dimensions.get("screen").width -50,
+    height:height,
+    width:width -50,
     borderRadius:20,
 }}/>
 

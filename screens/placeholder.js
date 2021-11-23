@@ -3,6 +3,7 @@
  import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
  import SkeletonPlaceholder from "react-native-skeleton-placeholder";
  import Icon from 'react-native-vector-icons/Ionicons'
+ let {height,width} = Dimensions.get('screen')
  export default class Placehodler extends Component{
      render(){
          return(

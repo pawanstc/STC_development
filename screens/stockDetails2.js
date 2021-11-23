@@ -2,10 +2,17 @@ import  React,{ Component } from 'react';
 
 import { StyleSheet, View, Image, TouchableOpacity, Text,StatusBar, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
- 
+let {height,width} = Dimensions.get('screen')
  export default class StockDetails2 extends Component{ 
 
 	componentDidMount(){
+		if(width>height){
+			let temp = width;
+			width= height;
+			height=temp;
+		   
+			
+		}
 		alert("success")
 	}
  	
@@ -21,7 +28,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
  			<View style= {{
  				height:170,
- 				width:Dimensions.get("screen").width,
+ 				width:width,
  				borderBottomLeftRadius:18,
  				borderBottomRightRadius:18,
  				backgroundColor:"#62463e",
@@ -49,8 +56,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
  				 top:75,
  				 left:25,
  				 right:25,
- 				 height:Dimensions.get("screen").height,
- 				width: Dimensions.get("screen").width -45,
+ 				 height:height,
+ 				width:width -45,
  				backgroundColor:"#FFF",
  				borderTopRightRadius:20,
  				borderTopLeftRadius:20

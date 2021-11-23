@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, Image,View, Text, TouchableOpacity, Dimensions,FlatList, ScrollView  } from 'react-native';
+import { StyleSheet, Image,View, Text,TextInput, TouchableOpacity, Dimensions,FlatList, ScrollView  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NetInfo from "@react-native-community/netinfo";
 import {URL, imageUrl} from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
+let {height,width} = Dimensions.get('screen')
 export default class subCategory2 extends Component{
 
    constructor(props){
@@ -14,13 +15,34 @@ export default class subCategory2 extends Component{
         subCategory2:[],
         refreshig:false
        }
+       this.arrayholder=[];
    }
 
    componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
 
         this.getSubCategory();
       
    }    
+
+   searchCat=(text)=>{
+    const newData = this.arrayholder.filter(item => {
+        console.log(item)
+        const itemData = item.pattern_no.toLowerCase();
+        const textData = text.toLowerCase();
+  
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({
+    subCategory2: newData,
+      });
+   }
    getSubCategory = () =>{
     let id = this.props.route.params.id;
     
@@ -43,6 +65,7 @@ export default class subCategory2 extends Component{
                         isVisiable: true,
                         refreshing:false
                     })
+                    this.arrayholder = result.sub_catlog_list
                 }else{
                     this.setState({
                         isVisiable:false
@@ -80,14 +103,15 @@ handleRefresh = ()=>{
             }} >
                 <View style={{
                     height:170,
-                    width:Dimensions.get("screen").width,
+                    width:width,
                     backgroundColor:'#62463e',
                     borderBottomRightRadius:18,
                     borderBottomLeftRadius:18,
-                    flexDirection:"row",
-                    justifyContent:"space-between"
+                    flexDirection:"column",
+                   
                 
                 }} >
+                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
 
                 <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.goBack(null)} >
                     <Icon name="arrow-back" color="#FFF" size={20} style={{
@@ -107,13 +131,35 @@ handleRefresh = ()=>{
                     width:40
                 }} />
                 </View>
+                <TextInput
+
+placeholder="Search...."
+//onEndEditing={()=>this.searchCat(this.state.searchtext)}
+onChangeText={text=>this.searchCat(text)}
+style={{
+    height: 43,
+    width: "70%",
+    textAlign: "left",
+    borderRadius: 10,
+    borderWidth: 0.3,
+    borderColor: "#FFF",
+    alignSelf:'center',
+    
+    color: "black",
+    backgroundColor: "#FFF",
+    
+}}
+placeholderTextColor="#000"
+/>
+
+                </View>
 
                 <View style={{
-                    height:Dimensions.get("screen").height,
-                    width:Dimensions.get("screen").width -45,
+                    height:height,
+                    width:width -45,
                     backgroundColor:'#FFF',
                     position:'absolute',
-                    top:70,
+                    top:120,
                     left:24,
                     right:0,
                     borderTopRightRadius:20,
@@ -146,7 +192,7 @@ handleRefresh = ()=>{
                                justifyContent:'center',
                                alignItems:'center',
                                margin:8,
-                               flex:0.3,
+                               flex:1,
                                marginTop:10,
                                alignSelf:"center"
                            }} >
@@ -165,13 +211,14 @@ handleRefresh = ()=>{
                                 <ImageLoad
                                  
     style={{  height:120,
-        width:125, marginTop:20 }}
+        width:width*0.4, marginTop:20 }}
     loadingStyle={{ size: 'large', color: '#62463e' }}
     borderRadius={10}
     source={{ uri: imageUrl+"/"+items.item.sub_category_img_url }}
 />
                                <Text numberOfLines={2} style={{
                                    textAlign:'center',
+                                   alignSelf:'center',
                                    fontFamily:'Roboto-Italic',
                                 fontSize:11,
                                    marginTop:11,

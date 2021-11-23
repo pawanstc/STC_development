@@ -7,6 +7,7 @@ import { URL } from '../api.js';
 
 import NetInfo from "@react-native-community/netinfo";
 
+let {height,width} = Dimensions.get('screen')
 export default class Onboard extends Component{
 
     constructor(props){
@@ -18,6 +19,14 @@ export default class Onboard extends Component{
     }
 
     componentDidMount(){
+
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         AsyncStorage.setItem("app_token", "app_enter_token");
     }
 

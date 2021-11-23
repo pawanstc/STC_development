@@ -17,7 +17,7 @@ const options = {
     path: 'images',
   },
 };
-
+let {height,width} = Dimensions.get('screen')
 export default class StackNavigation extends Component{
 
     constructor(props){
@@ -31,6 +31,15 @@ export default class StackNavigation extends Component{
            imageUri:"",
            photo:""
         }
+    }
+    componentDidMount(){
+      if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
     }
 
  
@@ -270,7 +279,7 @@ const styles = StyleSheet.create({
     headerStyle:{
         backgroundColor:"#62463e",
         height:105,
-        width:Dimensions.get("screen").width,
+        width:width,
         borderBottomRightRadius:15,
         borderBottomLeftRadius:15,
         flexDirection:"row"
@@ -289,8 +298,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
 
         
         marginHorizontal:25,
@@ -302,7 +311,7 @@ const styles = StyleSheet.create({
     },
     textInput:{
         height:40,
-        width:Dimensions.get("screen").width -100,
+        width:width -100,
         backgroundColor:"#FFF",
         borderBottomWidth:0.6,
         borderBottomColor:"black",

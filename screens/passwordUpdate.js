@@ -6,25 +6,37 @@ import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
 import { NetworkInfo } from "react-native-network-info";
 import DeviceInfo from 'react-native-device-info';
+let {height,width} = Dimensions.get('screen')
 export default class UpdatePassword extends Component{
 
     constructor(props){
         super(props)
         this.state = {
-            oldPassword:"",
+          
             newPassword:"",
             ipAddress:"",
             device_id:"",
             reEnterPassword:""
         }
+
+        this.user_id=''
+
     }
+    
 
     componentDidMount(){
         
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
     
-
+        this.user_id=this.props.route.params.user_id;
         this.getIpAddress();
-
+        this.user_id.toString();
     }
 
     getIpAddress = () =>{
@@ -35,21 +47,36 @@ export default class UpdatePassword extends Component{
         })
     }
 
+    Validation=()=>{
+        let e = ''
+        if(!this.state.newPassword && !this.state.reEnterPassword)e="Please enter new password and Re-enter password "
+        
+       else if(!this.state.newPassword)e="Please Enter New Password"
+        else if(!this.state.reEnterPassword)e="Please Re-Enter New Password"
+        else if(this.state.newPassword!=this.state.reEnterPassword)e="New password and Re-enter do not match"
+if(e){
+    Alert.alert(
+        'Error',
+        e.toString()
+    ); return false
+}else return true
+
+    }
+
     ChangePassword = () =>{
-      
+      if(this.Validation()){
         AsyncStorage.getItem("user_id")
         .then(user_id =>{
             console.log("user_id"+this.props.route.params.user_id);
             let uniqueId =   DeviceInfo.getUniqueId();
             NetInfo.fetch().then(state =>{
                 if(state.isConnected){
-                    fetch(URL+"/update_password_by_user_id",{
+                    fetch(URL+"/update_new_password_by_user_id",{
                         headers:{
                             "Content-Type":"application/x-www-form-urlencoded"
                         },
                         method:"POST",
-                        body:"new_password=" +this.state.newPassword+ "&old_password="+this.state.oldPassword+
-                            "&modify_by_ip=" +this.state.getIpAddress+ "&mobile_no="+ this.props.route.params.mobile_number+ "&retype_password="+this.state.reEnterPassword
+                        body:"new_password=" +this.state.newPassword+"&retype_password="+this.state.reEnterPassword+"&user_id="+this.user_id
                     }).then(response => response.json())
                     .then(result =>{
                        console.log(result);
@@ -57,9 +84,10 @@ export default class UpdatePassword extends Component{
                         AsyncStorage.removeItem("user_id");
                             this.props.navigation.replace("login");
                         }else{
+                            let error=result.error.msg
                             Alert.alert(
                                 "Error",
-                                "Password update not successfully"
+                                error.toString()
                             )
                         }
                     }).catch(error =>{
@@ -74,6 +102,7 @@ export default class UpdatePassword extends Component{
             })
         })
     }
+}
     render(){
         return(
             <View style={{
@@ -82,7 +111,7 @@ export default class UpdatePassword extends Component{
             }} >
                <View style={{
                    height:170,
-                   width:Dimensions.get("screen").width,
+                   width:width,
                    backgroundColor:"#62463e",
                    borderBottomLeftRadius:20,
                    borderBottomRightRadius:20,
@@ -111,8 +140,8 @@ export default class UpdatePassword extends Component{
                    flex:1,
                    justifyContent:'center',
                    alignItems:"center",
-                   height:Dimensions.get("screen").height,
-                   width:Dimensions.get("screen").width -45,
+                   height:height,
+                   width:width -45,
                    borderTopLeftRadius:20,
                    borderTopRightRadius:20,
                    position:"absolute",
@@ -127,31 +156,8 @@ export default class UpdatePassword extends Component{
                    }} >
                        
                   
-                <TextInput 
-                    placeholder="Enter Old Password"
-                    secureTextEntry={true}
-                    onChangeText={(value) => this.setState({
-                        oldPassword:value
-                    })}
-                    style={{
-                        height:45,
-                        width:280,
-                        borderWidth:0.6,
-                        borderColor
-                        :"#62463e",
-                        padding:12,
-                        borderRadius:8,
-                        fontFamily:"Roboto-Bold"
-                        
-                    }}
-                />
-                 <Text style={{
-                       fontSize:15,
-                       color:"#62463e",
-                       backgroundColor:"#FFF",
-                       position:"absolute",
-                       top:-8,
-                   }} >Enter Old Password</Text>
+               
+            
 <TextInput 
                     placeholder="Enter New Password"
                     secureTextEntry={true}
@@ -160,7 +166,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:width*0.7,
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -187,7 +193,7 @@ export default class UpdatePassword extends Component{
                     })}
                     style={{
                         height:45,
-                        width:280,
+                        width:width*0.7,
                         borderWidth:0.6,
                         borderColor
                         :"#62463e",
@@ -213,7 +219,8 @@ export default class UpdatePassword extends Component{
                         marginTop:45,
                         borderRadius:6,
                         justifyContent:'center',
-                        alignItems:'center'
+                        alignItems:'center',
+                        alignSelf:'center'
                     }} >
                         <Text style={{
                             color:"#FFF",

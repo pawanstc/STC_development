@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image,TouchableOpacity, Text, Dimensions, PermissionsAndroid, AsyncStorage, Alert, StatusBar, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image,TouchableOpacity, Text, Dimensions, PermissionsAndroid, AsyncStorage, Alert, StatusBar, ScrollView, ActivityIndicator, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {URL, imageUrl} from '../api.js';
 import TabContainer from '../screens/TabnarComponent';
@@ -8,6 +8,7 @@ import TabContainer from '../screens/TabnarComponent';
 
 import ImagePicker from 'react-native-image-crop-picker';
 import NetInfo from "@react-native-community/netinfo";
+let {height,width} = Dimensions.get('screen')
 export default class Profile extends Component{
 
     constructor(props){
@@ -37,6 +38,13 @@ export default class Profile extends Component{
     }
 
     componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this._unsubscribe = this.props.navigation.addListener('focus', () =>{
             this.getUsers();
         })
@@ -61,44 +69,46 @@ export default class Profile extends Component{
                   }).then(response => response.json())
                   .then(result =>{
                       if(result){
-                          console.log(result);
+                        // console.log("Profile details=====================>", result);
                           
-
-                        if(result.profilePicture == null && result.profilePicture == ""){
+                        if(result.profilePicture === null && result.profilePicture === ""){
                           this.setState({
                             profile_image:""
                           })
-                        }else if(result.profilePicture == ""){
+                        }else if(result.profilePicture === ""){
                             this.setState({
                                 profile_image:""
                               })
-                        }else if(result.profilePicture == null){
+                        }else if(result.profilePicture === null){
                             this.setState({
                                 profile_image:""
                               })
                         }
                         else{
-                          this.setState({
-                            profile_image:result.profilePicture
-                          });
+                            if(result.profilePicture.includes(".jpg")||result.profilePicture.includes(".png")||result.profilePicture.includes(".jpeg")){
+                                this.setState({
+                                  profile_image:result.profilePicture
+                                })}else this.setState({profile_image:""})
                         }
+                         
 
-                      if(result.company_logo == null &&  result.company_logo ==""){
+                      if(result.company_logo === null &&  result.company_logo ===""){
                         this.setState({
                           companyLogo:""
                         })
-                      }else if(result.company_logo == ""){
+                      }else if(result.company_logo === ""){
                         this.setState({
                             companyLogo:""
                           })
-                      }else if(result.company_logo == null){
+                      }else if(result.company_logo === null){
                         this.setState({
                             companyLogo:""
                           })
                       }else {
+                        if(result.company_logo.includes(".jpg")||result.company_logo.includes(".png")||result.company_logo.includes(".jpeg")){
                         this.setState({
                           companyLogo:result.company_logo
-                        })
+                        })}else this.setState({companyLogo:""})
                       }
                           this.setState({
                               first_name:result.first_name,
@@ -200,7 +210,7 @@ export default class Profile extends Component{
                                         }).then(response => response.json())
                                         .then(async result =>{ 
                                             
-                                            if(result.error == false){
+                                            if(result.error === false){
                                                 await AsyncStorage.removeItem("user_id");
                                                 await AsyncStorage.removeItem("device_id");
                                                 this.props.navigation.reset({
@@ -243,7 +253,7 @@ export default class Profile extends Component{
                <StatusBar barStyle="light-content" backgroundColor="#62463e" />
               <View style={{
                   height:170,
-                  width:Dimensions.get("screen").width,
+                  width:width,
                   borderBottomLeftRadius:20,
                   borderBottomRightRadius:20,
                 backgroundColor:"#62463e",
@@ -278,7 +288,7 @@ export default class Profile extends Component{
                   right:24,
                  borderRadius:15,
                   backgroundColor:"#FFF",
-                  width:Dimensions.get("screen").width -45,
+                  width:width -45,
                 height:140,
                 elevation:5,
                 flex:1
@@ -291,10 +301,10 @@ export default class Profile extends Component{
                             
                         }} >
                            {
-                               this.state.companyLogo ==  ""  ?(
+                               !this.state.companyLogo   ?(
                                    <View>
                                        {
-                                           this.state.profile_image == "" ? (
+                                           this.state.profile_image === "" ? (
                                             <Image source={require("../assets/userProfile.png")} style={{
                                                 height:60,
                                                 width:60,
@@ -302,9 +312,9 @@ export default class Profile extends Component{
                                             }} />
                                            ) : (
                                             <Image source={{uri:imageUrl+"/"+this.state.profile_image}} style={{
-                                                height:60,
-                                                width:60,
-                                                borderRadius:30
+                                                height:40,
+                                                width:40,
+                                                borderRadius:20
                                             }} />
                                            )
                                        }
@@ -322,10 +332,11 @@ export default class Profile extends Component{
                            <View style={{
                                flexDirection:"column"
                            }} >
-                                <Text style={{
+                                <Text numberOfLines={1} style={{
                                 fontSize:24,
                                 fontWeight:"bold",
-                                paddingLeft:10
+                                paddingLeft:10,
+                                width:200
                             }} >{ this.state.first_name }</Text>
                               <Text style={{
                                     fontSize:15,
@@ -356,9 +367,9 @@ export default class Profile extends Component{
               </View>
 
               <View style={{
-                  height:Dimensions.get("screen").height,
+                  height:height,
                   marginTop:45,
-                  width:Dimensions.get("screen").width -45,
+                  width:width -45,
                   borderTopLeftRadius:20,
                   borderTopRightRadius:20,
                   backgroundColor:"#FFF",
@@ -377,7 +388,7 @@ export default class Profile extends Component{
                           showsVerticalScrollIndicator={false}
                         style={{
                            flex:1,
-                          height:Dimensions.get("screen").height +300                     
+                          height:height +300                     
                         }} >
                         <View style={{
                             flexDirection:"row",
@@ -386,7 +397,7 @@ export default class Profile extends Component{
                             backgroundColor:"#FFF",
                             borderTopLeftRadius:30,
                             borderTopRightRadius:30,
-                            alignItems:"center"
+                            alignItems:'center'
                             
                         }} >
                             <Text style={{
@@ -410,43 +421,39 @@ export default class Profile extends Component{
       
                         <View style={{
                             flex:1,
-                            justifyContent:"center",
-                      alignItems:"center",
+                            marginLeft:10,
+                      alignItems:"flex-start",
                             marginTop:20
                         }} >
                           {/* first name section */}
-                              <View  >
-                                  
-                           <View style={{
-                               height:45,
-                               width:260,
-                               borderWidth:0.4,
-                               borderRadius:6,
-                               borderColor:"#62463e"
-                           }} >
-                               <Text style={{
-                                          textAlign:"left",
-                                          padding:12,
-                                          fontWeight:"bold"
-                                      }} >{ this.state.first_name }</Text>
-                              <View style={{
-                                  backgroundColor:"#FFF",
-                                  position:"absolute",
-                                  top:-8,
-                                  left:0,
-                                  right:0,
-                                  width:60
-                              }} >
-                                
-                                 <Text style={{
+                              <View  style={{width:'100%'}} >
+                              <Text style={{
                                color:"black",
                                fontSize:14,
                               width:100,
                               color:"#62463e",
-                              fontWeight:"bold"
+                              fontWeight:"bold",
+                              marginBottom:10
                            }} >
                                First Name
                            </Text>
+                                  
+                           <View style={{
+                               height:45,
+                               
+                               width:'90%',
+                               borderWidth:0.4,
+                               borderRadius:6,
+                               borderColor:"#62463e"
+                           }} >
+                               <Text numberOfLines={1} style={{
+                                          textAlign:"left",
+                                          padding:12,
+                                          fontWeight:"bold"
+                                      }} >{ this.state.first_name }</Text>
+                              <View  >
+                                
+                               
           
                               </View>
                            </View>
@@ -455,17 +462,29 @@ export default class Profile extends Component{
       
                             {/* Last name section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <Text style={{
+                                      color:"black",
+                                      fontSize:14,
+                                     width:100,
+                                     color:"#62463e",
+                                     fontWeight:"bold",
+                                     marginTop:3,
+                                     marginBottom:10
+                                  }} >
+                                      Last Name
+                                  </Text>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
@@ -473,25 +492,9 @@ export default class Profile extends Component{
                                           fontWeight:"bold",
                                        
                                       }} >{ this.state.last_name }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-14,
-                                         left:0,
-                                         right:0,
-                                         width:60
-                                     }} >
+                                     <View  >
                                        
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold",
-                                     marginTop:3
-                                  }} >
-                                      Last Name
-                                  </Text>
+                                       
                  
                                      </View>
                                   </View>
@@ -500,344 +503,314 @@ export default class Profile extends Component{
       
                                    {/* Email id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Email Id
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.email }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:45
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Email Id
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of Email id section */}
       
                                        {/* Mobile Number id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <View >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:185,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Mobile Number
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.mobile_number }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:84
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:185,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Mobile Number
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of Mobile Number id section */}
       
                                              {/* Company name id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%',
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:180,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Company Name
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.company_name }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:88
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:180,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Company Name
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of company name id section */}
       
                                     {/* Company Address id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:200,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Company Address
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
-                                      height:45,
-                                      width:260,
+                                    //   height:45,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
-                                      <Text style={{
-                                          textAlign:"left",
-                                          padding:12,
-                                          fontWeight:"bold"
-                                      }} >{ this.state.office_address }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:100
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:200,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Company Address
-                                  </Text>
-                 
-                                     </View>
+                                      <TextInput
+                                        multiline={true}
+                                        editable={false}
+                                        numberOfLines={2}
+                                        onChangeText={() => {}}
+                                        value={this.state.office_address}
+                                        style={{ color: 'black' }} />
+                                    
                                   </View>
                                      </View>
                                   {/* end of company address id section */}
       
                                    {/* state id section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                  <View >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    State
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.state }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:30
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     State
-                                  </Text>
-                 
-                                     </View>
+                                   
                                   </View>
                                      </View>
                                   {/* end of state id section */}
       
                                    {/* city section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    City
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.city }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:25
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     City
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of city section */}
       
                                     {/* pincode section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <View >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Pin Code
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.pincode }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:25
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Pin Code
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of pincode section */}
       
                                    {/* role section */}
                             <View style={{
-                                marginTop:20
+                                marginTop:20,
+                                width:'100%'
                             }} >
+                                 <View  >
+                                       
+                                       <Text style={{
+                                     color:"black",
+                                     fontSize:14,
+                                    width:100,
+                                    color:"#62463e",
+                                    fontWeight:"bold",
+                                    marginBottom:10
+                                 }} >
+                                    Role
+                                 </Text>
+                
+                                    </View>
                                   
                                   <View style={{
                                       height:45,
-                                      width:260,
+                                      width:'90%',
                                       borderWidth:0.4,
                                       borderRadius:6,
                                       borderColor:"#62463e",
                                       justifyContent:'center',
-                                      alignSelf:"flex-end"
+                                      alignSelf:"flex-start"
                                   }} >
                                       <Text style={{
                                           textAlign:"left",
                                           padding:12,
                                           fontWeight:"bold"
                                       }} >{ this.state.role }</Text>
-                                     <View style={{
-                                         backgroundColor:"#FFF",
-                                         position:"absolute",
-                                         top:-8,
-                                         left:0,
-                                         right:0,
-                                         width:25
-                                     }} >
-                                       
-                                        <Text style={{
-                                      color:"black",
-                                      fontSize:14,
-                                     width:100,
-                                     color:"#62463e",
-                                     fontWeight:"bold"
-                                  }} >
-                                     Role
-                                  </Text>
-                 
-                                     </View>
+                                    
                                   </View>
                                      </View>
                                   {/* end of role section */}

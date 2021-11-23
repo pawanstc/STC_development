@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView,TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, ScrollView,TextInput, Alert, AsyncStorage } from 'react-native';
 
 import NetInfo from "@react-native-community/netinfo";
 import {URL} from '../api.js';
@@ -21,7 +21,7 @@ import {
     WaveIndicator,
   } from 'react-native-indicators';
   import {Picker} from '@react-native-picker/picker';
-
+  let {height,width} = Dimensions.get('screen')
 export default class HomeComponent extends Component{
 
  constructor(props){
@@ -50,34 +50,49 @@ export default class HomeComponent extends Component{
     patterns:this.props.route.params.value.patterns,
     cityList:[],
     city:"",
-    city_name:""
+    city_name:"",
+    user_id:this.props.route.params.user_id
 
      }
  }
 
  componentDidMount(){
 
-  
-
-    this.getCityList();
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
+    
+    AsyncStorage.getItem('role').then(result=>{
+        this.getCityList(result);
+    });
    
  }
 
- getCityList = () =>{
+ getCityList = (role) =>{
     NetInfo.fetch().then(state =>{
         if(state.isConnected){
-            fetch(URL+"/"+"get_stock_city_list",{
-                headers:{
-                    "Content-Type":"application/json"
-                }
+
+            var form = new FormData();
+            form.append('user_id',this.state.user_id)
+            form.append('user_role',role === 'Dealer' ? 3 : 2)
+
+            fetch(URL+"/get_stock_city_list_new",{
+                method:'POST',
+                
+                body:form
+                
             }).then(response => response.json())
             .then(result =>{
-                console.log(result);
                 if(result.error ==false){
                     this.setState({
-                        cityList:result.stock_city_list,
-                        isVisiable:false
+                        cityList:result.stock_city_list
                     })
+                    console.log("Datat is hre")
+                    console.log(this.state.cityList)
                 }else{
                     this.setState({
                         isVisiable:true
@@ -85,6 +100,9 @@ export default class HomeComponent extends Component{
                 }
             }).catch(error =>{
                 console.log(error);
+                
+                
+                
             });
         }else{
             Alert(
@@ -127,7 +145,7 @@ export default class HomeComponent extends Component{
 //      }
 //  }
     render(){
-console.log(this.state.params)
+
     
         return(
           <View style={{
@@ -136,7 +154,7 @@ console.log(this.state.params)
           }} >
               <View style={{
                   height:170,
-                  width:Dimensions.get("screen").width,
+                  width:width,
                   backgroundColor:"#62463e",
                   borderBottomLeftRadius:20,
                   borderBottomRightRadius:20,
@@ -174,8 +192,8 @@ console.log(this.state.params)
               </View>
 
               <View style={{
-                  height:Dimensions.get("screen").height,
-                  width:Dimensions.get("screen").width -45,
+                  height:height,
+                  width:width -45,
                   position:"absolute",
                   top:75,
                   left:24,
@@ -204,27 +222,34 @@ console.log(this.state.params)
                      textAlign:"center"
                   }} > Select Your City</Text>
                   <View style={{
-                      height:40,
-                      width:"90%",
-                      borderWidth:0.3,
+                      height:50,
+                      width:"80%",
+                      borderWidth:1,
                       borderColor:"black",
                       borderRadius:5,
-                      marginTop:30
+                      marginTop:30,
+                      alignItems:'center'
                   }} >
+                      
                       <Picker 
+                      style={{
+                        height:10,
+                        width:"100%",
+                        
+                        
+                    }}
                     selectedValue={this.state.city}
                         onValueChange={(value) => this.setState({
                             city:value
                         })}
-                      style={{
-                          height:45,
-                          width:"100%"
-                      }} >
+                       >
+                          
                           {
                               this.state.cityList.map(value =>(
                                 <Picker.Item style={{
-                                    padding:20
-                                }} label={value.city_name.substring(0, 12)} value={value.id}/>
+                                    
+                                   
+                                }} label={value.city_name.substring(0, 12)} value={value.id} />
                               ))
                           }
 
@@ -232,7 +257,18 @@ console.log(this.state.params)
 
                   </View>
 
-                  <TouchableOpacity activeOpacity={2} onPress={() => {
+                  <View style={{
+                      flex:1
+                  }} >
+                  <TouchableOpacity  style={{
+                          height:45,
+                          width:280,
+                          backgroundColor:"#62463e",
+                          borderRadius:6,
+                          justifyContent:'center',
+                          alignItems:"center",
+                          marginTop:60
+                      }} activeOpacity={2} onPress={() => {
                       if(this.state.city == ""){
                           Alert.alert(
                               "Validation Error",
@@ -246,15 +282,7 @@ console.log(this.state.params)
                       
                       })
                   } } >
-                      <View style={{
-                          height:45,
-                          width:280,
-                          backgroundColor:"#62463e",
-                          borderRadius:6,
-                          justifyContent:'center',
-                          alignItems:"center",
-                          marginTop:60
-                      }} >
+                      <View >
                           <Text style={{
                               textAlign:'center',
                               color:"#FFF",
@@ -263,6 +291,7 @@ console.log(this.state.params)
 
                       </View>
                   </TouchableOpacity>
+                  </View>
 
                  </View>
 
@@ -276,8 +305,8 @@ console.log(this.state.params)
 
 const styles = StyleSheet.create({
     headerBar:{
-        height:Dimensions.get("screen").height /4,
-        width:Dimensions.get("screen").width,
+        height:height /4,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -293,8 +322,8 @@ const styles = StyleSheet.create({
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
         flex:1,
@@ -304,7 +333,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

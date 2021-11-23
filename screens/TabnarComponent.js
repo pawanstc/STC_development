@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, Image, View, Text, TouchableOpacity,Dimensions } from 'react-native';
-
+import { StyleSheet, Image, View, Text, TouchableOpacity,Dimensions, AsyncStorage } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import Icon from 'react-native-vector-icons/Ionicons';
+import {URL,imageUrl} from '../api'
 
 Icon.loadFont();
-
+let {height,width} = Dimensions.get('screen')
 export default class TabComponnet extends Component{
 
     constructor(props){
@@ -36,14 +37,48 @@ export default class TabComponnet extends Component{
                 
                 
             ],
-            tabLabel: "Home"
+            tabLabel: "Home",
+            uid:'',
+            notifications_count: 0,
+            pageIndex: 0,
+            pageSize: 20
         }
+    }
+
+    getNotifications=(userId, role)=>{
+        NetInfo.fetch().then(state=>{
+            if(state.isConnected){
+                AsyncStorage.setItem("role", role);
+                console.log('notification result=================>', userId, role, this.state.pageIndex, this.state.pageSize);
+                fetch(URL + "/get_all_notification_details",{
+                        headers:{
+                            "Content-Type":"application/x-www-form-urlencoded"
+                        },
+                        method:"POST",
+                        body:
+                            "user_id="+
+                            userId+
+                            "&role="+
+                            role+
+                            "&page_index="+
+                            this.state.pageIndex+
+                            "&page_size="+
+                            this.state.pageSize
+                }).then(response=>response.json())
+                .then(result=>{
+                    this.setState({
+                        notifications_count: result.total_size,
+                    })
+                }  
+                ).catch(err=>console.log(err))
+            }
+        })
     }
 
     selectTab  =(value) =>{
     
        this.setState({
-           tabLabel:value
+           tabLabel:value,
        });
       
 
@@ -54,6 +89,37 @@ export default class TabComponnet extends Component{
             }else if(value === "PostJob"){
                 this.props.navigate.navigate("postJob")
             }
+    }
+
+    componentDidMount(){
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
+        AsyncStorage.getItem('user_id').then(result=>{
+            if(result){
+                fetch(URL+"/get_user_details_by_user_id", {
+                    headers:{
+                        "Content-Type":"application/x-www-form-urlencoded"
+                    },
+                    method:"POST",
+                    body:"user_id=" +result
+                }).then(response => response.json())
+                .then(res =>{
+                    if (res) {
+                        this.getNotifications(result, res.user_role_name);
+
+                        this.setState({uid:result})
+                    }
+                }).catch(error =>{
+                    console.log(error);
+                })
+            }
+        })
+
     }
 
     showTab = (value) =>{
@@ -159,11 +225,30 @@ export default class TabComponnet extends Component{
              
       
          }} >
-            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigate.navigate("notification")} >
+            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigate.navigate("notification")
+                
+            } >
                     <Icon name="notifications-outline" size={18} style={{
               
                         marginLeft:15
                     }} color="#ffcc80"  />
+                    {this.state.notifications_count ?
+                        <View style={{
+                            position:'absolute', 
+                            height: 15, 
+                            width: 15,
+                            borderRadius: 8, 
+                            backgroundColor: '#ffcc80', 
+                            justifyContent: 'center', 
+                            alignItems: 'center',
+                            right: 17,
+                            top: -5
+                            }}>
+                            <Text style={{ fontSize: 7, fontWeight: 'bold', color: 'white'}}>
+                                {this.state.notifications_count > 99 ? '99+' : this.state.notifications_count} 
+                            </Text>
+                        </View>
+                    : null}
                     <Text style={{
                         
                          fontSize:10,
@@ -187,7 +272,7 @@ const styles = StyleSheet.create({
     tabContainer:{
       
         height:55,
-        width:Dimensions.get("screen").width ,
+        width:width ,
         backgroundColor:"#FFF",
         elevation:10,
         justifyContent:"center",

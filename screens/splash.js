@@ -70,21 +70,24 @@ componentDidMount(){
             useNativeDriver:false
         }),
         
-    ]).start(  () =>   this.checkUser());
+    ]).start(  () =>{ console.log("checkuser") 
+     this.checkUser()});
 
    
 }
 
 checkUser =  () =>{
    
-
+    console.log("function called!!")
     let uniqueId =   DeviceInfo.getUniqueId();
    AsyncStorage.getItem("app_token")
    .then(result =>{
-       console.log(result);
+       console.log(result)
+       console.log("hello");
        if(result){
         NetInfo.fetch().then(state =>{
             if(state.isConnected){
+                console.log("hello netinfo connected");
                 fetch(URL+"/get_User_Details_By_Device_Id", {
                     headers:{
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -92,16 +95,15 @@ checkUser =  () =>{
                     method:"POST",
                     body:'device_id=' +uniqueId
                 }).then(response => response.json())
+                    
                 .then(result =>{
-                  
-                   
                     if(result.devices_id === uniqueId & result !=null){
                         this.props.navigation.replace("home");
                     }else{
                         this.props.navigation.replace("login");
                     }
                 })
-
+                
             }else{
                 Alert.alert(
                     "Network Error",

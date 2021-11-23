@@ -22,6 +22,7 @@ import {
   } from 'react-native-indicators';
   import NetInfo from "@react-native-community/netinfo";
   import ImageLoad from 'react-native-image-placeholder';
+  let {height,width} = Dimensions.get('screen')
 export default class StackNavigation extends Component{
 
     constructor(props){
@@ -59,6 +60,13 @@ export default class StackNavigation extends Component{
     }
 
 componentDidMount(){
+    if(width>height){
+        let temp = width;
+        width= height;
+        height=temp;
+       
+        
+    }
    
 this.getCatlog();
     setTimeout(() =>{
@@ -146,10 +154,11 @@ searchBarAppear = () =>{
    
  }
 
- subCatelogById = (id, name) =>{
+ subCatelogById = (id, catalogue_pdf, cat_name) =>{
     this.props.navigation.navigate("products",{
-        id:id,
-        name:name
+        id,
+        cat_name,
+        catalogue_pdf
     })
  }
 
@@ -157,7 +166,7 @@ searchBarAppear = () =>{
      console.log(value);
      NetInfo.fetch().then(state =>{
         if(state.isConnected){
-           fetch("http://phpstack-525410-1692898.cloudwaysapps.com/backend/v1/get_catlog_details_by_catlog_master_name",{
+           fetch(URL + "/get_catlog_details_by_catlog_master_name",{
                headers:{
                    "Content-Type":"application/x-www-form-urlencoded"
                },
@@ -221,7 +230,7 @@ searchBarAppear = () =>{
 
                     }
                 }).catch(error =>{
-                    consoile.log(error);
+                    console.log(error);
                 });
             }else{
                 Aelrt.alert(
@@ -249,11 +258,13 @@ searchBarAppear = () =>{
                         method:"GET"
                     }).then(response => response.json())
                     .then(result =>{
+                        console.log('get_stock_details_wallpaper_platinum=======>', result)
                         if(result.error == false){
                             this.setState({
                                 cate_log_list:result.stock_catlog_list,
                                 refreshing:false
-                            });
+                            })
+                            console.log(result.stock_catalog_list)
                         }else{
 
                         }
@@ -282,6 +293,7 @@ searchBarAppear = () =>{
                         method:"GET"
                     }).then(response => response.json())
                     .then(result =>{
+                        console.log('get_stock_details_wallpaper_economical=======>', result)
                         if(result.error == false){
                             this.setState({
                                 cate_log_list:result.stock_catlog_list,
@@ -311,7 +323,7 @@ searchBarAppear = () =>{
                 
             }).then(response => response.json())
             .then(result =>{
-                console.log(result)
+                console.log('get_customise_catlog_details_by_catlog_master_name========>', result)
                 if(result.error == false){
                     console.log(result);
                     this.setState({
@@ -354,7 +366,7 @@ searchBarAppear = () =>{
     inputRange:[0,1],
     outputRange:[0,1]
   });
- 
+
         return(
            <View style={{
                flexGrow:1
@@ -378,23 +390,20 @@ searchBarAppear = () =>{
           
 
       <Text style={{
-        marginHorizontal:92,
+          marginRight:width*0.2,
           fontSize:16,
           color:"#FFF",
-          margin:20,
-          marginRight:50
+          marginTop:20,
+          textAlign:'center'
+          
+        
+          
           
       }} >  Catalog</Text>
-      <View style={{
-          width:100
-      }}  />
+     
 
           
-        <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.navigate("searchComponent")} >
-            
 
-    
-        </TouchableOpacity>
            
             
           
@@ -492,26 +501,26 @@ searchBarAppear = () =>{
                     data={this.state.cate_log_list}
                     showsVerticalScrollIndicator={false}
                     renderItem={(items) =>{
-                        console.log(items.item.catlog_image)
+                        // console.log('name===================>', items.item)
                     return(
          
                         <View style={{
                             flexDirection:"row",
                             justifyContent:'space-between',
                             height:"100%",
-                            flexGrow:1
+                        
                         }} >
                             <View style={{
                                 flexDirection:"column",
                                 justifyContent:"center",
                                 alignItems:'center',
-                                marginBottom:20
+                              
                             }} >
-                           <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id)} >
+                           <TouchableOpacity activeOpacity={2} onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf, this.state.cat_name)} >
                            <ImageLoad
                                      isShowActivity={true}
-        style={{  height:110,
-            width:120, marginTop:20 }}
+        style={{  height:120,
+            width:width*0.35, marginHorizontal:8,marginTop:15 }}
         loadingStyle={{ size: 'large', color: '#62463e' }}
         borderRadius={6}
         source={{ uri:imageUrl+"/"+items.item.catlog_image}}
@@ -520,21 +529,22 @@ searchBarAppear = () =>{
                                 <Text numberOfLines={2} style={{
                                  
                                     textAlign:'center',
+                                    alignSelf:'center',
                                     fontSize:14,
                                     width:120,
-                                    height:45
+                                    height:35,
                                 }} >
                                     {items.item.catlog_name} 
                                 </Text>
                            </TouchableOpacity>
     
            <View style={{
-               marginTop:10,
+              
                width:120,
-               marginLeft:10
+              
            }} >
                          <Button
-                        onPress={() => this.subCatelogById(items.item.id)}
+                        onPress={() => this.subCatelogById(items.item.id, items.item.catalogue_pdf, this.state.cat_name)}
     touchSoundDisabled ={false}
       title="Explore"
       color="#62463e"
@@ -583,7 +593,7 @@ searchBarAppear = () =>{
 const styles = StyleSheet.create({
     headerBar:{
         height:170,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#62463e",
         borderBottomRightRadius:18,
         borderBottomLeftRadius:18,
@@ -593,24 +603,23 @@ const styles = StyleSheet.create({
 
     },
     formContainer:{
-
         position:"absolute",
         top:60,
         left:0,
         right:0,
         backgroundColor:"#FFF",
-        height:Dimensions.get("screen").height,
-        width:Dimensions.get("screen").width -50,
+        height:height,
+        width:width -50,
         marginHorizontal:25,
         borderRadius:20,
-    
+
         alignItems:"center",
         flex:1
     },
     tabContainer:{
       
         height:60,
-        width:Dimensions.get("screen").width,
+        width:width,
         backgroundColor:"#FFF",
         elevation:5,
         borderTopRightRadius:18,

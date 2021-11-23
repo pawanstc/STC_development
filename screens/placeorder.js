@@ -37,7 +37,7 @@ const customStyles = {
     currentStepLabelColor: '#fe7013',
 
   }
-
+  let {height,width} = Dimensions.get('screen')
 
 export default class Placeorder extends Component{
 
@@ -54,6 +54,13 @@ export default class Placeorder extends Component{
     }
 
     componentDidMount() {
+        if(width>height){
+            let temp = width;
+            width= height;
+            height=temp;
+           
+            
+        }
         this.setState({
             wallImage:this.props.route.params.stocks
         })
@@ -132,7 +139,7 @@ export default class Placeorder extends Component{
              }} >
                  <View style={{
                      height:180,
-                     width:Dimensions.get("screen").width,
+                     width:width,
                      borderBottomLeftRadius:18,
                      borderBottomRightRadius:18,
                      backgroundColor:'#62463e',
@@ -156,8 +163,8 @@ export default class Placeorder extends Component{
                  <View style={{
                      position:'absolute',
                      top:74,
-                     height: Dimensions.get("screen").height,
-                     width:Dimensions.get("screen").width -46,
+                     height: height,
+                     width:width -46,
                      backgroundColor:'#FFF',
                      left:22,
                      borderTopLeftRadius:20,
@@ -562,7 +569,7 @@ placeholder="Width" style={{
                  
              <View style={{
                  height:53,
-                 width:Dimensions.get("screen").width,
+                 width:width,
                  backgroundColor:'#62463e',
                  justifyContent:'center',
                  alignItems:'center',
