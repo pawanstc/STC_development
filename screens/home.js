@@ -158,7 +158,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
  }
 
  checkAppUpdate = (releaseApkUpload) => {
-    if (releaseApkUpload === 0) {
+    if (releaseApkUpload) {
         Alert.alert(
             "Notice",
             "Please update the app.",
@@ -221,7 +221,7 @@ getUsers =  async ()=>{
                 }).then(response => response.json())
                 .then(result =>{
                     
-                   console.log('result=========================>', result);
+                //    console.log('result=========================>', result);
                     this.checkAppUpdate(result.release_apk_upload);
                     if(result.error == false){
                         if(result.profilePicture == null  && result.profilePicture == ""){
