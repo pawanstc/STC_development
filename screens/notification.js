@@ -186,7 +186,7 @@ export default class Notification extends Component{
                                                 {items.item.notification_doc_url?(
                                                     <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
                                                 ):(
-                                                    <Image source={require('../assets/logo45454.png')} style={{height:50,width:50, borderRadius: 25}}/>
+                                                    <Image source={require('../assets/images/logo45454.png')} style={{height:50,width:50, borderRadius: 25}}/>
                                                 )}
                                             </View>
                                         </View>

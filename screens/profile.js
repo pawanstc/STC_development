@@ -15,7 +15,7 @@ export default class Profile extends Component{
         super(props)
 
         this.state = {
-            image: require("../assets/userProfile.png"),
+            image: require("../assets/images/userProfile.png"),
 
             camImage:"https://www.enableds.com/products/azures21/images/avatars/2s.png",
             editPopup:false,
@@ -305,7 +305,7 @@ export default class Profile extends Component{
                                    <View>
                                        {
                                            this.state.profile_image === "" ? (
-                                            <Image source={require("../assets/userProfile.png")} style={{
+                                            <Image source={require("../assets/images/userProfile.png")} style={{
                                                 height:60,
                                                 width:60,
                                                 borderRadius:30
@@ -836,7 +836,7 @@ export default class Profile extends Component{
                                            </View>
                                    ) :(
                                        <View>
-                                       <Image source={require("../assets/userProfile.png")} style={{
+                                       <Image source={require("../assets/images/userProfile.png")} style={{
                                         height:40,
                                         width:40,
                                         borderRadius:20
@@ -867,7 +867,7 @@ export default class Profile extends Component{
                                         borderRadius:20
                                     }} />
                                   ) :(
-                                    <Image source={require("../assets/companyLogo.jpg")} style={{
+                                    <Image source={require("../assets/images/companyLogo.jpg")} style={{
                                         height:40,
                                         width:40,
                                         borderRadius:20

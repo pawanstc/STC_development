@@ -219,12 +219,12 @@ handleChooseImage = () =>{
             }
             flashImages={{
               // Flash button images
-              on: require('../assets/flashon.png'),
-              off: require('../assets/flashoff.png'),
-              auto: require('../assets/flashauto.png'),
+              on: require('../assets/images/flashon.png'),
+              off: require('../assets/images/flashoff.png'),
+              auto: require('../assets/images/flashauto.png'),
             }}
            
-            captureButtonImage={require('../assets/camera.png')}
+            captureButtonImage={require('../assets/images/camera.png')}
        
           />
         </View>

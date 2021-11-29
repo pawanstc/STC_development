@@ -675,7 +675,7 @@ export default class customiseComponent extends Component {
                       }}>
                       {this.props.route.params.image == '' ? (
                         <Image
-                          source={require('../assets/uload3.jpg')}
+                          source={require('../assets/images/uload3.jpg')}
                           style={{
                             height: 110,
                             width: 120,
@@ -684,7 +684,7 @@ export default class customiseComponent extends Component {
                         />
                       ) : (
                         <Image
-                          source={require('../assets/uload3.jpg')}
+                          source={require('../assets/images/uload3.jpg')}
                           style={{
                             height: 110,
                             width: 120,
@@ -723,7 +723,7 @@ export default class customiseComponent extends Component {
                             this.props.navigation.navigate('customCatelog')
                           }>
                           <Image
-                            source={require('../assets/menu.jpg')}
+                            source={require('../assets/images/menu.jpg')}
                             style={{
                               height: 20,
                               width: 28,
@@ -807,7 +807,7 @@ export default class customiseComponent extends Component {
                     alignItems: 'center',
                   }}>
                   <Image
-                    source={require('../assets/desc_01.jpg')}
+                    source={require('../assets/images/desc_01.jpg')}
                     style={{
                       height: width * 0.37,
                       width: width * 0.6,
@@ -1180,7 +1180,7 @@ export default class customiseComponent extends Component {
                         marginHorizontal: 5,
                       }}>
                       <Image
-                        source={require('../assets/menu.jpg')}
+                        source={require('../assets/images/menu.jpg')}
                         style={{
                           height: 20,
                           width: 20,

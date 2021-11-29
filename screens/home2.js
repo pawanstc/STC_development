@@ -230,7 +230,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
               <Moment>{this.state.time}</Moment>
               </View> */}
             <TouchableOpacity activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-            <Image source={require("../assets/userProfile.png")}
+            <Image source={require("../assets/images/userProfile.png")}
              style={{
                  height:40,
                  width:40,
@@ -433,7 +433,7 @@ _unsubscribeSiBlur = this.props.navigation.addListener('blur', e => {
            
            </View> 
 
-{/* <ImageBackground  source={require('../assets/backgrondImage.jpg')} style={{
+{/* <ImageBackground  source={require('../assets/images/backgrondImage.jpg')} style={{
     height:250,
     width:290,
     borderRadius:6,

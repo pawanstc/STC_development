@@ -721,7 +721,7 @@ export default class EditProfile extends Component {
                           />
                         ) : (
                           <Image
-                            source={require("../assets/userProfile.png")
+                            source={require("../assets/images/userProfile.png")
                               
                             }
                             style={{
@@ -1300,7 +1300,7 @@ export default class EditProfile extends Component {
                               alignItems: 'center',
                             }}>
                             <Image
-                              source={require('../assets/edit3.png')}
+                              source={require('../assets/images/edit3.png')}
                               style={{
                                 height: 20,
                                 width: 20,
@@ -1345,7 +1345,7 @@ export default class EditProfile extends Component {
                         ) : (
                           <View>
                             <Image
-                              source={require("../assets/userProfile.png")}
+                              source={require("../assets/images/userProfile.png")}
                               style={{
                                 height: 80,
                                 width: 80,

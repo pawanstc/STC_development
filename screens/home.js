@@ -314,7 +314,7 @@ getUsers =  async ()=>{
                             )}
                         </View>
                         <TouchableOpacity style={styles.logo} activeOpacity={2} onPress={() =>this.props.navigation.navigate("profile")} >
-                            <Image source={profileImage ? {uri:imageUrl+"/"+profileImage} : require("../assets/userProfile.png")}    
+                            <Image source={profileImage ? {uri:imageUrl+"/"+profileImage} : require("../assets/images/userProfile.png")}    
                                 style={{
                                     height:50,
                                     width:50,

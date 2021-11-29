@@ -174,7 +174,7 @@ export default class HomeComponent extends Component{
                       color:"#FFF"
                   }} >Stock Enquiry</Text>
                  {/* <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.navigate("profile")} >
-                 <Image source={require("../assets/userProfile.png")} style={{
+                 <Image source={require("../assets/images/userProfile.png")} style={{
                       height:40,
                       width:40,
                       borderRadius:20,

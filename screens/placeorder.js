@@ -212,7 +212,7 @@ export default class Placeorder extends Component{
                borderWidth:0.4,
                
            }} >
-               <Image source={require("../assets/edit.jpg")} style={{
+               <Image source={require("../assets/images/edit.jpg")} style={{
                    height:120,
                    width:140
                }} />
@@ -237,7 +237,7 @@ export default class Placeorder extends Component{
                 marginHorizontal:10
             }} >
                 <TouchableOpacity onPress={() => this.uploadImage()} >
-                <Image source={ require("../assets/uload3.jpg") } style={{
+                <Image source={ require("../assets/images/uload3.jpg") } style={{
                     height:15,
                     width:15
                 }} />
@@ -277,7 +277,7 @@ export default class Placeorder extends Component{
           margin:10
       }} >
           
-          <Image source={require("../assets/menu.jpg")} style={{
+          <Image source={require("../assets/images/menu.jpg")} style={{
               height:25,
               width:25
           }} />
@@ -293,7 +293,7 @@ export default class Placeorder extends Component{
           
             
 </View>
-<Image source={require("../assets/desc_01.jpg")} style={{
+<Image source={require("../assets/images/desc_01.jpg")} style={{
 height:150,
 width:250,
 marginLeft:43,
@@ -519,7 +519,7 @@ placeholder="Width" style={{
            alignItems:"center"
        }} >
           <TouchableOpacity onPress={() => this.uploadImage()} >
-          <Image source={require("../assets/uload3.jpg")} style={{
+          <Image source={require("../assets/images/uload3.jpg")} style={{
                height:10,
                width:10
            }} />
@@ -544,7 +544,7 @@ placeholder="Width" style={{
            alignItems:"center"
        }} >
     
-          <Image source={require("../assets/menu.jpg")} style={{
+          <Image source={require("../assets/images/menu.jpg")} style={{
                height:15,
                width:15
            }} />

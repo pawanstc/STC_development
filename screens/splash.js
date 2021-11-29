@@ -199,7 +199,7 @@ setToken =   () =>{
                         flex:0.7,
                         alignItems:"center"
                     }} >
-                    <Image source={require("../assets/logo45454.png")} 
+                    <Image source={require("../assets/images/logo45454.png")} 
                         style={{
                             height:200,
                             width:200,

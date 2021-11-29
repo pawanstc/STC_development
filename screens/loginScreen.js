@@ -193,7 +193,7 @@ export default class LoginComponent extends Component {
                 alignItems: 'center',
               }}>
               <Image
-                source={require('../assets/logo45454.png')}
+                source={require('../assets/images/logo45454.png')}
                 style={{
                   height: 100,
                   width: 150,

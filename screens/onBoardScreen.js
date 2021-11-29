@@ -113,7 +113,7 @@ onDoneFunction = () =>{
   pages={[
     {
       backgroundColor: "#c2cbd7",
-      image: <Image source={require("../assets/newDash1.jpg")} style={{
+      image: <Image source={require("../assets/images/newDash1.jpg")} style={{
           height:200,
           width:280
       }} />,
@@ -122,7 +122,7 @@ onDoneFunction = () =>{
     },
     {
         backgroundColor: '#ffeec5',
-        image: <Image source={require("../assets/newDash2.png")} style={{
+        image: <Image source={require("../assets/images/newDash2.png")} style={{
             height:200,
             width:280
         }} />,
@@ -132,7 +132,7 @@ onDoneFunction = () =>{
       },
       {
         backgroundColor: '#e3effe',
-        image: <Image source={require("../assets/newDash3.png")} style={{
+        image: <Image source={require("../assets/images/newDash3.png")} style={{
             height:200,
             width:280
         }} />,
@@ -141,7 +141,7 @@ onDoneFunction = () =>{
       },
       {
         backgroundColor: '#fafafa',
-        image: <Image source={require("../assets/newDash4.png")} style={{
+        image: <Image source={require("../assets/images/newDash4.png")} style={{
             height:150,
             width:180
         }} />,

@@ -130,11 +130,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.stc"
+        applicationId "com.stcwallpaper"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "7.0"
         multiDexEnabled true
     }
     splits {

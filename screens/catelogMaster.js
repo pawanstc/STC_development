@@ -29,7 +29,7 @@ export default class StackNavigation extends Component{
                
                {
                    "name":"Creative art",
-                   "image":require("../assets/Brandname2.png")
+                   "image":require("../assets/images/Brandname2.png")
                }
            ],
             isVisible:false

@@ -708,14 +708,14 @@ launchCamera2 = async () =>{
                     }} >
                       {
                         this.props.route.params.image =="" ? (
-                          <Image source={require("../assets/uload3.jpg")} style={{
+                          <Image source={require("../assets/images/uload3.jpg")} style={{
                             height:'100%',
                             width:width*0.30,
       
                             //marginLeft:6
                            }} /> 
                         ) :(
-                          <Image source={require("../assets/uload3.jpg")} style={{
+                          <Image source={require("../assets/images/uload3.jpg")} style={{
                             height:120,
                             width:180,
       
@@ -757,7 +757,7 @@ launchCamera2 = async () =>{
                    activeOpacity={2} 
                     onPress={() => this.props.navigation.navigate("customCatelog")}
                    >
-                   <Image source={require("../assets/menu.jpg")} style={{
+                   <Image source={require("../assets/images/menu.jpg")} style={{
                     height:20,
                     width:28,
                 }}/>
@@ -832,7 +832,7 @@ launchCamera2 = async () =>{
       padding:10,
       
      }} >
-        <Image source={require("../assets/desc_01.jpg")} style={{
+        <Image source={require("../assets/images/desc_01.jpg")} style={{
             height:width*0.36,
             width:width*0.6,
             
@@ -1203,7 +1203,7 @@ justifyContent:'center',
 marginHorizontal:5
 
 }} >
-<Image source={require("../assets/menu.jpg")} style={{
+<Image source={require("../assets/images/menu.jpg")} style={{
 height:20,
 width:20,
 

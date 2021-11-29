@@ -231,7 +231,7 @@ export default class ProductImage extends Component {
                             <ActivityIndicator size={20} color="#62463e" />
                         ) : (
                             <TouchableOpacity activeOpacity={0.95} onPress={() => this.onPressDownloadBrochure()}>
-                                <Image source={require("../assets/downloadIcon.png")} style={{
+                                <Image source={require("../assets/images/downloadIcon.png")} style={{
                                     height:36,
                                     width:36,
                                     borderRadius: 12,
@@ -333,7 +333,7 @@ export default class ProductImage extends Component {
                                                         />
                                                     </TouchableOpacity>
 
-                                                    <Image source={require("../assets/Brandname2.png")} style={{
+                                                    <Image source={require("../assets/images/Brandname2.png")} style={{
                                                         height: 30,
                                                         width: 30,
                                                         position: 'absolute',
