@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import {
   View,
-  StyleSheet,
   Image,
   TouchableOpacity,
   Text,
@@ -10,27 +9,23 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
-  Keyboard,
   PermissionsAndroid,
   AsyncStorage,
   Alert,
-  ImageComponent,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MIIcon from 'react-native-vector-icons/MaterialIcons';
-import TabContainer from '../screens/TabnarComponent';
-import ImgToBase64 from 'react-native-image-base64';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {NetworkInfo} from 'react-native-network-info';
 import NetInfo from '@react-native-community/netinfo';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {Picker} from '@react-native-picker/picker';
 import {imageUrl, URL, FileUploadURL} from '../api.js';
 import emailValidator from '../screens/Validator';
 
 import * as Progress from 'react-native-progress';
+import { CustomAlert } from './components';
 let {height,width} = Dimensions.get('screen')
-// import { Dropdown } from 'react-native-material-dropdown';
+
 export default class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -64,7 +59,8 @@ export default class EditProfile extends Component {
       fileType2: '',
       filename2: '',
       email_id: '',
-      visible: false,
+      imagePickerModalVisible: false,
+      uploadFor: '',
     };
   }
 
@@ -114,7 +110,7 @@ export default class EditProfile extends Component {
           })
             .then((response) => response.json())
             .then((result) => {
-              console.log(result);
+              console.log('result==============>', result);
               if (result) {
                 if (result.company_logo == null) {
                   this.setState({
@@ -162,118 +158,9 @@ export default class EditProfile extends Component {
       });
     });
   };
-  openCamera2 = async () => {
-    var options = {
-      title: 'Select company Logo',
-      // customButtons: [
-      //   {
-      //     name: 'customOptionKey',
-      //     title: 'Choose file from Custom Option'
-      //   },
-      // ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-      didCancel: true,
-    };
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title: 'STC Permissions',
-        message: "Stc need's to allow your camera Permissions",
-        buttonNutral: 'Ask me Latter',
-        buttonPositive: 'Yes',
-        buttonNegative: 'No',
-      },
-    );
-
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      ImagePicker.showImagePicker(options, (res) => {
-        var form = new FormData();
-        form.append('image', {
-          uri: res.uri,
-          type: 'image/jpeg',
-          name: res.fileName,
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', FileUploadURL+'/uploads.php');
-        xhr.setRequestHeader('Contnet-Type', 'multipart/form-data');
-        xhr.send(form);
-
-        if (xhr.upload) {
-          console.log(res.path);
-          xhr.upload.onprogress = ({total, loaded}) => {
-            const Progress = loaded / total;
-            console.log(Progress);
-            this.setState({
-              progress: Progress,
-              progressStat: true,
-            });
-          };
-
-          setTimeout(() => {
-            this.setState({
-              progressStat: false,
-            });
-          }, 1600);
-        }
-
-        if (res) {
-          console.log(res);
-        }
-
-        this.setState({
-          camImage2: res.uri,
-          fileType2: res.type,
-          filename2: res.fileName,
-        });
-      });
-    } else {
-      alert('Pleace try again');
-    }
-  };
-
-  openCamera = async () => {
-    var options = {
-      title: 'Select Profile',
-      // customButtons: [
-      //   {
-      //     name: 'customOptionKey',
-      //     title: 'Choose file from Custom Option'
-      //   },
-      // ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-      didCancel: true,
-    };
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title: 'STC Permissions',
-        message: "Stc need's to allow your camera Permissions",
-        buttonNutral: 'Ask me Latter',
-        buttonPositive: 'Yes',
-        buttonNegative: 'No',
-      },
-    );
-
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      ImagePicker.showImagePicker(options, (res) => {
-        console.log(res);
-
-        this.setState({
-          camImage: res.uri,
-          fileType: res.type,
-          filename: res.fileName,
-        });
-      });
-    } else {
-      alert('Pleace try again');
-    }
+  
+  profilePicChoose = () => {
+    this.setState({imagePickerModalVisible: true, uploadFor: 'profile'});
   };
 
   updateProfile = () => {
@@ -603,6 +490,208 @@ export default class EditProfile extends Component {
     }
   };
 
+  handleCamera = async () => {
+    if (this.state.uploadFor === 'profile') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'STC Permissions',
+          message: "Stc need's to allow your camera Permissions",
+          buttonNutral: 'Ask me Latter',
+          buttonPositive: 'Yes',
+          buttonNegative: 'No',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        ImagePicker.openCamera({
+          mediaType: 'photo'
+        }).then(image => {
+            // console.log('image============>', image);
+            this.setState({
+              camImage: image.path,
+              fileType: image.mime,
+              filename: image.modificationDate+'.jpeg',
+            });
+            
+            this.setState({imagePickerModalVisible: false, uploadFor: ''});
+        }).catch(err => {
+            console.log('error', err)
+        });
+      
+      } else {
+        Alert.alert('Pleace try again');
+      }
+    }
+    if (this.state.uploadFor === 'company') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'STC Permissions',
+          message: "Stc need's to allow your camera Permissions",
+          buttonNutral: 'Ask me Latter',
+          buttonPositive: 'Yes',
+          buttonNegative: 'No',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        ImagePicker.openCamera({
+          mediaType: 'photo'
+        }).then(image => {
+          this.setState({imagePickerModalVisible: false, uploadFor: ''});
+
+            var form = new FormData();
+            form.append('image', {
+              uri: image.path,
+              type: image.mime,
+              name: image.modificationDate+'.jpeg',
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', FileUploadURL+'/uploads.php');
+            xhr.setRequestHeader('Contnet-Type', 'multipart/form-data');
+            xhr.send(form);
+
+            if (xhr.upload) {
+              console.log(image.path);
+              xhr.upload.onprogress = ({total, loaded}) => {
+                const Progress = loaded / total;
+                console.log(Progress);
+                this.setState({
+                  progress: Progress,
+                  progressStat: true,
+                });
+              };
+
+              setTimeout(() => {
+                this.setState({
+                  progressStat: false,
+                });
+              }, 1600);
+            }
+
+            if (image) {
+              console.log(image);
+            }
+
+            this.setState({
+              camImage2: image.path,
+              fileType2: image.mime,
+              filename2: image.modificationDate+'.jpeg',
+            });
+        }).catch(err => {
+            console.log('error', err)
+        });
+      
+      } else {
+        Alert.alert('Pleace try again');
+      }
+    }
+  }
+
+  handleGallery = async () => {
+    if (this.state.uploadFor === 'profile') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'STC Permissions',
+          message: "Stc need's to allow your camera Permissions",
+          buttonNutral: 'Ask me Latter',
+          buttonPositive: 'Yes',
+          buttonNegative: 'No',
+        },
+      );
+  
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        ImagePicker.openPicker({
+          mediaType: 'photo'
+        }).then(image => {
+            // console.log('image============>', image);
+            
+            this.setState({imagePickerModalVisible: false});
+            
+            this.setState({
+              camImage: image.path,
+              fileType: image.mime,
+              filename: image.modificationDate+'.jpeg',
+            });
+        }).catch(err => {
+            console.log('error', err)
+        });
+      
+      } else {
+        Alert.alert('Pleace try again');
+      }
+    }
+
+    if (this.state.uploadFor === 'company') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'STC Permissions',
+          message: "Stc need's to allow your camera Permissions",
+          buttonNutral: 'Ask me Latter',
+          buttonPositive: 'Yes',
+          buttonNegative: 'No',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        ImagePicker.openPicker({
+          mediaType: 'photo'
+        }).then(image => {
+          this.setState({imagePickerModalVisible: false, uploadFor: ''});
+
+            var form = new FormData();
+            form.append('image', {
+              uri: image.path,
+              type: image.mime,
+              name: image.modificationDate+'.jpeg',
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', FileUploadURL+'/uploads.php');
+            xhr.setRequestHeader('Contnet-Type', 'multipart/form-data');
+            xhr.send(form);
+
+            if (xhr.upload) {
+              console.log(image.path);
+              xhr.upload.onprogress = ({total, loaded}) => {
+                const Progress = loaded / total;
+                console.log(Progress);
+                this.setState({
+                  progress: Progress,
+                  progressStat: true,
+                });
+              };
+
+              setTimeout(() => {
+                this.setState({
+                  progressStat: false,
+                });
+              }, 1600);
+            }
+
+            if (image) {
+              console.log(image);
+            }
+
+            this.setState({
+              camImage2: image.path,
+              fileType2: image.mime,
+              filename2: image.modificationDate+'.jpeg',
+            });
+        }).catch(err => {
+            console.log('error', err)
+        });
+      
+      } else {
+        Alert.alert('Pleace try again');
+      }
+    }
+  }
+
   render() {
     console.log(this.state.city_id);
     return (
@@ -737,7 +826,8 @@ export default class EditProfile extends Component {
                     )}
                     <TouchableOpacity
                       onPress={() => {
-                        this.openCamera()
+                        // this.profilePicChoose()
+                        this.setState({imagePickerModalVisible: true, uploadFor: 'profile'});
                       }}
                       style={{
                           width: '20%',
@@ -1280,37 +1370,9 @@ export default class EditProfile extends Component {
                             marginHorizontal:15
                           }}
                         />
-
-                        {/* <TouchableOpacity
-                          onPress={() => this.openCamera2()}
-                          style={{
-                            position: 'absolute',
-                            top: 40,
-                            left: 40,
-                            right: 0,
-                          }}>
-                          <View
-                            style={{
-                              height: 30,
-                              width: 30,
-                              borderRadius: 10,
-                              borderWidth: 0.3,
-                              borderRadiusColor: 'black',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}>
-                            <Image
-                              source={require('../assets/images/edit3.png')}
-                              style={{
-                                height: 20,
-                                width: 20,
-                              }}
-                            />
-                          </View>
-                        </TouchableOpacity> */}
                         <TouchableOpacity
                           onPress={() => {
-                            this.openCamera2()
+                            this.setState({imagePickerModalVisible: true, uploadFor: 'company'});
                           }}
                           style={{
                               width: '20%',
@@ -1358,7 +1420,7 @@ export default class EditProfile extends Component {
 
                         <TouchableOpacity
                           onPress={() => {
-                            this.openCamera2()
+                            this.setState({imagePickerModalVisible: true, uploadFor: 'company'});
                           }}
                           style={{
                               width: '20%',
@@ -1404,6 +1466,16 @@ export default class EditProfile extends Component {
             </Text>
           </View>
         </TouchableOpacity>
+        <CustomAlert 
+          modelVisible={this.state.imagePickerModalVisible}
+          cancelButtonTitle='Gallery'
+          alertCancelButtonClick={this.handleGallery}
+          successButtonTitle='Camera'
+          alertSuccessButtonClick={this.handleCamera}
+          Subtitile=''
+          title='Upload from:'
+          closeModel={() => this.setState({imagePickerModalVisible: false, uploadFor: ''})}
+        />
       </View>
     );
   }
