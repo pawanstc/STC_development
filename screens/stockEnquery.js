@@ -233,7 +233,7 @@ export default class HomeComponent extends Component{
                       
                       <Picker 
                       style={{
-                        height:10,
+                        // height:10,
                         width:"100%",
                         
                         
