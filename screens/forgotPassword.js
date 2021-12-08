@@ -72,8 +72,8 @@ export default class ChangePassword extends Component {
                             })
                         } else {
                             Alert.alert(
-                                "Mobile Number",
-                                "Mobile number does not exist"
+                                "Error",
+                                result.msg
                             );
 
                             this.setState({
