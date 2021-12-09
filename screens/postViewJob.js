@@ -451,8 +451,8 @@
     };
 
     playSound = () => {
-    console.log(imageUrl + this.state.audio);
-    var url = urlsDomain + this.state.audio;
+    console.log('audioUrl', this.state.audio);
+    var url = this.state.audio;
     var url1 = 'https://stcapp.stcwallpaper.com/audio/audio-20210508151225.wav';
     url.toString();
     const track = {

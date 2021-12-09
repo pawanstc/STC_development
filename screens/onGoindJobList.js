@@ -118,7 +118,7 @@ export default class onGoingJobList extends Component {
             })
               .then((response) => response.json())
               .then((result) => {
-                console.log(result);
+                console.log('get_first_all_job_by_user_id', result);
                 let jobId = [];
                 if (result.error == false) {
                   result.order_details.forEach((element) => {

@@ -78,6 +78,7 @@ export default class Notification extends Component{
                             this.state.pageSize
                     }).then(response=>response.json())
                     .then(result=>{
+                        console.log('get_all_notification_details ', result);
                         this.setState({isLoading: false});
                         if (result.error === false) {
                             this.setState({

@@ -53,7 +53,7 @@ export default class StockEnquery2 extends Component {
                 }).then(response => response.json())
                 .then(result =>{
                     if(result){
-                        console.log(result)
+                        console.log('get_stock_city_details_by_city_id', result)
                         let date = result.stock_city_list[0].update_stock_date;
                     var newDate = moment(date).format("MMM Do YY")
                  
@@ -222,31 +222,29 @@ export default class StockEnquery2 extends Component {
                         this.state.city_name != null && this.state.date  ? (
                             <View style={{
                                 flex:1,
-                                alignItems:"center"
                             }} >
                                 <View style={{
                         flexDirection:"row",
                         justifyContent:"space-between",
-                        marginTop:20
+                        marginTop:20,
                     }} >
                         <View style={{
-                        alignItems:"center",
-                        flexDirection:"row"
+                        flexDirection:"row",
+                        width: '55%'
                     }} >
                            <TouchableOpacity activeOpacity={2} onPress={() => this.props.navigation.goBack(null)} >
                            <Icon name="location-outline" size={13} style={{
-                            margin:6
+                            marginRight:6, paddingTop: 3
                            }} color="red" />
                            </TouchableOpacity>
                         <Text style={{
                             fontSize:14
-                        }} >{ this.state.city_name }</Text>
+                        }} >{ this.state.city_name}</Text>
                      
                         
                     </View>
                     <View style={{
                         height:20,
-                        width:"40%"
                     }} />
 
                     <Text style={{
