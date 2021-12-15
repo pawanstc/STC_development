@@ -68,7 +68,7 @@ export default class Messaging extends Component {
 
       NetInfo.fetch().then((state) => {
         if (state.isConnected) {
-          let api = 'get_message_list_by_order_id';
+          let api = 'get_message_list_by_order_id_mobile';
           let body = 'order_id='+this.props.route.params.order_id;
           if (this.state.flowDirection === 'previewImage') {
             api = 'get_all_preview_remarks_by_order_id';
