@@ -93,3 +93,26 @@ export const deviceHeight = () => {
   const dim = Dimensions.get('window');
   return dim.height;
 };
+
+export const isEnabledCancelRejectButton = (userType, status) => {
+  if (userType === 'Distributor') {
+    switch(status) {
+      case 6:
+      case 8:
+      case 9:
+      case 10:
+      case 11:
+        return true;
+    }
+  }
+  if (userType === 'Dealer') {
+    switch(status) {
+      case 8:
+      case 9:
+      case 10:
+        return true;
+    }
+  }
+
+  return false;
+}
