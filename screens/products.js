@@ -92,11 +92,16 @@ export default class ProductImage extends Component {
         let id = this.props.route.params.id;
         let cat_name = this.props.route.params.cat_name;
 
-        console.log('"catlog_master_id=" + id=====================>', id, cat_name)
+        
+        let api = '/get_catlog_subcategory_details_by_catlog_master_id';
+        
+        if (cat_name === 'Customize') {
+            api = '/get_customise_catlog_subcategory_details_by_catlog_name';
+        }
 
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
-                fetch(URL + "/get_customise_catlog_subcategory_details_by_catlog_name", {
+                fetch(URL + api, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },

@@ -250,7 +250,7 @@ export default class StockEnquery2 extends Component {
                     <Text style={{
                         fontSize:14,
                        
-                    }} >Date :{ this.state.date }</Text>
+                    }} >Date: {this.state.date }</Text>
 
                     </View>
                    <TextInput
