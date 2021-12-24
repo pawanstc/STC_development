@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Textarea from 'react-native-textarea';
 import {NetworkInfo} from 'react-native-network-info';
 import NetInfo from '@react-native-community/netinfo';
+import {isEnabledCancelRejectButton} from './helper/utility';
 
 let {height, width} = Dimensions.get('screen');
 
@@ -21,7 +22,7 @@ export default class chatAgainstIndividualPreviews extends Component {
         this.state = {
             modalVisible: false,
             isDisabled: false,
-            isRejectDisabled: false,
+            isRejectDisabled: true,
             jobDetail: this.props.route.params.item,
             approve_action: false,
             modalvisibale: false,
@@ -235,17 +236,17 @@ export default class chatAgainstIndividualPreviews extends Component {
 
     render() {
         if (this.state.jobDetail.user_role_name === 'Dealer') {
-            if (this.state.jobDetail.approved_by_dealer === 2) {
-                this.state.isRejectDisabled = true;
-            } else {
+            if (isEnabledCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
                 this.state.isRejectDisabled = false;
+            } else {
+                this.state.isRejectDisabled = true;
             }
         }
         if (this.state.jobDetail.user_role_name === 'Distributor') {
-            if (this.state.jobDetail.approved_by_distributer === 2) {
-                this.state.isRejectDisabled = true;
-            } else {
+            if (isEnabledCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
                 this.state.isRejectDisabled = false;
+            } else {
+                this.state.isRejectDisabled = true;
             }
         }
 
