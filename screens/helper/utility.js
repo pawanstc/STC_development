@@ -116,3 +116,15 @@ export const isEnabledCancelRejectButton = (userType, status) => {
 
   return false;
 }
+
+export function isValidString(text) {
+  if (Number.isNaN(text)) {
+    return false
+  }
+  if (text === "") {
+    return true
+  }
+  const reg = /^[a-z\d\-_\s]+$/i
+  console.log('reg.test(text)=======', text, reg.test(text))
+  return reg.test(text)
+}

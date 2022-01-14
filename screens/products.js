@@ -337,15 +337,16 @@ export default class ProductImage extends Component {
                                                             source={{ uri: imageUrl + "" + items.item.sub_category_img_url }}
                                                         />
                                                     </TouchableOpacity>
-
-                                                    <Image source={require("../assets/images/Brandname2.png")} style={{
-                                                        height: 30,
-                                                        width: 30,
-                                                        position: 'absolute',
-                                                        top: 1,
-                                                        left: 4,
-                                                        right: 0
-                                                    }} />
+                                                    {this.props.route.params.cat_name === 'Customize' ? 
+                                                        <Image source={require("../assets/images/Brandname2.png")} style={{
+                                                            height: 30,
+                                                            width: 30,
+                                                            position: 'absolute',
+                                                            top: 1,
+                                                            left: 4,
+                                                            right: 0
+                                                        }} />
+                                                    : null}
                                                     <View style={{
 
                                                         marginTop: 15

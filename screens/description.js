@@ -35,6 +35,7 @@ import {
 import { PickerItem } from 'react-native/Libraries/Components/Picker/Picker';
 import { ThemeConsumer } from 'styled-components';
 import { duration } from 'moment';
+import { isValidString } from './helper/utility.js';
 
 
 let {height,width} = Dimensions.get('screen')
@@ -57,7 +58,7 @@ export default class Recorder extends Component {
 			mediaType:"",
 			paperType:[],
 			selectPaper:"",
-			desc:" ",
+			desc:"",
 			user_id:"",
 			filename:"",
 			pattern_url:"",
@@ -244,9 +245,16 @@ console.log(this.state.pattern_url);
                                 .then((res) => res.json())
                                 .then((responseJson) => {
                                     //GET RESPONSE SUCCESS OF FAILURE
-                                    console.log(responseJson);
-									console.log(responseJson.url.replace('https://stcapp.stcwallpaper.com/',''));
-									this.setState({data:responseJson.url.replace('https://stcapp.stcwallpaper.com/','')})
+									let audioUrl = '';
+									if (responseJson.url.includes('https://phpstack-525410-2077105.cloudwaysapps.com/')){
+										audioUrl = responseJson.url.replace('https://phpstack-525410-2077105.cloudwaysapps.com/','');
+									} else if (responseJson.url.includes('https://stcapp.stcwallpaper.com/')) {
+										audioUrl = responseJson.url.replace('https://stcapp.stcwallpaper.com/','');
+									}
+                                    console.log('audioUrl==============>', audioUrl);
+									// console.log(responseJson.url.replace('https://stcapp.stcwallpaper.com/',''));
+									// this.setState({data:responseJson.url.replace('https://stcapp.stcwallpaper.com/','')})
+									this.setState({data: audioUrl});
 									console.log(this.state.data)
                                 })
                                 .catch((error) => {
@@ -390,6 +398,7 @@ console.log(this.state.pattern_url);
 		
 		console.log("inside function ")
 		console.log(this.state.data)
+		console.log('catlog_sub_category_id=====>', this.props.route.params.image_id);
 		fetch(URL+"/insert_post_job_order",{
 			headers:{
 				"Content-Type":"application/x-www-form-urlencoded"
@@ -431,6 +440,7 @@ console.log(this.state.pattern_url);
 	
 		console.log("inside function ")
 		console.log(this.state.data)
+		console.log('catlog_sub_category_id=====>', this.props.route.params.image_id);
 	console.log(this.props.route.params.fileObj.path);
 
 		fetch(URL+"/insert_post_job_order",{
@@ -541,8 +551,8 @@ console.log(this.state.pattern_url);
 				}} >Description</Text>
 				 <Textarea
 				 maxLength={160}
-				 onChangeText={(value) => this.setState({
-					 desc:value
+				 onChangeText={(value) => isValidString(value) && this.setState({
+					 desc: value
 				 })}
     containerStyle={{
 		height:200,
@@ -551,9 +561,10 @@ console.log(this.state.pattern_url);
 		margin:20
 	}}
     maxLength={120}
-    placeholder={' Write a description for supporting image'}
+    placeholder={'Write a description for supporting image'}
     placeholderTextColor={'#c7c7c7'}
     underlineColorAndroid={'transparent'}
+	value={this.state.desc}
   />
 					<View style={{
 						flexDirection: "row",
