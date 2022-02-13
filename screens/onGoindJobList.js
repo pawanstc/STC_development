@@ -472,7 +472,7 @@ export default class onGoingJobList extends Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        console.log('result==============', result);
         if (!result.error) {
           this.setState({
             jobList: [
@@ -591,6 +591,7 @@ export default class onGoingJobList extends Component {
                     }
                     showsVerticalScrollIndicator={false}
                     renderItem={(items, index) => {
+                      console.log('items==========>', items.item);
                       console.log('support image detail');
                       console.log(items.item.support_image.image_details);
                       return (

@@ -950,6 +950,11 @@
                                                 } else if (this.state.user_type === 'Distributor') {
                                                     isApproveDisabled = this.state.previewImageApprovedByDistributor && Object.keys(this.state.previewImageApprovedByDistributor) && Object.keys(this.state.previewImageApprovedByDistributor).length > 0
                                                 }
+
+                                                if (this.state.jobDetail && this.state.jobDetail.cancel_job === 1) {
+                                                    isApproveDisabled = true;
+                                                }
+                                                
                                                 this.props.navigation.navigate('chatAgainstIndividualPreviews', {item: { ...this.state.jobDetail, ...item, user_type: this.state.user_type, status: this.state.status, isApproveDisabled }});
                                             }}>
                                                 <Image

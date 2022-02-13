@@ -85,7 +85,8 @@ export default class chatAgainstIndividualPreviews extends Component {
                     method: 'POST',
                     body:
                         'order_id=' +
-                        this.state.jobDetail.order_id +
+                        // this.state.jobDetail.order_id +
+                        this.state.jobDetail.id +
                         '&user_id=' +
                         result +
                         '&role=' +
@@ -139,7 +140,8 @@ export default class chatAgainstIndividualPreviews extends Component {
                     method: 'POST',
                     body:
                         'order_id=' +
-                        this.state.jobDetail.order_id +
+                        // this.state.jobDetail.order_id +
+                        this.state.jobDetail.id +
                         '&user_id=' +
                         result +
                         '&role=' +

@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, FlatList, TextInput, ScrollView, Alert, Share, ActivityIndicator, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Text, StatusBar, Dimensions, FlatList, TextInput, ScrollView, Alert, ActivityIndicator, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImageBlurLoading from 'react-native-image-blur-loading'
 import Modal from 'react-native-modal';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import NetInfo from "@react-native-community/netinfo";
 import { URL, imageUrl } from '../api.js';
 import ImageLoad from 'react-native-image-placeholder';
 import { downloadFile, showToastMessage } from './helper/utility.js';
+import Share from 'react-native-share'
+
 let {height,width} = Dimensions.get('screen')
+
 export default class ProductImage extends Component {
 
     constructor(props) {
@@ -53,7 +57,7 @@ export default class ProductImage extends Component {
     
 
     uploadModel = (data, id, pattern_id) => {
-        console.log("pattern number is"+pattern_id);
+        console.log("pattern number is "+pattern_id);
         this.setState({
             image: data,
             isvisible: true,
@@ -169,6 +173,63 @@ export default class ProductImage extends Component {
         }
         return false
       }
+
+    ShareImage = (uri) => {
+        let ext = '';
+        let type = '';
+        if(uri.endsWith('png')){
+          ext='png'
+          type='image/png'
+        }else if(uri.endsWith('jpg')){
+          ext='jpeg'
+          type='image/jpeg'
+        }else if(uri.endsWith('jpeg')){
+          ext='jpeg'
+          type='image/jpeg'
+        }
+        
+        
+       
+       let shareOptions = {
+         message:'',
+         url:uri
+       }
+     
+   
+       RNFetchBlob.config({ fileCache: false })
+       .fetch('GET', uri)
+       .then(resp => {
+           shareOptions.url='data:image/'+ext+';base64,'+resp.data;
+           shareOptions={...shareOptions,type}
+       })
+       .then(()=>{
+            this.setState({
+                isvisible: false
+            });
+            Share.open(shareOptions)
+        })
+       .catch(err => { 
+         console.log(err);
+       })
+    }
+
+    postJob = () => {
+        this.setState({
+            isvisible: false
+        });
+
+        setTimeout(() => {
+            this.props.navigation.navigate("customWp", {
+                image: imageUrl + "" + this.state.image,
+
+                image_id: this.state.id,
+
+                flag: "1",
+                image_id:this.state.pattern_no
+                
+            })
+        }, 1000)
+    }
 
 
     render() {
@@ -490,20 +551,7 @@ export default class ProductImage extends Component {
 
                                 <View>
                                     <TouchableOpacity onPress={() => {
-                                        this.setState({
-                                            isvisible: false
-                                        });
-
-                                        Share.share(
-                                            {
-                                                message: imageUrl + "/" + this.state.image,
-
-                                            }
-                                        ).then(result => {
-                                            console.log(result);
-                                        }).catch(error => {
-                                            console.log(error);
-                                        });
+                                        this.ShareImage(imageUrl+"/"+this.state.image);
                                     }}  >
                                         <Icon name="share" size={30} color="black" style={{
                                             padding: 8,
@@ -522,21 +570,7 @@ export default class ProductImage extends Component {
                                 
                                 <View>
                                     <TouchableOpacity onPress={() => {
-                                        this.setState({
-                                            isvisible: false
-                                        });
-
-                                        setTimeout(() => {
-                                            this.props.navigation.navigate("customWp", {
-                                                image: imageUrl + "" + this.state.image,
-
-                                                image_id: this.state.id,
-
-                                                flag: "1",
-                                                image_id:this.state.pattern_no
-                                                
-                                            })
-                                        }, 1000)
+                                        this.postJob();
                                     }} >
                                         <Icon name="add-outline" size={30} color="black" style={{
                                             padding: 10,
