@@ -63,7 +63,9 @@ export default class TabComponnet extends Component{
                             "&page_index="+
                             this.state.pageIndex+
                             "&page_size="+
-                            this.state.pageSize
+                            this.state.pageSize+
+                            "&source="+
+                            'mobile'
                 }).then(response=>response.json())
                 .then(result=>{
                     this.setState({

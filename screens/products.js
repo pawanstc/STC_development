@@ -191,7 +191,7 @@ export default class ProductImage extends Component {
         
        
        let shareOptions = {
-         message:'',
+         message:uri,
          url:uri
        }
      
@@ -551,7 +551,7 @@ export default class ProductImage extends Component {
 
                                 <View>
                                     <TouchableOpacity onPress={() => {
-                                        this.ShareImage(imageUrl+"/"+this.state.image);
+                                        this.ShareImage(imageUrl+this.state.image);
                                     }}  >
                                         <Icon name="share" size={30} color="black" style={{
                                             padding: 8,

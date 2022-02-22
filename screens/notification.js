@@ -75,7 +75,9 @@ export default class Notification extends Component{
                             "&page_index="+
                             this.state.pageIndex+
                             "&page_size="+
-                            this.state.pageSize
+                            this.state.pageSize+
+                            "&source="+
+                            'mobile'
                     }).then(response=>response.json())
                     .then(result=>{
                         console.log('get_all_notification_details ', result);
@@ -105,11 +107,11 @@ export default class Notification extends Component{
 
 
     Click=(item)=>{
-            if(item.notification_type=="Job_Details"){
+            // if(item.notification_type=="Job_Details"){
                 var jd=[]
                 route_notificationTojob(item.post_job_order_id).then(res=>{jd=res
                 
-                    console.log("jobdetails",jd)
+                    console.log("jobdetails-----------------",item, res)
                     if(jd!=undefined){
                         this.props.navigation.navigate("postViewJob",{
                             pattern_number:jd.pattern_no,
@@ -123,12 +125,12 @@ export default class Notification extends Component{
                         user_type:jd.user_role_name})}
                     }
                     ).catch(err=>console.log(err))
-            }else{
-                
-                var res=route_notificationToNotice(item.notification_doc_url)
-                if(res=="pdf")this.props.navigation.navigate("showsPdf",{url:imageUrl+item.notification_doc_url})
-                if(res=="jpg")this.props.navigation.navigate("preview",{uri:imageUrl+item.notification_doc_url})
-            }
+            // }else{
+            //     var res=route_notificationToNotice(item.notification_doc_url)
+            //     console.log('res, item.notification_doc_url======>', res, item.notification_doc_url)
+            //     if(res==="pdf")this.props.navigation.navigate("showsPdf",{url:imageUrl+item.notification_doc_url})
+            //     if(res==="jpg")this.props.navigation.navigate("preview",{uri:imageUrl+item.notification_doc_url})
+            // }
     }
 
     render(){
