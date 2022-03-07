@@ -151,14 +151,6 @@ export default class Messaging extends Component {
             },
             method: 'POST',
             body: body,
-              // 'user_id=' +
-              // this.state.user_id +
-              // '&order_id=' +
-              // this.props.route.params.order_id +
-              // '&message=' +
-              // messages[0].text +
-              // '&created_by_ip=' +
-              // this.state.ip_address,
           },
         )
           .then((response) => {
@@ -166,7 +158,7 @@ export default class Messaging extends Component {
             response.text()
           })
           .then((result) => {
-            if (result.error == false) {
+            if (result?.error == false) {
               this.getMessage();
             }
           })

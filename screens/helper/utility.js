@@ -94,7 +94,7 @@ export const deviceHeight = () => {
   return dim.height;
 };
 
-export const isEnabledCancelRejectButton = (userType, status) => {
+export const isActiveCancelRejectButton = (userType, status) => {
   if (userType === 'Distributor') {
     switch(status) {
       case 6:
@@ -113,6 +113,28 @@ export const isEnabledCancelRejectButton = (userType, status) => {
         return true;
     }
   }
+
+  return false;
+}
+
+export const isActiveApproveButton = (userType, status) => {
+  if (userType === 'Distributor') {
+    switch(status) {
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+        return true;
+    }
+  }
+  // if (userType === 'Dealer') {
+  //   switch(status) {
+  //     case 8:
+  //     case 9:
+  //     case 10:
+  //       return true;
+  //   }
+  // }
 
   return false;
 }

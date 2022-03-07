@@ -186,8 +186,8 @@ export default class Notification extends Component{
                                                         <Text style={{fontSize:10}}>{items.item.date_time}</Text>
                                                     </TouchableOpacity>
                                                 </View>
-                                                {items.item.notification_doc_url?(
-                                                    <Image source={{uri:imageUrl+items.item.notification_doc_url}} style={{height:50,width:50, borderRadius: 25}}/>
+                                                {items.item.pattern_image_url?(
+                                                    <Image source={{uri:imageUrl+items.item.pattern_image_url}} style={{height:50,width:50, borderRadius: 25}}/>
                                                 ):(
                                                     <Image source={require('../assets/images/logo45454.png')} style={{height:50,width:50, borderRadius: 25}}/>
                                                 )}

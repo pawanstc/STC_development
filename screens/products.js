@@ -569,6 +569,7 @@ export default class ProductImage extends Component {
                                 </View>
                                 
                                 <View>
+                                {this.props.route.params.cat_name === 'Customize' ? 
                                     <TouchableOpacity onPress={() => {
                                         this.postJob();
                                     }} >
@@ -584,6 +585,7 @@ export default class ProductImage extends Component {
                                             marginRight: 20
                                         }} >Post Job</Text>
                                     </TouchableOpacity>
+                                    :null}
                                 </View>
 
 

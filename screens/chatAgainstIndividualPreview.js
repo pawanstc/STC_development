@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Textarea from 'react-native-textarea';
 import {NetworkInfo} from 'react-native-network-info';
 import NetInfo from '@react-native-community/netinfo';
-import {isEnabledCancelRejectButton} from './helper/utility';
+import {isActiveApproveButton, isActiveCancelRejectButton} from './helper/utility';
 
 let {height, width} = Dimensions.get('screen');
 
@@ -23,6 +23,7 @@ export default class chatAgainstIndividualPreviews extends Component {
             modalVisible: false,
             isDisabled: false,
             isRejectDisabled: true,
+            isApproveDisabled: true,
             jobDetail: this.props.route.params.item,
             approve_action: false,
             modalvisibale: false,
@@ -238,17 +239,25 @@ export default class chatAgainstIndividualPreviews extends Component {
 
     render() {
         if (this.state.jobDetail.user_role_name === 'Dealer') {
-            if (isEnabledCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
+            if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
                 this.state.isRejectDisabled = false;
             } else {
                 this.state.isRejectDisabled = true;
             }
+
+            this.state.isApproveDisabled = this.state.jobDetail.isApproveDisabled;
         }
         if (this.state.jobDetail.user_role_name === 'Distributor') {
-            if (isEnabledCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
+            if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
                 this.state.isRejectDisabled = false;
             } else {
                 this.state.isRejectDisabled = true;
+            }
+
+            if (isActiveApproveButton(this.state.jobDetail.user_role_name, this.state.status)) {
+                this.state.isApproveDisabled = false;
+            } else {
+                this.state.isApproveDisabled = true;
             }
         }
 
@@ -309,16 +318,16 @@ export default class chatAgainstIndividualPreviews extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
-                                disabled={this.state.jobDetail.isApproveDisabled}
+                                disabled={this.state.isApproveDisabled}
                                 onPress={() => this.approveJobAlert()}
                                  style={
-                                    this.state.jobDetail.isApproveDisabled
+                                    this.state.isApproveDisabled
                                         ? styles.approvebutton_disabled
                                         : styles.approvebutton_enabled
                                     }>
                                     <Text
                                     style={
-                                        this.state.jobDetail.isApproveDisabled
+                                        this.state.isApproveDisabled
                                         ? styles.approvetext_disabled
                                         : styles.approvetext_enabled
                                     }>
