@@ -30,6 +30,7 @@
     import moment from 'moment';
     import {Picker} from '@react-native-picker/picker';
     import { getDayDateFormat } from './helper/utility';
+    import { CustomModal } from './components';
 
     let urlsDomain = 'https://stcapp.stcwallpaper.com/';
     let {height, width} = Dimensions.get('screen');
@@ -59,7 +60,8 @@
         description: '',
         dist_only: false,
         prev_img_desc: '',
-        modalvisibale: false,
+        isVisibleMediaTypeModal: false,
+        isVisibleQtyModal: false,
         remark: 'No remarks',
         approve_action: false,
         dealer_remarks: '',
@@ -75,7 +77,8 @@
         paper_list: [],
         paperType: [],
         mediaType: '',
-        selectedPaper: ''
+        selectedPaper: '',
+        quantity: '',
     };
     }
 
@@ -216,6 +219,23 @@
         }
     }
 
+    isEditableQuantity = (order_status_id) => {
+        switch(order_status_id && order_status_id.toString()) {
+            case '1':
+            case '2':
+            case '4':
+            case '8':
+            case '9':
+            case '10':
+            case '11':
+            case '12':
+            case '13':
+                return true;
+            default: 
+                return false;
+        }
+    }
+
     getJobDetail = () => {
         fetch(URL + '/get_job_details_by_order_id', {
             headers: {
@@ -234,7 +254,8 @@
                     job_id: result.order_id,
                     jobDetail: result,
                     mediaType: result.mediaTypeId,
-                    selectedPaper: result.paperTypeId || ''
+                    selectedPaper: result.paperTypeId || '',
+                    quantity: result.quantity
                 });
                 this.getPaperType(result.mediaTypeId)
             }
@@ -260,7 +281,7 @@
             }).then(response => response.json())
             .then(result =>{
                 if(result.error == false){
-                    this.setState({ modalvisibale: false })
+                    this.setState({ isVisibleMediaTypeModal: false })
                     this.getJobDetail();
                     Alert.alert(
                         "Data updated successfully!"
@@ -278,6 +299,41 @@
             if (this.state.selectedPaper === "") {
                 Alert.alert(
                     "Paper type is required"
+                );
+            }
+        }
+    }
+
+    updateQuantity = () => {
+        if (this.state.quantity !== "") {
+            const body = "order_id="+
+            this.state.jobDetail.order_id+
+            "&quantity="+
+            this.state.quantity;
+
+            fetch(URL+"/update_job_post_quantity_by_order_id",{
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+                method:"POST",
+                body
+            }).then(response => response.json())
+            .then(result =>{
+                if(result.error == false){
+                    this.setState({ isVisibleQtyModal: false })
+                    this.getJobDetail();
+                    Alert.alert(
+                        "Quantity updated successfully!"
+                    );
+                    this.props.navigation.navigate('onGoingJoblist', {});
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+        } else {
+            if (this.state.quantity === "") {
+                Alert.alert(
+                    "Quantity is required"
                 );
             }
         }
@@ -497,6 +553,10 @@
         });
     };
 
+    onPressGoBack(){
+        this.props.navigation.goBack(null);
+    }
+
     render() {
     return (
         <View
@@ -521,7 +581,7 @@
             }}>
             <TouchableOpacity
                 activeOpacity={2}
-                onPress={() => this.props.navigation.goBack(null)}>
+                onPress={() => this.onPressGoBack()}>
                 <Icons
                 name="arrow-back"
                 style={{
@@ -645,13 +705,34 @@
                         : 'N/A'}
                     </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
-                    Qty:
-                    </Text>
-                    <Text style={{fontSize: 12, padding: 4}}>
-                    {this.state.jobDetail.quantity}
-                    </Text>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
+                        Qty:
+                        </Text>
+                        <Text style={{fontSize: 12, padding: 4}}>
+                        {this.state.quantity}
+                        </Text>
+                    </View>
+                    {this.isEditableQuantity(this.state.jobDetail.order_status_id) ?
+                        <TouchableOpacity
+                            onPress={() => {
+                                // this.getSheet();
+                                this.setState({ isVisibleQtyModal: true });
+                            }}
+                            style={{
+                                width: '20%',
+                                marginRight: 8,
+                                height: 25,
+                                width: 25,
+                                borderRadius: 15,
+                                backgroundColor: '#62463e',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <MIIcon name="edit" color="white" size={15} />
+                        </TouchableOpacity>
+                    : null}
                 </View>
                 <View style={{flexDirection: 'row'}}>
                     <Text style={{fontSize: 12, color: 'grey', padding: 4}}>
@@ -686,7 +767,7 @@
                         <TouchableOpacity
                             onPress={() => {
                                 this.getSheet();
-                                this.setState({ modalvisibale: true });
+                                this.setState({ isVisibleMediaTypeModal: true });
                             }}
                             style={{
                                 width: '20%',
@@ -1115,184 +1196,12 @@
                         </View>
                     )}
                 </View>
-
-                {/* <View style={{marginBottom: 4, borderRadius: 4}}>
-                <View
-                    style={{
-                    padding: 10,
-                    borderBottomWidth: 0.5,
-                    }}>
-                    <Text
-                    style={{
-                        fontSize: 18,
-                        marginTop: 10,
-                        textAlign: 'left',
-                        color: '#62463e',
-                    }}>
-                    Preview Images:
-                    </Text>
-                </View>
-                {this.state.prev_img ? (
-                    <View>
-                    <TouchableOpacity
-                        onPress={() => {
-                        this.props.navigation.navigate('preview', {
-                            uri: imageUrl+this.state.prev_img,
-                            isShowShare: true,
-                            isShowDownload: true
-                        });
-                        }}>
-                        <Image
-                        source={{uri: imageUrl+this.state.prev_img}}
-                        style={{
-                            height: 240,
-                            width: '97%',
-                            borderRadius: 4,
-                            elevation: 5,
-                            marginTop: 5,
-                            alignSelf: 'center',
-                            //marginBottom:1,
-                            borderWidth: 1,
-                            borderColor: '#eeee',
-                        }}
-                        />
-                    </TouchableOpacity>
-                    <View
-                        style={{
-                        borderBottomWidth: 0.5,
-                        }}>
-                        <Text
-                        style={{
-                            fontSize: 18,
-                            margin: 5,
-                            color: '#62463e',
-                            textAlign: 'left',
-                        }}>
-                        Description:
-                        </Text>
-                        <Text
-                        style={{
-                            padding: 10,
-                            fontSize: 16,
-                            color: 'grey',
-                            textAlign: 'left',
-                        }}
-                        selectable={true}>
-                        {this.state.prev_img_desc}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                        width: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        }}>
-                        <TouchableOpacity
-                        disabled={this.state.isDisabled}
-                        onPress={() => this.rejectJobConf()}>
-                        <View
-                            style={
-                            this.state.isDisabled
-                                ? styles.rejectbutton_disabled
-                                : styles.rejectbutton_enabled
-                            }>
-                            <Text
-                            style={
-                                this.state.isDisabled
-                                ? styles.rejecttext_disabled
-                                : styles.rejecttext_enabled
-                            }>
-                            Change/Reject Preview
-                            </Text>
-                        </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                        disabled={this.state.isDisabled}
-                        onPress={() => this.approveJobconf()}>
-                        <View
-                            style={
-                            this.state.isDisabled
-                                ? styles.approvebutton_disabled
-                                : styles.approvebutton_enabled
-                            }>
-                            <Text
-                            style={
-                                this.state.isDisabled
-                                ? styles.approvetext_disabled
-                                : styles.approvetext_enabled
-                            }>
-                            Approve Preview
-                            </Text>
-                        </View>
-                        </TouchableOpacity>
-                    </View>
-
-                    {this.state.dealer_approve ? (
-                        <View>
-                        <Text
-                            style={{
-                            fontSize: 16,
-                            padding: 10,
-                            color: 'grey',
-                            textAlign: 'left',
-                            }}>
-                            Dealer Status:-{this.state.dealer_approve}
-                        </Text>
-                        <Text
-                            style={{
-                            fontSize: 16,
-                            padding: 10,
-                            color: 'grey',
-                            textAlign: 'left',
-                            }}>
-                            Dealer Remarks:-{this.state.dealer_remarks}
-                        </Text>
-                        </View>
-                    ) : null}
-                    {this.state.distributer_approve ? (
-                        <View>
-                        <Text
-                            style={{
-                            fontSize: 16,
-                            padding: 10,
-                            color: 'grey',
-                            textAlign: 'left',
-                            }}>
-                            Distributor Status:-{this.state.distributer_approve}
-                        </Text>
-                        <Text
-                            style={{
-                            fontSize: 16,
-                            padding: 10,
-                            color: 'grey',
-                            textAlign: 'left',
-                            }}>
-                            Distributor Remarks:-{this.state.distributer_remarks}
-                        </Text>
-                        </View>
-                    ) : null}
-                    </View>
-                ) : (
-                    <Text
-                    style={{
-                        fontSize: 16,
-                        color: 'grey',
-                        textAlign: 'center',
-                    }}>
-                    No preview image found
-                    </Text>
-                )}
-                </View> */}
             </ScrollView>
             </View>
         </View>
-            <Modal
-                backdropOpacity={0.3}
-                isVisible={this.state.modalvisibale}
-                onBackButtonPress={() => {
-                    this.setState({modalvisibale: false});
+            <CustomModal isVisible={this.state.isVisibleMediaTypeModal}
+                backButtonPress={() => {
+                    this.setState({isVisibleMediaTypeModal: false});
                 }}>
                 <View style={{flex: 1}}>
                     <View
@@ -1307,7 +1216,7 @@
                     }}>
                         <TouchableOpacity
                             onPress={() => {
-                                this.setState({modalvisibale: false});
+                                this.setState({isVisibleMediaTypeModal: false});
                             }}
                             style={{width: 50, height: 50, alignSelf: 'flex-end'}}>
                             <Icon
@@ -1413,7 +1322,93 @@
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </CustomModal>
+
+            <CustomModal isVisible={this.state.isVisibleQtyModal}
+                backButtonPress={() => {
+                    this.setState({isVisibleQtyModal: false});
+                }}>
+                <View style={{flex: 1}}>
+                    <View
+                        style={{
+                        height: 250,
+                        width: '88%',
+                        marginTop: 200,
+                        alignSelf: 'center',
+                        backgroundColor: 'white',
+                        elevation: 5,
+                        borderRadius: 5,
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({isVisibleQtyModal: false});
+                            }}
+                            style={{width: 50, height: 50, alignSelf: 'flex-end'}}>
+                            <Icon
+                                name="x-circle"
+                                size={20}
+                                color="#62463e"
+                                style={{alignSelf: 'flex-end', padding: 10}}
+                            />
+                        </TouchableOpacity>
+                        <Text
+                            style={{
+                                color: '#62463e',
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                paddingHorizontal: 20,
+                                paddingBottom: 20
+
+                            }}>
+                            Change Quantity
+                        </Text>
+                        
+                        <TextInput
+                            placeholder="Enter Quantity"
+                            defaultValue={this.state.quantity.toString()}
+                            onChangeText={(value) => {
+                                this.setState({
+                                    quantity: value,
+                                });
+                            }}
+                            style={{
+                                height: 45,
+                                width: '90%',
+                                borderWidth: 0.8,
+                                borderRadius: 6,
+                                borderColor: '#62463e',
+                                padding: 12,
+                                alignSelf: 'center'
+                            }}
+                        />
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.updateQuantity();
+                            }}
+                            style={{
+                                height: 40,
+                                backgroundColor: '#62463e',
+                                alignSelf: 'center',
+                                alignContent: 'center',
+                                marginBottom: 10,
+                                marginTop: 30,
+                                paddingHorizontal: 20,
+                                borderRadius: 20
+                            }}>
+                            <Text
+                                style={{
+                                color: 'white',
+                                alignSelf: 'center',
+                                fontWeight: 'bold',
+                                marginTop: 10,
+                                }}>
+                                Update Qty
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </CustomModal>
         </View>
     );
     }
