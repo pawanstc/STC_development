@@ -472,7 +472,7 @@ export default class onGoingJobList extends Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        console.log('result==============', result);
         if (!result.error) {
           this.setState({
             jobList: [
@@ -591,6 +591,7 @@ export default class onGoingJobList extends Component {
                     }
                     showsVerticalScrollIndicator={false}
                     renderItem={(items, index) => {
+                      // console.log('items==========>', items.item);
                       console.log('support image detail');
                       console.log(items.item.support_image.image_details);
                       return (
@@ -1010,11 +1011,22 @@ export default class onGoingJobList extends Component {
                                       </Text>
                                     </View>
                                   </TouchableOpacity>
-
+                                  {console.log('order_status_id======', items.item.order_status_id, items.item.cancel_job)}
                                   {items.item.cancel_job == '0' &&
-                                  items.item.order_status_id != 8 &&
-                                  items.item.order_status_id != 5 &&
-                                  items.item.order_status_id != 7 ? (
+                                  // items.item.order_status_id != 8 &&
+                                  // items.item.order_status_id != 5 &&
+                                  // items.item.order_status_id != 3 
+                                  (items.item.order_status_id == 1 ||
+                                  items.item.order_status_id == 2 || 
+                                  items.item.order_status_id == 4 || 
+                                  items.item.order_status_id == 6 || 
+                                  items.item.order_status_id == 8 || 
+                                  items.item.order_status_id == 9 || 
+                                  items.item.order_status_id == 10 || 
+                                  items.item.order_status_id == 11 || 
+                                  items.item.order_status_id == 12 || 
+                                  items.item.order_status_id == 13)
+                                  ? (
                                     <TouchableOpacity
                                       onPress={() =>
                                         this.cancelJob(items.item.id)
@@ -1049,7 +1061,7 @@ export default class onGoingJobList extends Component {
                       );
                     }}
                     keyExtractor={(item) => item.id}
-                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.getJobList}/>}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.getJobList()}/>}
                   />
                   <View
                     style={{

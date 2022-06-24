@@ -859,7 +859,7 @@ export default class customiseComponent extends Component {
                     </Text>
                       <TextInput
                         placeholder="Width"
-                        defaultValue={this.state.width.toString()}
+                        defaultValue={this.state.width && this.state.width.toString()}
                         onChangeText={(value) =>
                           this.setState({
                             width: value,
@@ -907,7 +907,7 @@ export default class customiseComponent extends Component {
 
                           textAlign: 'center',
                         }}
-                        defaultValue={this.state.height.toString()}
+                        defaultValue={this.state.height && this.state.height.toString()}
                         keyboardType="numeric"
                       />
                   </View>

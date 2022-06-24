@@ -17,7 +17,7 @@ export function route_notificationToNotice(notice_url){
 
     if(notice_url.includes(".pdf")){
         return("pdf")
-    }else if(notice_url.includes(".jpg"||notice_url.includes(".png"))){
+    }else if(notice_url.includes(".jpg") || notice_url.includes(".png")){
         return("jpg")
     }
 

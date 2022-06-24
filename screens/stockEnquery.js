@@ -249,7 +249,7 @@ export default class HomeComponent extends Component{
                                 <Picker.Item style={{
                                     
                                    
-                                }} label={value.city_name.substring(0, 12)} value={value.id} />
+                                }} label={value.city_name} value={value.id} />
                               ))
                           }
 
