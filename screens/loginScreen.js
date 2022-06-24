@@ -13,6 +13,7 @@ import {
   Easing,
   AsyncStorage,
   Alert,
+  Platform,
 } from 'react-native';
 
 import RNRestart from 'react-native-restart';
@@ -47,14 +48,38 @@ export default class LoginComponent extends Component {
     }
     this.animation();
     console.log(messaging().isDeviceRegisteredForRemoteMessages);
-    console.log(messaging().registerDeviceForRemoteMessages());
-    // messaging()
-    //   .getToken()
-    //   .then((token) => this.setState({fcmToken: token}))
-    //   .catch((error) => Alert.alert('Error', error.toString()));
-    // messaging().getToken().then((token) => console.log('res================>', token));
-    console.log('device===========width=========', width);
+    this.requestUserPermission();
   }
+
+  requestUserPermission = async ()=> {
+    const authStatus = await messaging().requestPermission({
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: true,
+        provisional: false,
+        sound: true,
+    });
+    const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+        await messaging().registerDeviceForRemoteMessages();
+        await messaging().setAutoInitEnabled(true)
+
+      await this.getFcmToken();
+    } else {
+        console.log('User declined messaging permissions :(');
+    }
+  };
+
+  getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    this.setState({fcmToken: fcmToken});
+    AsyncStorage.setItem({'fcmToken': fcmToken});
+    return fcmToken?fcmToken:null;
+  };
 
   // button animation
 
@@ -83,9 +108,7 @@ export default class LoginComponent extends Component {
     let device_id = DeviceInfo.getUniqueId();
     NetInfo.fetch().then(async (state) => {
       if (state.isConnected) {
-        await AsyncStorage.getItem('device_id').then((result) => {
-          console.log('device_id' + device_id);
-          console.log(this.state.fcmToken);
+        if (this.state.fcmToken) {
           if (this.state.username == '' || this.state.password === '') {
             alert('Mobile Number and Password field is required');
           } else {
@@ -146,7 +169,7 @@ export default class LoginComponent extends Component {
                 console.log(error);
               });
           }
-        });
+        }
       } else {
         Alert.alert(
           'NetWork Error',
