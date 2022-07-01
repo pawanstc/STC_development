@@ -30,7 +30,7 @@
     import moment from 'moment';
     import {Picker} from '@react-native-picker/picker';
     import { getDayDateFormat } from './helper/utility';
-    import { CustomModal } from './components';
+    import { AddSupportImage, CustomModal } from './components';
 
     let urlsDomain = 'https://stcapp.stcwallpaper.com/';
     let {height, width} = Dimensions.get('screen');
@@ -62,6 +62,7 @@
         prev_img_desc: '',
         isVisibleMediaTypeModal: false,
         isVisibleQtyModal: false,
+        isVisibleSupportImageModal: false,
         remark: 'No remarks',
         approve_action: false,
         dealer_remarks: '',
@@ -224,6 +225,24 @@
             case '1':
             case '2':
             case '4':
+            case '8':
+            case '9':
+            case '10':
+            case '11':
+            case '12':
+            case '13':
+                return true;
+            default: 
+                return false;
+        }
+    }
+
+    isAddSupportImage = (order_status_id) => {
+        switch(order_status_id && order_status_id.toString()) {
+            case '1':
+            case '2':
+            case '4':
+            case '6':
             case '8':
             case '9':
             case '10':
@@ -555,6 +574,11 @@
 
     onPressGoBack(){
         this.props.navigation.goBack(null);
+    }
+
+    handleOnSubmitSuccess = () => {
+        this.getJobDetail();
+        this.setState({ isVisibleSupportImageModal: false })
     }
 
     render() {
@@ -922,15 +946,36 @@
                     </View> */}
                 </View>
                 <View style={{marginBottom: 4, borderBottomWidth: 0.5}}>
-                <Text
-                    style={{
-                        fontSize: 18,
-                        margin: 10,
-                        color: '#62463e',
-                        textAlign: 'left',
-                    }}>
-                    Support Images:
-                </Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                margin: 10,
+                                color: '#62463e',
+                                textAlign: 'left',
+                            }}>
+                            Support Images:
+                        </Text>
+                        {this.isAddSupportImage(this.state.jobDetail.order_status_id) ?
+                            <TouchableOpacity
+                                onPress={() => {
+                                    // this.getSheet();
+                                    this.setState({ isVisibleSupportImageModal: true });
+                                }}
+                                style={{
+                                    marginRight: 10,
+                                    height: 25,
+                                    width: 25,
+                                    borderRadius: 15,
+                                    top: 10,
+                                    backgroundColor: '#62463e',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                <MIIcon name="add" color="white" size={15} />
+                            </TouchableOpacity>
+                        : null}
+                    </View>
                 {this.state.jobDetail.support_image && this.state.jobDetail.support_image.image_details.length > 0 ? (
                     <View>
                     <FlatList
@@ -1409,6 +1454,11 @@
                     </View>
                 </View>
             </CustomModal>
+            <AddSupportImage 
+                isVisible={this.state.isVisibleSupportImageModal} 
+                onPressClose={() => this.setState({ isVisibleSupportImageModal: false })} 
+                onSubmitSuccess={() => this.handleOnSubmitSuccess()} 
+            />
         </View>
     );
     }
