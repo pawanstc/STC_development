@@ -132,8 +132,8 @@ android {
         applicationId "com.stcwallpaper"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 704
-        versionName "7.0.4"
+        versionCode 705
+        versionName "7.0.5"
         multiDexEnabled true
     }
     splits {
