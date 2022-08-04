@@ -8,8 +8,7 @@ import CustomModal from '../CustomModal';
 
 function AddSupportImage(props) {
     const {isVisible, onPressClose, onSubmitSuccess} = props;
-    const [photo2, setPhoto2] = useState();
-    const [photo2Arr, setPhoto2Arr] = useState([]);
+    const [docList, setDocList] = useState([]);
     const [progressInfo, setProgressInfo] = useState({});
     const [image_flag, setImageFlag] = useState('');
 
@@ -19,9 +18,9 @@ function AddSupportImage(props) {
             "Are you sure to delete custom image ?",
             [
                 {text:"yes", onPress: async() =>{
-                    const newArray = photo2Arr;
+                    const newArray = docList;
                     const updatedList = newArray.filter(item => item.id !== id);
-                    setPhoto2Arr(updatedList);
+                    setDocList(updatedList);
                 }},
                 {text:"No", onPress:() => null }
             ],
@@ -29,7 +28,7 @@ function AddSupportImage(props) {
               cancelable:false
             }
         );
-        console.log(photo2Arr);
+        console.log(docList);
     }
 
     const launchCamera2 = async () => {
@@ -50,10 +49,10 @@ function AddSupportImage(props) {
                 tempImage.push(ImageObj);
                 console.log(tempImage);
             
-                setPhoto2Arr([...photo2Arr, ...tempImage])
+                setDocList([...docList, ...tempImage])
   
                 var form = new FormData();
-                photo2Arr.forEach((item, i) => {
+                docList.forEach((item, i) => {
                     form.append("image",{
                         uri:item.uri,
                         type:'image/'+item.uri.split('.').pop(),
@@ -102,10 +101,10 @@ function AddSupportImage(props) {
                     var image = { uri:value.path, id:uuid() };
                     tempArray.push(image);
                 })
-                setPhoto2Arr([...photo2Arr, ...tempArray])
+                setDocList([...docList, ...tempArray])
        
                 var form = new FormData();
-                photo2Arr.forEach((item, i) => {
+                docList.forEach((item, i) => {
                     form.append("image",{
                         uri:item.uri,
                         type:'image/'+item.uri.split('.').pop(),
@@ -134,10 +133,15 @@ function AddSupportImage(props) {
     }
 
     const orderSubmit = () => {
-        onSubmitSuccess && onSubmitSuccess();
+        if (docList && docList.length > 0) {
+            onSubmitSuccess && onSubmitSuccess(docList);
+        } else {
+            Alert.alert(
+                "STC alert",
+                "Please choose supporting image."
+            );
+        }
     }
-
-    console.log('photo2Arr===============>', photo2Arr);
 
     return (
         <CustomModal isVisible={isVisible} backButtonPress={onPressClose}>
@@ -164,15 +168,11 @@ function AddSupportImage(props) {
                         <Text style={{fontSize:14, marginTop:14, textAlign:"center", marginBottom:6, color:"#404040"}}>
                             Add Supporting Images (Custom or wall Image)
                         </Text>
-                        {photo2  ? (
-                            <Image source={{ uri: photo2 }} style={{ height:120, width:120 }} />
-                        ) : null}
-
-                        {photo2Arr?.length > 0 ? (
+                        {docList?.length > 0 ? (
                             <View>
                                 <FlatList
                                     showsHorizontalScrollView={false}
-                                    data={photo2Arr}
+                                    data={docList}
                                     horizontal
                                     contentContainerStyle={{
                                     paddingBottom:20

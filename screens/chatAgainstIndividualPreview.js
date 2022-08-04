@@ -238,28 +238,48 @@ export default class chatAgainstIndividualPreviews extends Component {
     };
 
     render() {
+        const finalStatus = this.state.jobDetail.order.status
         if (this.state.jobDetail.user_role_name === 'Dealer') {
-            if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
+            if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, finalStatus)) {
                 this.state.isRejectDisabled = false;
             } else {
-                this.state.isRejectDisabled = true;
+                if (this.state.jobDetail.approved_by_dealer !== 2 && this.state.status !== 5) {
+                    this.state.isRejectDisabled = false;
+                } else {
+                    this.state.isRejectDisabled = true;
+                }
             }
 
             this.state.isApproveDisabled = this.state.jobDetail.isApproveDisabled;
         }
         if (this.state.jobDetail.user_role_name === 'Distributor') {
-            if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, this.state.status)) {
+            if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, finalStatus)) {
                 this.state.isRejectDisabled = false;
             } else {
-                this.state.isRejectDisabled = true;
+                if (this.state.jobDetail.approved_by_distributer !== 2 && this.state.status !== 5) {
+                    this.state.isRejectDisabled = false;
+                } else {
+                    this.state.isRejectDisabled = true;
+                }
             }
 
-            if (isActiveApproveButton(this.state.jobDetail.user_role_name, this.state.status)) {
+            if (isActiveApproveButton(this.state.jobDetail.user_role_name, finalStatus)) {
                 this.state.isApproveDisabled = false;
             } else {
                 this.state.isApproveDisabled = true;
             }
+
+            this.state.isApproveDisabled = this.state.jobDetail.isApproveDisabled;
         }
+
+        // this.state.isEnableCancelReject = false;
+        // this.state.isEnableApprove = false;
+        // if (isActiveCancelRejectButton(this.state.jobDetail.user_role_name, finalStatus)) {
+        //     this.state.isEnableCancelReject = true;
+        // }
+        // if (isActiveApproveButton(this.state.jobDetail.user_role_name, finalStatus)) {
+        //     this.state.isEnableApprove = true;
+        // }
 
         return (
             <View>

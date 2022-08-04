@@ -95,6 +95,7 @@ export const deviceHeight = () => {
 };
 
 export const isActiveCancelRejectButton = (userType, status) => {
+  console.log('status============>', status);
   if (userType === 'Distributor') {
     switch(status) {
       case 6:
@@ -118,6 +119,7 @@ export const isActiveCancelRejectButton = (userType, status) => {
 }
 
 export const isActiveApproveButton = (userType, status) => {
+  console.log('status============>', status);
   if (userType === 'Distributor') {
     switch(status) {
       case 9:
@@ -149,4 +151,10 @@ export function isValidString(text) {
   const reg = /^[a-z\d\-_\s]+$/i
   console.log('reg.test(text)=======', text, reg.test(text))
   return reg.test(text)
+}
+
+export function isValidNumber(text) {
+  let isnum = /^\d+$/.test(text);
+  console.log('isNum=======', isnum);
+  return isnum
 }

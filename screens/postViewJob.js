@@ -29,7 +29,7 @@
     import { getImagesWithoutSize } from 'react-native-image-view/src/utils';
     import moment from 'moment';
     import {Picker} from '@react-native-picker/picker';
-    import { getDayDateFormat } from './helper/utility';
+    import { getDayDateFormat, isValidNumber } from './helper/utility';
     import { AddSupportImage, CustomModal } from './components';
 
     let urlsDomain = 'https://stcapp.stcwallpaper.com/';
@@ -325,30 +325,36 @@
 
     updateQuantity = () => {
         if (this.state.quantity !== "") {
-            const body = "order_id="+
-            this.state.jobDetail.order_id+
-            "&quantity="+
-            this.state.quantity;
-
-            fetch(URL+"/update_job_post_quantity_by_order_id",{
-                headers:{
-                    "Content-Type":"application/x-www-form-urlencoded"
-                },
-                method:"POST",
-                body
-            }).then(response => response.json())
-            .then(result =>{
-                if(result.error == false){
-                    this.setState({ isVisibleQtyModal: false })
-                    this.getJobDetail();
-                    Alert.alert(
-                        "Quantity updated successfully!"
-                    );
-                    this.props.navigation.navigate('onGoingJoblist', {});
-                }
-            }).catch(error =>{
-                console.log(error);
-            })
+            if (isValidNumber(this.state.quantity)) {
+                const body = "order_id="+
+                this.state.jobDetail.order_id+
+                "&quantity="+
+                this.state.quantity;
+    
+                fetch(URL+"/update_job_post_quantity_by_order_id",{
+                    headers:{
+                        "Content-Type":"application/x-www-form-urlencoded"
+                    },
+                    method:"POST",
+                    body
+                }).then(response => response.json())
+                .then(result =>{
+                    if(result.error == false){
+                        this.setState({ isVisibleQtyModal: false })
+                        this.getJobDetail();
+                        Alert.alert(
+                            "Quantity updated successfully!"
+                        );
+                        this.props.navigation.navigate('onGoingJoblist', {});
+                    }
+                }).catch(error =>{
+                    console.log(error);
+                })
+            } else {
+                Alert.alert(
+                    "Please only enter only number."
+                );
+            }
         } else {
             if (this.state.quantity === "") {
                 Alert.alert(
@@ -576,12 +582,14 @@
         this.props.navigation.goBack(null);
     }
 
-    handleOnSubmitSuccess = () => {
+    handleOnSubmitSuccess = (docList) => {
+        console.log('doclist--------------->', docList);
         this.getJobDetail();
         this.setState({ isVisibleSupportImageModal: false })
     }
 
     render() {
+        console.log('this.state.preview_images=========>', this.state.preview_images);
     return (
         <View
         style={{
@@ -956,7 +964,7 @@
                             }}>
                             Support Images:
                         </Text>
-                        {this.isAddSupportImage(this.state.jobDetail.order_status_id) ?
+                        {/* {this.isAddSupportImage(this.state.jobDetail.order_status_id) ?
                             <TouchableOpacity
                                 onPress={() => {
                                     // this.getSheet();
@@ -974,7 +982,7 @@
                                 }}>
                                 <MIIcon name="add" color="white" size={15} />
                             </TouchableOpacity>
-                        : null}
+                        : null} */}
                     </View>
                 {this.state.jobDetail.support_image && this.state.jobDetail.support_image.image_details.length > 0 ? (
                     <View>
@@ -1074,6 +1082,7 @@
                                                 if (this.state.user_type === 'Dealer') {
                                                     isApproveDisabled = this.state.previewImageApprovedByDelear && Object.keys(this.state.previewImageApprovedByDelear) && Object.keys(this.state.previewImageApprovedByDelear).length > 0
                                                 } else if (this.state.user_type === 'Distributor') {
+                                                    console.log('hello=======>', this.state.previewImageApprovedByDistributor);
                                                     isApproveDisabled = this.state.previewImageApprovedByDistributor && Object.keys(this.state.previewImageApprovedByDistributor) && Object.keys(this.state.previewImageApprovedByDistributor).length > 0
                                                 }
 
@@ -1411,6 +1420,7 @@
                         <TextInput
                             placeholder="Enter Quantity"
                             defaultValue={this.state.quantity.toString()}
+                            keyboardType='number-pad'
                             onChangeText={(value) => {
                                 this.setState({
                                     quantity: value,
@@ -1457,7 +1467,7 @@
             <AddSupportImage 
                 isVisible={this.state.isVisibleSupportImageModal} 
                 onPressClose={() => this.setState({ isVisibleSupportImageModal: false })} 
-                onSubmitSuccess={() => this.handleOnSubmitSuccess()} 
+                onSubmitSuccess={(docList) => this.handleOnSubmitSuccess(docList)} 
             />
         </View>
     );
