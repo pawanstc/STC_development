@@ -246,9 +246,10 @@ export default class TabComponnet extends Component{
                             right: 17,
                             top: -5
                             }}>
-                            <Text style={{ fontSize: 7, fontWeight: 'bold', color: 'white'}}>
+                            {/* <Text style={{ fontSize: 7, fontWeight: 'bold', color: 'white'}}>
                                 {this.state.notifications_count > 99 ? '99+' : this.state.notifications_count} 
-                            </Text>
+                            </Text> */}
+                                <Icon name="star" size={10} color="#ffffff"  />
                         </View>
                     : null}
                     <Text style={{
