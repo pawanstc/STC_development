@@ -10,6 +10,7 @@ import TaqbContainer from '../screens/TabnarComponent.js';
 import ImagePicker from 'react-native-image-crop-picker';
 import uuid from 'uuid-random';
 import * as Progress from 'react-native-progress';
+import moment from 'moment';
 
 let {height,width} =Dimensions.get('screen')
 let imagesGrid = []
@@ -151,7 +152,8 @@ launchCamera2 = async () =>{
 
  var ImageObj = {
     uri: image.path,
-    id: uuid()
+    id: uuid(),
+    name: moment().unix()+'.'+image.path.split('.').pop()
  };
 
 
@@ -170,7 +172,7 @@ launchCamera2 = async () =>{
     form.append("image",{
       uri:item.uri,
       type:'image/'+item.uri.split('.').pop(),
-      name:item.uri.replace(/^.*[\\\/]/, '')
+      name: item.name
     })
   });
 
@@ -346,11 +348,11 @@ launchCamera2 = async () =>{
         form.append("image",{
           uri:item.uri,
           type:'image/'+item.uri.split('.').pop(),
-          name:item.uri.replace(/^.*[\\\/]/, '')
+          name: moment().unix()+'.'+item.uri.split('.').pop()
         })
       });
 
-      var xhr = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
 
         xhr.open("POST","https://stcapp.stcwallpaper.com/backend/postjob.php");
         xhr.setRequestHeader("Content-Type","multipart/form-data");
@@ -395,7 +397,8 @@ launchCamera2 = async () =>{
   image.forEach(value =>{
     var image = {
       uri:value.path,
-      id:uuid()
+      id:uuid(),
+      name: moment().unix()+'.'+value.path.split('.').pop()
    };
     tempArray.push(image);
   })
@@ -410,7 +413,7 @@ launchCamera2 = async () =>{
       form.append("image",{
         uri:item.uri,
         type:'image/'+item.uri.split('.').pop(),
-        name:item.uri.replace(/^.*[\\\/]/, '')
+        name: item.name
       })
     });
 
@@ -546,7 +549,8 @@ launchCamera2 = async () =>{
 
   var form = new FormData();
 
-  var filename = image.path.replace(/^.*[\\\/]/, '');
+  var filename = moment().unix()+'.'+image.path.split('.').pop()
+
 
 
     form.append('image',{
